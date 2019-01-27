@@ -45,7 +45,7 @@ class tseries(commands.AutoShardedBot):
         super().__init__(
             command_prefix = self.custom_prefix,
             case_insensitive = True,
-            max_messages = 700,
+            max_messages = 500,
             fetch_offline_members = False,
             reconnect = True
         )
