@@ -1,0 +1,8 @@
+/*
+/*/
+/cogs/__pycache__/*
+!/cogs/
+!tseries.py
+!authsupport.py
+!lasagna.mp3
+!.gitignore
