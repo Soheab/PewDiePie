@@ -39,7 +39,6 @@ important = ("jishaku", "authsupport")
 # Bot
 class tseries(commands.AutoShardedBot):
     def __init__(self, token):
-        custom_prefix = "tst!"
         self.custom_prefix = custom_prefix
         self.token = token
         super().__init__(
