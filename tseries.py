@@ -67,7 +67,7 @@ class tseries(commands.AutoShardedBot):
         if hasattr(self, "uptime") == False:
             self.uptime = datetime.datetime.utcnow()
 
-        print("T-Series bot is ready!")
+        print(f"{self.user.name} is ready!")
 
     async def database(self):
         if hasattr(self, "pool") == False:
