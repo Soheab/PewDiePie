@@ -4,6 +4,7 @@ from contextlib import redirect_stdout
 import textwrap
 import io
 import traceback
+import asyncio
 
 
 class Owner:
@@ -67,6 +68,7 @@ class Owner:
     @commands.command(name = "eval")
     @commands.is_owner()
     async def ev(self, ctx, *, code: str):
+        """From R. Danny. I did not make this command"""
         env = {
             "bot": self.bot,
             "ctx": ctx,
@@ -94,9 +96,6 @@ class Owner:
             if ret is None:
                 if value:
                     await ctx.send(f"```py\n{value}\n```")
-            else:
-                _last_result = ret
-                await ctx.send(f"```py\n{value}{ret}\n```")
 
 
 def setup(bot):
