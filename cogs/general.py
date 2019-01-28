@@ -204,6 +204,7 @@ class General:
         em.add_field(name = "Invite", value = "[Invite me here!](https://discordapp.com/oauth2/authorize?client_id=500868806776979462&scope=bot&permissions=72710)")
         await ctx.send(embed = em)
         print("Sent bot invite!")
+
     # Set prefix tutorial command
     @commands.command(aliases = ["prefixtutorial", "tutprefix"])
     async def prefixtut(self, ctx):
