@@ -71,6 +71,7 @@ class Owner:
     async def update(self, ctx):
         pro = await asyncio.create_subprocess_exec("git", "pull", stdout = asyncio.subprocess.DEVNULL)
         com = str(pro.stdout)
+        pro.kill()
         reg = r"(.*?)\.py"
         found = re.findall(reg, com)
         if found:
