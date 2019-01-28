@@ -5,12 +5,13 @@ import textwrap
 import io
 import traceback
 import asyncio
+import re
 
 
 class Owner:
     def __init__(self, bot):
         self.bot = bot
-    
+
     # Command authorization check
     async def cmdauthcheck(ctx): # pylint: disable=E0213
         # Get guild
@@ -63,6 +64,28 @@ class Owner:
         em = discord.Embed(color = discord.Color.dark_purple())
         em.add_field(name = "Deauthorized", value = f"`{ctx.guild.name}` has been deauthorized")
         await ctx.send(embed = em)
+
+    @commands.command()
+    @commands.is_owner()
+    async def update(self, ctx):
+        pro = await asyncio.create_subprocess_exec("git", "pull", stdout = asyncio.subprocess.DEVNULL)
+        com = str(pro.stdout)
+        reg = r"(.*?)\.py"
+        found = re.findall(reg, com)
+        if found:
+            updated = []
+            final_string = ""
+            for x in found:
+                extension = re.sub(r"\s+", "", x)
+                extension = extension.replace("/", ".")
+                self.bot.unload_extension(extension)
+                self.bot.load_extension(extension)
+                updated.append(extension)
+            for b in updated:
+                final_string += f"`{b}` "
+            await ctx.send(f"Updated cogs: {final_string}")
+        else:
+            await ctx.send("No cogs were updated")
 
     # Eval command
     @commands.command(name = "eval")
