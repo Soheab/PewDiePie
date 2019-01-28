@@ -65,6 +65,7 @@ class Owner:
         em.add_field(name = "Deauthorized", value = f"`{ctx.guild.name}` has been deauthorized")
         await ctx.send(embed = em)
 
+    # Update command
     @commands.command()
     @commands.is_owner()
     async def update(self, ctx):
