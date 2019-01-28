@@ -5,6 +5,12 @@ import random
 import datetime
 import asyncpg
 import aiohttp
+import asyncio
+import sys
+
+# Support asyncio subprocesses for Windows
+if sys.platform == "win32":
+    asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
 
 # Custom prefixes
 async def custom_prefix(bot, message):
