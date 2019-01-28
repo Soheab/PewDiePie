@@ -12,13 +12,13 @@ class Owner:
         self.bot = bot
     
     # Command authorization check
-    async def cmdauthcheck(self, ctx):
+    async def cmdauthcheck(ctx): # pylint: disable=E0213
         # Get guild
-        guild = self.bot.get_guild(499357399690379264)
+        guild = ctx.bot.get_guild(499357399690379264)
         # Get role
         role = guild.get_role(531176653184040961)
         # Get member
-        user = guild.get_member(ctx.author.id)
+        user = guild.get_member(ctx.author.id) # pylint: disable=E1101
         # Check if user has role
         try:
             if role in user.roles:
@@ -27,7 +27,7 @@ class Owner:
                 return False
         except AttributeError:
             return False
-    
+
     # Authorize command
     @commands.command()
     @commands.check(cmdauthcheck)
