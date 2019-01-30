@@ -16,10 +16,9 @@ class EconomyPhrases:
             em.add_field(name = "Phrase Not Found", value = f"Phrase #{pid} could not be found")
             await ctx.send(embed = em)
             return
-        # Get phrase
-        p = await self.bot.pool.fetchval("SELECT name FROM shovel WHERE id = $1", pid)
-        # Get fate
-        fate = await self.bot.pool.fetchval("SELECT fate FROM shovel WHERE id = $1", pid)
+        # Phrase and fate
+        fate = pcheck["fate"]
+        p = pcheck["name"]
         # Tell the user
         if fate:
             em = discord.Embed(color = discord.Color.green())
