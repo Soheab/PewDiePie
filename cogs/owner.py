@@ -69,12 +69,9 @@ class Owner:
     @commands.command()
     @commands.is_owner()
     async def update(self, ctx):
-        pro = await asyncio.create_subprocess_exec("git", "pull",
-        stdout = asyncio.subprocess.DEVNULL,
-        stderr = asyncio.subprocess.DEVNULL,
-        stdin = asyncio.subprocess.DEVNULL)
+        pro = await asyncio.create_subprocess_exec("git", "pull", stdout = asyncio.subprocess.DEVNULL)
         com = pro.communicate()
-        pro.kill()
+        print(com)
         reg = r"(.*?)\.py"
         found = re.findall(reg, com)
         if found:
