@@ -17,11 +17,11 @@ class ErrorHandler:
             return
         elif isinstance(error, commands.MissingPermissions):
             em = discord.Embed(color = discord.Color.dark_teal())
-            em.add_field(name = "Error: Missing Permissions", value = "You do not have the necessary permissions to run this command")
+            em.add_field(name = "Error: Missing Permissions", value = "You are missing permissions to run this command")
             await ctx.send(embed = em)
         elif isinstance(error, commands.BotMissingPermissions):
             em = discord.Embed(color = discord.Color.dark_teal())
-            em.add_field(name = "Error: Bot Missing Permissions", value = f"{self.bot.user.name} does not have permissions to execute this command")
+            em.add_field(name = "Error: Bot Missing Permissions", value = f"{self.bot.user.name} doesn't have permissions to run this command")
             await ctx.send(embed = em)
         elif isinstance(error, discord.HTTPException):
             em = discord.Embed(color = discord.Color.dark_teal())
@@ -39,7 +39,7 @@ class ErrorHandler:
             await ctx.send(embed = em)
         elif isinstance(error, commands.NotOwner):
             em = discord.Embed(color = discord.Color.dark_teal())
-            em.add_field(name = "Error: Not Owner", value = "You do not have permission to run this command because you are not the owner")
+            em.add_field(name = "Error: Not Owner", value = "You are not the owner")
             await ctx.send(embed = em)
         elif isinstance(error, commands.CommandOnCooldown):
             # Time
