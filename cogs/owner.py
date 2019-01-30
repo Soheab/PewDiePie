@@ -71,8 +71,7 @@ class Owner:
     async def update(self, ctx):
         pro = await asyncio.create_subprocess_exec(
             "git", "pull",
-            stdout = asyncio.subprocess.DEVNULL,
-            stdin = asyncio.subprocess.DEVNULL,
+            stdout = asyncio.subprocess.PIPE,
             stderr = asyncio.subprocess.PIPE
         )
         com = str(await pro.communicate())
