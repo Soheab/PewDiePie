@@ -8,6 +8,11 @@ class Economy:
     def __init__(self, bot):
         self.bot = bot
         self.tcoinimage = "<:tseries_coin:529144538225311774>"
+
+    async def on_ready(self):
+        # Cache shovel phrases
+        self.bot.pos = await self.bot.pool.fetch("SELECT * FROM shovel WHERE fate = true")
+        self.bot.neg = await self.bot.pool.fetch("SELECT * FROM shovel WHERE fate = false")
     
     # Add user to DB and check
     async def cad_user(ctx): # pylint: disable=E0213
@@ -23,9 +28,9 @@ class Economy:
     async def econmsg(self, fate: bool, ctg: int):
         # Check fate to determine which phrase to get
         if fate:
-            phrases = await self.bot.pool.fetch("SELECT * FROM shovel WHERE fate = true")
+            phrases = self.bot.pos
         else:
-            phrases = await self.bot.pool.fetch("SELECT * FROM shovel WHERE fate = false")
+            phrases = self.bot.neg
         # Get random asyncpg.Record object
         phrases = random.choice(phrases)
         # Get phrase ID
@@ -60,7 +65,7 @@ class Economy:
         else:
             em = discord.Embed(color = discord.Color.red())
         em.add_field(name = "Shovel", value = message["phrase"])
-        em.set_footer(text = f"Phrase #{message['phraseid']}")
+        em.set_footer(text = f"Phrase #{message['phraseid']:,d}")
         await ctx.send(embed = em)
         # Change values for the user in the database
         await self.bot.pool.execute("UPDATE econ SET coins = coins + $1 WHERE userid = $2 AND guildid = $3", ctg, ctx.author.id, ctx.guild.id)
