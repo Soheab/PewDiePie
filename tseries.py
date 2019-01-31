@@ -56,18 +56,6 @@ class tseries(commands.AutoShardedBot):
         )
         # Client session
         self.session = aiohttp.ClientSession(loop = self.loop)
-        # Load in important extensions
-        for x in important:
-            try:
-                self.load_extension(x)
-            except:
-                print(f"There was a problem loading in the {x} extension")
-        # Load in extensions
-        for x in extensions:
-            try:
-                self.load_extension("cogs." + x)
-            except:
-                print(f"There was a problem loading in the {x} extension")
 
     async def on_ready(self):
         if hasattr(self, "uptime") == False:
@@ -99,6 +87,22 @@ class tseries(commands.AutoShardedBot):
         await super().close()
         # Print to console
         print("\n", "Closed")
+
+    async def on_connect(self):
+        # Load in important extensions
+        for x in important:
+            try:
+                self.load_extension(x)
+            except:
+                print(f"There was a problem loading in the {x} extension")
+        # Load in extensions
+        for x in extensions:
+            try:
+                self.load_extension("cogs." + x)
+            except Exception as e:
+                print(f"There was a problem loading in the {x} extension")
+                print()
+                print(e)
 
     def run(self):
         try:
