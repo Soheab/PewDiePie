@@ -325,7 +325,7 @@ class Economy:
         # All T-Coins
         tcall = econ_info["sum"]
         # Leading economy user
-        tlu = await self.bot.pool.fetchrow("SELECT userid, coins FROM econ ORDER BY coins DESC")
+        tlu = await self.bot.pool.fetchrow("SELECT userid, coins FROM econ ORDER BY coins DESC LIMIT 1")
         # Shovel phrases count
         spc = await self.bot.pool.fetchval("SELECT COUNT(name) FROM shovel")
         try:
