@@ -289,6 +289,7 @@ class General:
         `gamble`: You can gamble a specific amount of T-Coins
         `steal (rob)`: Steals from a user that you specify
         `transfer`: Sends T-Coins to another server. The max amount is 50% of your coins.
+        `statistics (stats)`: Statistics on T-Coin usage
         """, inline = False)
         em.add_field(name = "Shop", value = """
         `shop`: View all the items (roles) in the shop
