@@ -312,6 +312,25 @@ class Economy:
             em.add_field(name = "Not Enough", value = f"You do not have enough T-Coins to transfer {amount:,d} {self.tcoinimage} to `{guild.name}`")
             em.set_footer(text = "NOTE: You are only able to transfer up to 50% of your T-Coins")
             await ctx.send(embed = em)
+    
+    # Statistics command
+    @commands.command(aliases = ["stats", "stat"])
+    async def statistics(self, ctx):
+        # T-Coin userbase count
+        tcusbcount = await self.bot.pool.fetchval("SELECT COUNT(coins) FROM econ")
+        # Average T-Coins
+        tcavg = await self.bot.pool.fetchval("SELECT AVG(coins) FROM econ")
+        # All T-Coins
+        tcall = await self.bot.pool.fetchval("SELECT SUM(coins) FROM econ")
+        # Embed
+        em = discord.Embed(color = discord.Color.red())
+        em.set_author(name = "T-Coin Statistics")
+        em.add_field(name = "Userbase", value = f"{tcusbcount:,d}")
+        em.add_field(name = "Average Amount", value = f"{round(tcavg):,d}")
+        em.add_field(name = "Total Amount", value = f"{round(tcall):,d}")
+        # Timestamp
+        em.timestamp = datetime.datetime.utcnow()
+        await ctx.send(embed = em)
 
 
 def setup(bot):
