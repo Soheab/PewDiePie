@@ -316,18 +316,31 @@ class Economy:
     # Statistics command
     @commands.command(aliases = ["stats", "stat"])
     async def statistics(self, ctx):
+        # Get tables from the economy table that are needed here
+        econ_info = await self.bot.pool.fetchrow("SELECT COUNT(coins), AVG(coins), SUM(coins) FROM econ")
         # T-Coin userbase count
-        tcusbcount = await self.bot.pool.fetchval("SELECT COUNT(coins) FROM econ")
+        tcusbcount = econ_info["count"]
         # Average T-Coins
-        tcavg = await self.bot.pool.fetchval("SELECT AVG(coins) FROM econ")
+        tcavg = econ_info["avg"]
         # All T-Coins
-        tcall = await self.bot.pool.fetchval("SELECT SUM(coins) FROM econ")
+        tcall = econ_info["sum"]
+        # Leading economy user
+        tlu = await self.bot.pool.fetchrow("SELECT userid, coins FROM econ ORDER BY coins DESC")
+        # Shovel phrases count
+        spc = await self.bot.pool.fetchval("SELECT COUNT(name) FROM shovel")
+        try:
+            tluname = self.bot.get_user(tlu["userid"]).name
+        except AttributeError:
+            tluname = "User Not Found"
         # Embed
         em = discord.Embed(color = discord.Color.red())
         em.set_author(name = "T-Coin Statistics")
         em.add_field(name = "Accounts", value = f"{tcusbcount:,d} accounts")
         em.add_field(name = "Average Amount", value = f"{round(tcavg):,d} {self.tcoinimage}")
         em.add_field(name = "Total Amount", value = f"{round(tcall):,d} {self.tcoinimage}")
+        em.add_field(name = "Leading User", value = f"{tluname}")
+        em.add_field(name = "Leading User Amount", value = f"{tlu['coins']:,d} {self.tcoinimage}")
+        em.add_field(name = "Shovel Phrases", value = f"{spc:,d} phrases")
         # Timestamp
         em.timestamp = datetime.datetime.utcnow()
         await ctx.send(embed = em)
