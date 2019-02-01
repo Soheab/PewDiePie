@@ -37,7 +37,7 @@ extensions = (
     "economy", "general", "subscribe", "owner",
     "error_handler", "events", "economy_phrases", "economy_shop",
     "economy_owner"
-    )
+)
 
 # Important extensions
 important = ("jishaku", "authsupport")
@@ -60,7 +60,7 @@ class tseries(commands.AutoShardedBot):
     async def on_ready(self):
         if hasattr(self, "uptime") == False:
             self.uptime = datetime.datetime.utcnow()
-
+        
         print(f"{self.user.name} is ready!")
 
     async def database(self):
@@ -77,16 +77,6 @@ class tseries(commands.AutoShardedBot):
             except Exception as error:
                 print("There was a problem connecting to the database")
                 print("\n", error)
-
-    async def close(self):
-        # Close pool
-        await self.pool.close()
-        # Close aiohttp client session
-        await self.session.close()
-        # Close bot
-        await super().close()
-        # Print to console
-        print("\n", "Closed")
 
     async def on_connect(self):
         # Load in important extensions
