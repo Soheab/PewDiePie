@@ -325,7 +325,7 @@ class Economy:
         # Embed
         em = discord.Embed(color = discord.Color.red())
         em.set_author(name = "T-Coin Statistics")
-        em.add_field(name = "Userbase", value = f"{tcusbcount:,d} users")
+        em.add_field(name = "Accounts", value = f"{tcusbcount:,d} accounts")
         em.add_field(name = "Average Amount", value = f"{round(tcavg):,d} {self.tcoinimage}")
         em.add_field(name = "Total Amount", value = f"{round(tcall):,d} {self.tcoinimage}")
         # Timestamp
