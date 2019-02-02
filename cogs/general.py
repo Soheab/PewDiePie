@@ -274,9 +274,9 @@ class General:
         `youtube (yt)`: Sends you the link to PewDiePie's and T-Series' YouTube channel
         `spoiler`: Sends any message you provide as a spoiler in an annoying form
         """, inline = False)
-        # T-Coin (economy) commands
-        em.add_field(name = "T-Coin (economy)", value = """
-        Run `t.help economy` to view the list of commands for T-Coin (economy commands)
+        # Bro Coin (economy) commands
+        em.add_field(name = "Bro Coin (economy)", value = """
+        Run `t.help economy` to view the list of commands for Bro Coin (economy commands)
         """)
         # Meta commands
         em.add_field(name = "Meta Commands", value = f"""
@@ -292,19 +292,19 @@ class General:
         await ctx.send(embed = em)
 
     # Help: economy
-    @help.command(aliases = ["tcoin", "t-coin", "tcoins", "t-coins"])
+    @help.command()
     async def economy(self, ctx):
         em = discord.Embed(color = discord.Color.gold())
         em.set_author(name = f"{self.bot.user.name} Economy Help Page")
-        em.add_field(name = "T-Coin Commands", value = """
-        `shovel`: You work all day shoveling for T-Coins
-        `balance (bal)`: Informs you on how many T-Coins you have
-        `pay`: Pays a user with a specified amount of T-Coins
-        `leaderboard (lb)`: Shows the leaderboard for T-Coins
-        `gamble`: You can gamble a specific amount of T-Coins
+        em.add_field(name = "Bro Coin Commands", value = """
+        `shovel`: You work all day shoveling for Bro Coins
+        `balance (bal)`: Informs you on how many Bro Coins you have
+        `pay`: Pays a user with a specified amount of Bro Coins
+        `leaderboard (lb)`: Shows the leaderboard for Bro Coins
+        `gamble`: You can gamble a specific amount of Bro Coins
         `steal (rob)`: Steals from a user that you specify
-        `transfer`: Sends T-Coins to another server. The max amount is 50% of your coins.
-        `statistics (stats)`: Statistics on T-Coin usage
+        `transfer`: Sends Bro Coins to another server. The max amount is 50% of your coins.
+        `statistics (stats)`: Statistics on Bro Coin usage
         """, inline = False)
         em.add_field(name = "Shop", value = """
         `shop`: View all the items (roles) in the shop
