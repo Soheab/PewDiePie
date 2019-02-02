@@ -3,8 +3,9 @@ import discord
 import random
 import asyncio
 
+# I did not make this cog. Xua#4427 made it for me.
 
-class TSeries:
+class AuthSupport:
     def __init__(self, bot):
         self.bot = bot
         self.rules_channel = 499363307497717760
@@ -61,4 +62,4 @@ class TSeries:
 
 
 def setup(bot):
-    bot.add_cog(TSeries(bot))
+    bot.add_cog(AuthSupport(bot))
