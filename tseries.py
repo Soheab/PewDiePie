@@ -112,5 +112,5 @@ class tseries(commands.AutoShardedBot):
 
 
 if __name__ == "__main__":
-    bot = tseries(config.privtoken)
+    bot = tseries(config.pubtoken)
     bot.run()
