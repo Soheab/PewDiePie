@@ -82,7 +82,7 @@ class ErrorHandler:
             em = discord.Embed(color = discord.Color.dark_teal())
             em.add_field(name = "Error: Cooldown", value = f"Please wait {hours} {ist} {minutes} {ist1} {seconds} to use `{ctx.command.name}` again")
             if ctx.command.name == "shovel":
-                await ctx.send(embed = em, delete_after = 5)
+                await ctx.send(embed = em, delete_after = error.retry_after)
             else:
                 await ctx.send(embed = em)
         else:
