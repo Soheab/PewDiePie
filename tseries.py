@@ -37,7 +37,7 @@ extensions = (
 important = ("jishaku", "authsupport")
 
 # Bot
-class tseries(commands.AutoShardedBot):
+class PewDiePie(commands.AutoShardedBot):
     def __init__(self, token):
         self.custom_prefix = custom_prefix
         self.token = token
@@ -114,5 +114,5 @@ class tseries(commands.AutoShardedBot):
 
 
 if __name__ == "__main__":
-    bot = tseries(config.pubtoken)
+    bot = PewDiePie(config.pubtoken)
     bot.run()
