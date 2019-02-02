@@ -7,7 +7,7 @@ import datetime
 class Economy:
     def __init__(self, bot):
         self.bot = bot
-        self.tcoinimage = "<:tseries_coin:529144538225311774>"
+        self.tcoinimage = "<:bro_coin:541363630189576193>"
 
     async def on_ready(self):
         # Cache shovel phrases
@@ -112,7 +112,7 @@ class Economy:
             await self.bot.pool.execute("UPDATE econ SET coins = coins - $1 WHERE userid = $2 AND guildid = $3", amount, ctx.author.id, ctx.guild.id)
             # Tell the user
             em = discord.Embed(color = discord.Color.dark_green())
-            em.add_field(name = f"Sent T-Coin to {user.name}#{user.discriminator}", value = f"{amount:,d} {self.tcoinimage} was sent to {user.mention}")
+            em.add_field(name = f"Sent Bro Coin to {user.name}#{user.discriminator}", value = f"{amount:,d} {self.tcoinimage} was sent to {user.mention}")
             em.timestamp = datetime.datetime.utcnow()
             await ctx.send(embed = em)
         else:
@@ -135,7 +135,7 @@ class Economy:
         # Tell the user
         em = discord.Embed(color = discord.Color.blue())
         em.set_author(name = f"{uid.name}#{uid.discriminator}", icon_url = uid.avatar_url)
-        em.add_field(name = "T-Coins", value = f"{bal:,d} {self.tcoinimage}")
+        em.add_field(name = "Bro Coins", value = f"{bal:,d} {self.tcoinimage}")
         await ctx.send(embed = em)
 
     # Leaderboard
@@ -147,7 +147,7 @@ class Economy:
         em = discord.Embed(color = discord.Color.dark_red())
         # Make sure something is in the embed
         if coins == []:
-            em.add_field(name = "Leaderboard", value = "No one is using T-Coin so there is nothing on the leaderboard :(")
+            em.add_field(name = "Leaderboard", value = "No one is using Bro Coin so there is nothing on the leaderboard :(")
         else:
             em.set_author(name = "Leaderboard")
         # Loop
@@ -168,9 +168,9 @@ class Economy:
             # Put coins in a human readable format
             coins = format(x["coins"], ",d")
             # Add field to embed
-            em.add_field(name = f"#{lbcount} - {uname} ({gname})", value = f"T-Coins: {coins} {self.tcoinimage}", inline = False)
+            em.add_field(name = f"#{lbcount} - {uname} ({gname})", value = f"Bro Coins: {coins} {self.tcoinimage}", inline = False)
         # Set footer
-        em.set_footer(text = "PROTIP: Use t.shovel to collect T-Coins")
+        em.set_footer(text = "PROTIP: Use t.shovel to collect Bro Coins")
         # Send
         await ctx.send(embed = em)
 
@@ -259,7 +259,7 @@ class Economy:
             em.add_field(name = "Caught by the Police", value = f"Looks like this time {user.mention} got off the hook since the police showed up")
             await ctx.send(embed = em)
 
-    # Guild T-Coin transfer command
+    # Guild Bro Coin transfer command
     @commands.command()
     @commands.check(cad_user)
     async def transfer(self, ctx, amount: AmountConverter, *, guild: str):
@@ -281,7 +281,7 @@ class Economy:
         transfercheck = await self.bot.pool.fetchval("SELECT transfer FROM econ WHERE userid = $1 AND guildid = $2", ctx.author.id, ctx.guild.id)
         if transfercheck:
             em = discord.Embed(color = discord.Color.dark_teal())
-            em.add_field(name = "Already Transferred", value = "You have already transferred your T-Coins to this guild")
+            em.add_field(name = "Already Transferred", value = "You have already transferred your Bro Coins to this guild")
             await ctx.send(embed = em)
             return
         # Get user coins
@@ -305,14 +305,14 @@ class Economy:
             await self.bot.pool.execute("UPDATE econ SET coins = coins - $1 WHERE userid = $2 AND guildid = $3", amount, ctx.author.id, ctx.guild.id)
             # Tell the user
             em = discord.Embed(color = discord.Color.dark_red())
-            em.add_field(name = "T-Coins Transferred", value = f"{amount:,d} {self.tcoinimage} has been transferred to `{guild.name}`")
+            em.add_field(name = "Bro Coins Transferred", value = f"{amount:,d} {self.tcoinimage} has been transferred to `{guild.name}`")
             em.timestamp = datetime.datetime.utcnow()
             await ctx.send(embed = em)
         else:
             # User does not have enough coins
             em = discord.Embed(color = discord.Color.dark_teal())
-            em.add_field(name = "Not Enough", value = f"You do not have enough T-Coins to transfer {amount:,d} {self.tcoinimage} to `{guild.name}`")
-            em.set_footer(text = "NOTE: You are only able to transfer up to 50% of your T-Coins")
+            em.add_field(name = "Not Enough", value = f"You do not have enough Bro Coins to transfer {amount:,d} {self.tcoinimage} to `{guild.name}`")
+            em.set_footer(text = "NOTE: You are only able to transfer up to 50% of your Bro Coins")
             await ctx.send(embed = em)
     
     # Statistics command
@@ -320,11 +320,11 @@ class Economy:
     async def statistics(self, ctx):
         # Get tables from the economy table that are needed here
         econ_info = await self.bot.pool.fetchrow("SELECT COUNT(coins), AVG(coins), SUM(coins) FROM econ")
-        # T-Coin userbase count
+        # Bro Coin userbase count
         tcusbcount = econ_info["count"]
-        # Average T-Coins
+        # Average Bro Coins
         tcavg = econ_info["avg"]
-        # All T-Coins
+        # All Bro Coins
         tcall = econ_info["sum"]
         # Leading economy user
         tlu = await self.bot.pool.fetchrow("SELECT userid, coins FROM econ ORDER BY coins DESC LIMIT 1")
@@ -336,7 +336,7 @@ class Economy:
             tluname = "User Not Found"
         # Embed
         em = discord.Embed(color = discord.Color.red())
-        em.set_author(name = "T-Coin Statistics")
+        em.set_author(name = "Bro Coin Statistics")
         em.add_field(name = "Accounts", value = f"{tcusbcount:,d} accounts")
         em.add_field(name = "Average Amount", value = f"{round(tcavg):,d} {self.tcoinimage}")
         em.add_field(name = "Total Amount", value = f"{round(tcall):,d} {self.tcoinimage}")
