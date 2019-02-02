@@ -166,6 +166,7 @@ class General:
                 em = discord.Embed(color = discord.Color.dark_teal())
                 em.add_field(name = "Error: Prefix Not Set", value = "Please specify a prefix to use")
                 await ctx.send(embed = em)
+                return
         else:
             if prefix == None:
                 # Delete from database
@@ -181,19 +182,24 @@ class General:
                 em = discord.Embed(color = discord.Color.red())
                 em.add_field(name = "Set Prefix", value = f"{self.bot.user.mention}'s prefix has been set to `{prefix}`")
                 await ctx.send(embed = em)
+        # Update the prefix cache
+        if prefix != None:
+            self.bot.prefixes[ctx.guild.id] = prefix
+        else:
+            self.bot.prefixes.pop(ctx.guild.id)
 
     # Returns bot prefix in the current guild
     @commands.command(aliases = ["currentprefix", "botprefix", "serverprefix", "guildprefix"])
     async def prefix(self, ctx):
         # Get prefix
-        prefixes = await self.bot.pool.fetchrow("SELECT * FROM prefixes WHERE guildid = $1", ctx.guild.id)
-        if prefixes == None or prefixes == []:
+        prefixes = await self.bot.pool.fetchval("SELECT prefix FROM prefixes WHERE guildid = $1", ctx.guild.id)
+        if prefixes == None:
             prefix = "ts!, ts., t., and t!"
         else:
-            prefix = prefixes["prefix"]
+            prefix = prefixes
         # Send
         em = discord.Embed(color = discord.Color.red())
-        em.add_field(name = "Current Prefix", value = f"The current prefix for {self.bot.user.name} is `{prefix}`")
+        em.add_field(name = "Current Prefix", value = f"The current prefix for {self.bot.user.mention} is `{prefix}`")
         await ctx.send(embed = em)
 
     # Invite command
@@ -244,6 +250,14 @@ class General:
         # Send
         await feedbackchannel.send(embed = emb)
 
+    # Spoiler command
+    @commands.command()
+    async def spoiler(self, ctx, spoiler: str):
+        x = ""
+        for b in spoiler:
+            x += f"||{b}||"
+        await ctx.send(x)
+
     # Help command
     @commands.group(invoke_without_command = True)
     async def help(self, ctx):
@@ -270,6 +284,7 @@ class General:
         `feedback`: This command will send the developer feedback on this bot. Feel free to send suggestions or issues
         `prefixtut`: This will give you a tutorial on how to use custom prefixes on {self.bot.user.name}
         `prefix`: Returns the current prefix that {self.bot.user.name} uses in your server
+        `spoiler`: Sends any message you provide as a spoiler in an annoying form
         """, inline = False)
         # Timestamp
         em.timestamp = datetime.datetime.utcnow()

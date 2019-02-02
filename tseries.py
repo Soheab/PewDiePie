@@ -15,22 +15,21 @@ if sys.platform == "win32":
 # Custom prefixes
 async def custom_prefix(bot, message):
     await bot.wait_until_ready()
-    default_prefix = ["ts!", "ts.", "t.", "t!", "T."]
+    default_prefix = [
+        "ts!", "ts.", "t.", "t!",
+        "Ts!", "tS!", "TS!", "T.", "T!",
+        "Ts.", "tS.", "TS."
+    ]
     try:
-        prefixes = await bot.pool.fetchrow("SELECT * FROM prefixes WHERE guildid = $1", message.guild.id)
+        prefixes = bot.prefixes.get(message.guild.id)
     except AttributeError:
         # Is a DM
         rnd = random.randint(12**13, 12**200)
         return str(rnd)
-    if prefixes == None or prefixes == []:
+    if prefixes == None:
         return commands.when_mentioned_or(*default_prefix)(bot, message)
     else:
-        g = prefixes["guildid"]
-        cp = prefixes["prefix"]
-        prefixes = {
-            g: [cp]
-        }
-        return commands.when_mentioned_or(*prefixes.get(message.guild.id, []))(bot, message)
+        return commands.when_mentioned_or(prefixes)(bot, message)
 
 # Extensions
 extensions = (
@@ -79,6 +78,12 @@ class tseries(commands.AutoShardedBot):
                 print("\n", error)
 
     async def on_connect(self):
+        await asyncio.sleep(0.5) # Preventing self.pool not being ready yet
+        # Custom cachable prefixes
+        prefixes = await self.pool.fetch("SELECT * FROM prefixes")
+        self.prefixes = {}
+        for current_row in prefixes:
+            self.prefixes[current_row["guildid"]] = current_row["prefix"]
         # Load in important extensions
         for x in important:
             try:
@@ -107,5 +112,5 @@ class tseries(commands.AutoShardedBot):
 
 
 if __name__ == "__main__":
-    bot = tseries(config.pubtoken)
+    bot = tseries(config.privtoken)
     bot.run()
