@@ -72,14 +72,14 @@ class Economy:
 
     # Amount or all
     class AmountConverter(commands.Converter):
-        async def convert(self, ctx, argument, bot):
+        async def convert(self, ctx, argument):
             try:
                 return int(argument)
             except:
                 pass
             if "all" in argument:
                 # Get users coins
-                coins = await bot.pool.fetchval("SELECT coins FROM econ WHERE userid = $1 AND guildid = $2", ctx.author.id, ctx.guild.id)
+                coins = await ctx.bot.pool.fetchval("SELECT coins FROM econ WHERE userid = $1 AND guildid = $2", ctx.author.id, ctx.guild.id)
                 return coins
             elif "," in argument:
                 return int(argument.replace(",", ""))
