@@ -50,7 +50,7 @@ class General:
                 await ctx.send("Disconnected from voice channel")
                 print(f"Disconnected from VC in {ctx.guild.name}")
             else:
-                await ctx.send("T-Series is not currently in a voice channel")
+                await ctx.send(f"{self.bot.user.name} is not currently in a voice channel")
         else:
             await ctx.send("That is not a valid parameter")
 
@@ -131,7 +131,7 @@ class General:
         # Get bot latency
         botlat = f"{self.bot.latency * 1000:.3f}"
         # Bot info embed
-        em = discord.Embed(title = "T-Series Bot Information", color = discord.Color.green())
+        em = discord.Embed(title = f"{self.bot.user.name} Bot Information", color = discord.Color.green())
         em.add_field(name = "Bot Creator", value = "A Discord User#4063")
         em.add_field(name = "Bot Library", value = "discord.py rewrite")
         em.add_field(name = "Support Server", value = "https://discord.gg/we4DQ5u")
@@ -231,12 +231,12 @@ class General:
     async def feedback(self, ctx, *, message: str):
         # Feedback embed
         em = discord.Embed(color = discord.Color.blue())
-        em.add_field(name = "Feedback", value = """
-        Your feedback for T-Series has been submitted
+        em.add_field(name = "Feedback", value = f"""
+        Your feedback for {self.bot.user.name} has been submitted
         If you abuse this command, you could lose your ability to send feedback.
         """)
         await ctx.send(embed = em)
-        # Send in T-Series Support
+        # Send in PewDiePie Support
         feedbackchannel = self.bot.get_channel(518603886483996683)
         emb = discord.Embed(title = "Feedback", color = discord.Color.blue())
         emb.set_thumbnail(url = ctx.author.avatar_url)
@@ -262,7 +262,7 @@ class General:
     @commands.group(invoke_without_command = True)
     async def help(self, ctx):
         em = discord.Embed(color = discord.Color.gold())
-        em.set_author(name = "T-Series Help Page")
+        em.set_author(name = f"{self.bot.user.name} Help Page")
         # Main commands
         em.add_field(name = "Main Commands", value = """
         `pewdiepie`: Tells you what I think of PewDiePie in Hindi
@@ -295,7 +295,7 @@ class General:
     @help.command(aliases = ["tcoin", "t-coin", "tcoins", "t-coins"])
     async def economy(self, ctx):
         em = discord.Embed(color = discord.Color.gold())
-        em.set_author(name = "T-Series Economy Help Page")
+        em.set_author(name = f"{self.bot.user.name} Economy Help Page")
         em.add_field(name = "T-Coin Commands", value = """
         `shovel`: You work all day shoveling for T-Coins
         `balance (bal)`: Informs you on how many T-Coins you have
