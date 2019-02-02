@@ -6,7 +6,7 @@ import datetime
 class EconomyShop:
     def __init__(self, bot):
         self.bot = bot
-        self.tcoinimage = "<:tseries_coin:529144538225311774>"
+        self.tcoinimage = "<:bro_coin:541363630189576193>"
 
     # Add user to DB and check
     async def cad_user(ctx): # pylint: disable=E0213
@@ -92,7 +92,7 @@ class EconomyShop:
         if user_amount >= req_amount:
             # Give the user the role
             try:
-                await ctx.author.add_roles(role, reason = f"Purchased from the shop costing {req_amount:,d} T-Coins")
+                await ctx.author.add_roles(role, reason = f"Purchased from the shop costing {req_amount:,d} Bro Coins")
             except:
                 em = discord.Embed(color = discord.Color.dark_teal())
                 em.add_field(name = "Forbidden", value = f"""

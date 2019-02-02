@@ -6,7 +6,7 @@ import datetime
 class EconomyOwner:
     def __init__(self, bot):
         self.bot = bot
-        self.tcoinimage = "<:tseries_coin:529144538225311774>"
+        self.tcoinimage = "<:bro_coin:541363630189576193>"
 
     # Amount or all
     class AmountConverter(commands.Converter):
@@ -24,14 +24,14 @@ class EconomyOwner:
             else:
                 return 0
 
-    # Add T-Coins command (REQ_BOT_OWNER)
+    # Add Bro Coins command (REQ_BOT_OWNER)
     @commands.command()
     @commands.is_owner()
     async def addcoins(self, ctx, amount: AmountConverter, *, user: discord.Member):
         # Check if the amount specified is too small
         if 0 >= amount:
             em = discord.Embed(color = discord.Color.dark_teal())
-            em.add_field(name = "Too Small", value = f"You cannot add T-Coins to users that is 0 or smaller")
+            em.add_field(name = "Too Small", value = f"You cannot add Bro Coins to users that is 0 or smaller")
             await ctx.send(embed = em)
             return
         # Check if the user is in the DB
@@ -48,14 +48,14 @@ class EconomyOwner:
         em.timestamp = datetime.datetime.utcnow()
         await ctx.send(embed = em)
 
-    # Remove T-Coins command (REQ_BOT_OWNER)
+    # Remove Bro Coins command (REQ_BOT_OWNER)
     @commands.command()
     @commands.is_owner()
     async def removecoins(self, ctx, amount: AmountConverter, *, user: discord.Member):
         # Check if the amount specified is too small
         if 0 >= amount:
             em = discord.Embed(color = discord.Color.dark_teal())
-            em.add_field(name = "Too Small", value = f"You cannot remove T-Coins to users that is 0 or smaller")
+            em.add_field(name = "Too Small", value = f"You cannot remove Bro Coins to users that is 0 or smaller")
             await ctx.send(embed = em)
             return
         # Check if the user is in the DB

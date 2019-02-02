@@ -167,10 +167,12 @@ class Economy:
                 gname = gname[:-7] + "..."
             # Put coins in a human readable format
             coins = format(x["coins"], ",d")
+            # Shovel command uses
+            uses = format(x["uses"], ",d")
             # Add field to embed
-            em.add_field(name = f"#{lbcount} - {uname} ({gname})", value = f"Bro Coins: {coins} {self.tcoinimage}", inline = False)
+            em.add_field(name = f"#{lbcount} - {uname} ({gname})", value = f"Bro Coins: {coins} {self.tcoinimage} Shovel Uses: {uses}", inline = False)
         # Set footer
-        em.set_footer(text = "PROTIP: Use t.shovel to collect Bro Coins")
+        em.set_footer(text = "PROTIP: Use p.shovel to collect Bro Coins")
         # Send
         await ctx.send(embed = em)
 

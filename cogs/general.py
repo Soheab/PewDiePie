@@ -276,7 +276,7 @@ class General:
         """, inline = False)
         # Bro Coin (economy) commands
         em.add_field(name = "Bro Coin (economy)", value = """
-        Run `t.help economy` to view the list of commands for Bro Coin (economy commands)
+        Run `p.help economy` to view the list of commands for Bro Coin
         """)
         # Meta commands
         em.add_field(name = "Meta Commands", value = f"""
