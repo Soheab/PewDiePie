@@ -142,7 +142,7 @@ class General:
     # Custom prefix
     @commands.command(aliases = ["sprefix"])
     @commands.has_permissions(manage_messages = True)
-    async def setprefix(self, ctx, prefix: str = None):
+    async def setprefix(self, ctx, *, prefix: str = None):
         # Check if custom prefix exceeds the 30 character limit
         if prefix != None:
             if len(prefix) > 30:
