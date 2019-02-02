@@ -329,7 +329,7 @@ class Economy:
         # Shovel phrases count
         spc = await self.bot.pool.fetchval("SELECT COUNT(name) FROM shovel")
         try:
-            tluname = self.bot.get_user(tlu["userid"]).name
+            tluname = self.bot.get_user(tlu['userid'])
         except AttributeError:
             tluname = "User Not Found"
         # Embed
