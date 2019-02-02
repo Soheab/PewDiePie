@@ -272,6 +272,7 @@ class General:
         Please join the [support server](https://discord.gg/we4DQ5u) to request authorization.
         `randomvid`: Returns a random PewDiePie or T-Series video
         `youtube (yt)`: Sends you the link to PewDiePie's and T-Series' YouTube channel
+        `spoiler`: Sends any message you provide as a spoiler in an annoying form
         """, inline = False)
         # T-Coin (economy) commands
         em.add_field(name = "T-Coin (economy)", value = """
@@ -284,7 +285,6 @@ class General:
         `feedback`: This command will send the developer feedback on this bot. Feel free to send suggestions or issues
         `prefixtut`: This will give you a tutorial on how to use custom prefixes on {self.bot.user.name}
         `prefix`: Returns the current prefix that {self.bot.user.name} uses in your server
-        `spoiler`: Sends any message you provide as a spoiler in an annoying form
         """, inline = False)
         # Timestamp
         em.timestamp = datetime.datetime.utcnow()
