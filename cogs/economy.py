@@ -70,7 +70,7 @@ class Economy:
         # Change values for the user in the database
         await self.bot.pool.execute("UPDATE econ SET coins = coins + $1 WHERE userid = $2 AND guildid = $3", ctg, ctx.author.id, ctx.guild.id)
         # Update shovel uses
-        await self.bot.pool.execute("UPDATE econ SET uses = uses + 1 WHERE userid = $2 AND guildid = $3", ctx.author.id, ctx.guild.id)
+        await self.bot.pool.execute("UPDATE econ SET uses = uses + 1 WHERE userid = $1 AND guildid = $2", ctx.author.id, ctx.guild.id)
 
     # Amount or all
     class AmountConverter(commands.Converter):
