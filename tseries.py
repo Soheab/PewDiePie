@@ -15,11 +15,6 @@ if sys.platform == "win32":
 # Custom prefixes
 async def custom_prefix(bot, message):
     await bot.wait_until_ready()
-    default_prefix = [
-        "ts!", "ts.", "t.", "t!",
-        "Ts!", "tS!", "TS!", "T.", "T!",
-        "Ts.", "tS.", "TS."
-    ]
     try:
         prefixes = bot.prefixes.get(message.guild.id)
     except AttributeError:
@@ -27,7 +22,7 @@ async def custom_prefix(bot, message):
         rnd = random.randint(12**13, 12**200)
         return str(rnd)
     if prefixes == None:
-        return commands.when_mentioned_or(*default_prefix)(bot, message)
+        return commands.when_mentioned_or(*bot.default_prefix)(bot, message)
     else:
         return commands.when_mentioned_or(prefixes)(bot, message)
 
@@ -84,6 +79,13 @@ class tseries(commands.AutoShardedBot):
         self.prefixes = {}
         for current_row in prefixes:
             self.prefixes[current_row["guildid"]] = current_row["prefix"]
+        # Default prefixes
+        self.default_prefix = [
+            "ts!", "ts.", "t.", "t!",
+            "Ts!", "tS!", "TS!", "T.", "T!",
+            "Ts.", "tS.", "TS.", "p.", "P.",
+            "p!", "P!"
+        ]
         # Load in important extensions
         for x in important:
             try:
