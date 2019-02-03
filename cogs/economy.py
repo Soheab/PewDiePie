@@ -11,8 +11,8 @@ class Economy:
 
     async def on_ready(self):
         # Cache shovel phrases
-        self.bot.pos = await self.bot.pool.fetch("SELECT * FROM shovel WHERE fate = true")
-        self.bot.neg = await self.bot.pool.fetch("SELECT * FROM shovel WHERE fate = false")
+        self.bot.pos = await self.bot.pool.fetch("SELECT name, id FROM shovel WHERE fate = true")
+        self.bot.neg = await self.bot.pool.fetch("SELECT name, id FROM shovel WHERE fate = false")
     
     # Add user to DB and check
     async def cad_user(ctx): # pylint: disable=E0213
@@ -180,7 +180,7 @@ class Economy:
     @commands.command(aliases = ["bet", "ontheline", "bets", "dice", "die"])
     @commands.check(cad_user)
     @commands.cooldown(1, 60, commands.BucketType.member)
-    async def gamble(self, ctx, amount: AmountConverter):
+    async def gamble(self, ctx, amount: AmountConverter = 5000):
         # Get user stuff
         usercoins = await self.bot.pool.fetchval("SELECT coins FROM econ WHERE userid = $1 AND guildid = $2", ctx.author.id, ctx.guild.id)
         # Check if the user is using negatives
