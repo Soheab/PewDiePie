@@ -12,7 +12,7 @@ class EconomyShop:
     async def cad_user(ctx): # pylint: disable=E0213
         dbcheck = await ctx.bot.pool.fetchrow("SELECT * FROM econ WHERE userid = $1 AND guildid = $2", ctx.author.id, ctx.guild.id) # pylint: disable=E1101
         if dbcheck == None or dbcheck == []:
-            await ctx.bot.pool.execute("INSERT INTO econ VALUES ($1, $2, $3, $4, $5)", 0, ctx.author.id, ctx.guild.id, True, 0) # pylint: disable=E1101
+            await ctx.bot.pool.execute("INSERT INTO econ VALUES ($1, $2, $3, $4, $5)", 0, ctx.author.id, ctx.guild.id, False, 0) # pylint: disable=E1101
             return True
         else:
             return True
