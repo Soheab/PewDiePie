@@ -328,13 +328,15 @@ class Economy:
         tcavg = econ_info["avg"]
         # All Bro Coins
         tcall = econ_info["sum"]
+        # Shovel command uses
+        tcsuses = await self.bot.pool.fetchval("SELECT SUM(uses) FROM econ")
         # Leading economy user
         tlu = await self.bot.pool.fetchrow("SELECT userid, coins FROM econ ORDER BY coins DESC LIMIT 1")
         # Shovel phrases count
         spc = await self.bot.pool.fetchval("SELECT COUNT(name) FROM shovel")
-        try:
-            tluname = self.bot.get_user(tlu["userid"])
-        except AttributeError:
+        # Get user
+        tluname = self.bot.get_user(tlu["userid"])
+        if tluname == None:
             tluname = "User Not Found"
         # Embed
         em = discord.Embed(color = discord.Color.red())
@@ -345,6 +347,7 @@ class Economy:
         em.add_field(name = "Leading User", value = f"{tluname}")
         em.add_field(name = "Leading User Amount", value = f"{tlu['coins']:,d} {self.tcoinimage}")
         em.add_field(name = "Shovel Phrases", value = f"{spc:,d} phrases")
+        em.add_field(name = "Shovel Uses", value = f"{round(tcsuses):,d} uses")
         # Timestamp
         em.timestamp = datetime.datetime.utcnow()
         await ctx.send(embed = em)
