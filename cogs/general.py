@@ -252,7 +252,7 @@ class General:
 
     # Spoiler command
     @commands.command()
-    async def spoiler(self, ctx, spoiler: str):
+    async def spoiler(self, ctx, *, spoiler: str):
         x = ""
         for b in spoiler:
             x += f"||{b}||"
