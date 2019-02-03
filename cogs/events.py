@@ -73,7 +73,7 @@ class Events:
     async def autostatus(self):
         await self.bot.wait_until_ready()
         while not self.bot.is_closed():
-            await self.bot.change_presence(activity = discord.Activity(type = discord.ActivityType.watching, name = f"for p.help in {len(self.bot.guilds)} servers"))
+            await self.bot.change_presence(activity = discord.Activity(type = discord.ActivityType.watching, name = f"for p.help in {len(self.bot.guilds):,d} servers"))
             await asyncio.sleep(30)
             await self.bot.change_presence(activity = discord.Game(name = "Subscribe to PewDiePie!"))
             await asyncio.sleep(30)
