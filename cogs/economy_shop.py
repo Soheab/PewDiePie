@@ -18,6 +18,22 @@ class EconomyShop:
             return True
         return False
 
+    # Amount or all
+    class AmountConverter(commands.Converter):
+        async def convert(self, ctx, argument):
+            try:
+                return int(argument)
+            except:
+                pass
+            if "all" in argument:
+                # Get users coins
+                coins = await ctx.bot.pool.fetchval("SELECT coins FROM econ WHERE userid = $1 AND guildid = $2", ctx.author.id, ctx.guild.id)
+                return coins
+            elif "," in argument:
+                return int(argument.replace(",", ""))
+            else:
+                return 0
+
     # SHOP: Show roles (REQ_NONE)
     @commands.group(invoke_without_command = True)
     async def shop(self, ctx):
@@ -46,7 +62,7 @@ class EconomyShop:
     @shop.command(aliases = ["role", "make"])
     @commands.bot_has_permissions(manage_roles = True)
     @commands.has_permissions(manage_roles = True)
-    async def add(self, ctx, req_amount: int, *, role: discord.Role):
+    async def add(self, ctx, req_amount: AmountConverter, *, role: discord.Role):
         # Check if role is already in the DB
         rolecheck = await self.bot.pool.fetchrow("SELECT * FROM econshop WHERE roleid = $1 AND guildid = $2", role.id, ctx.guild.id)
         if rolecheck != None:
@@ -118,7 +134,7 @@ class EconomyShop:
     # SHOP: Edit existing shop item (REQ_MANAGE_ROLES)
     @shop.command(aliases = ["change", "adjust"])
     @commands.has_permissions(manage_roles = True)
-    async def edit(self, ctx, req_amount: int, *, role: discord.Role):
+    async def edit(self, ctx, req_amount: AmountConverter, *, role: discord.Role):
         # Check if the role does NOT exist
         rolecheck = await self.bot.pool.fetchrow("SELECT * FROM econshop WHERE roleid = $1 AND guildid = $2", role.id, ctx.guild.id)
         if rolecheck == None:
