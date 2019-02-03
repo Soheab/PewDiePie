@@ -13,7 +13,7 @@ class Subscribe:
 
     # Gets the PewDiePie and T-Series subcount
     @commands.command(aliases = ["subscribercount"])
-    async def subcount(self, ctx, p: str = "", stping: bool = True, log: bool = True):
+    async def subcount(self, ctx, p: str = "", stping: bool = True):
         if stping:
             await ctx.channel.trigger_typing()
         base = "https://www.googleapis.com/youtube/v3"
@@ -33,12 +33,8 @@ class Subscribe:
                 pjson = await preq.json()
         # Get T-Series sub count
         tsc = tjson["items"][0]["statistics"]["subscriberCount"]
-        if log:
-            print("Got T-Series subscriber count")
         # Get PewDiePie sub count
         psc = pjson["items"][0]["statistics"]["subscriberCount"]
-        if log:
-            print("Got PewDiePie subscriber count")
         # Create sub count variables with an int value
         tscint = int(tsc)
         pscint = int(psc)
@@ -76,8 +72,6 @@ class Subscribe:
             [T-Series](https://socialblade.com/youtube/user/tseries/realtime) | [PewDiePie](https://socialblade.com/youtube/user/pewdiepie/realtime)
             """, inline = False)
             await ctx.send(embed = em)
-            if log:
-                print("Sent subscriber count")
 
     # Authorization checking
     async def authcheck(self, gid: int):
@@ -137,7 +131,7 @@ class Subscribe:
         # ====START ORIGINAL MESSAGE====
 
         # Sub info 1
-        stsubinfo = await ctx.invoke(self.bot.get_command("subcount"), p = "retint", stping = False, log = False)
+        stsubinfo = await ctx.invoke(self.bot.get_command("subcount"), p = "retint", stping = False)
         # Create embed then send
         em = discord.Embed(color = discord.Color.blurple())
         em.add_field(name = "Leading Channel", value = stsubinfo["l"])
@@ -178,7 +172,7 @@ class Subscribe:
             # Return
             return False
         # Get subscriber count information
-        subinfo = await self.subcount.callback(None, None, "retint", False, False)
+        subinfo = await self.subcount.callback(None, None, "retint", False) # pylint: disable=no-member
         # Edit embed
         await self.subgedit(channel.id, message, subinfo["l"])
         # Take away one from count
