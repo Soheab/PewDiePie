@@ -170,7 +170,7 @@ class Economy:
             # Shovel command uses
             uses = format(x["uses"], ",d")
             # Add field to embed
-            em.add_field(name = f"#{lbcount} - {uname} ({gname})", value = f"Bro Coins: {coins} {self.tcoinimage} Shovel Uses: {uses}", inline = False)
+            em.add_field(name = f"#{lbcount} - {uname} ({gname})", value = f"Bro Coins: {coins} {self.tcoinimage}\nShovel Uses: {uses}", inline = False)
         # Set footer
         em.set_footer(text = "PROTIP: Use p.shovel to collect Bro Coins")
         # Send
