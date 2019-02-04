@@ -80,8 +80,9 @@ class Economy:
             except:
                 pass
             if "all" in argument:
-                # Get users coins
                 coins = await ctx.bot.pool.fetchval("SELECT coins FROM econ WHERE userid = $1 AND guildid = $2", ctx.author.id, ctx.guild.id)
+                if ctx.command.name == "transfer":
+                    coins = round(coins * 0.5)
                 return coins
             elif "," in argument:
                 return int(argument.replace(",", ""))
