@@ -266,7 +266,7 @@ class General:
         # Main commands
         em.add_field(name = "Main Commands", value = """
         `pewdiepie`: Tells you what I think of PewDiePie in Hindi
-        `disstrack`: Plays Bitch Lasagna in a voice channel. To disconnect, run `ts!disstrack stop` or `ts!disstrack leave`
+        `disstrack`: Plays Bitch Lasagna in a voice channel. To disconnect, run `p.disstrack stop` or `p.disstrack leave`
         `subcount`: Shows T-Series' and PewDiePie's subscriber count
         `subgap`: Automatically updates the current subscriber gap between PewDiePie and T-Series every 30 seconds. Your server must be authorized to use this feature.
         Please join the [support server](https://discord.gg/we4DQ5u) to request authorization.
