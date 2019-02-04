@@ -129,13 +129,18 @@ class Economy:
             uid = user
         else:
             uid = ctx.author
-        bal = await self.bot.pool.fetchval("SELECT coins FROM econ WHERE userid = $1 AND guildid = $2", uid.id, ctx.guild.id)
-        if bal == None:
+        baluses = await self.bot.pool.fetchrow("SELECT coins, uses FROM econ WHERE userid = $1 AND guildid = $2", uid.id, ctx.guild.id)
+        if baluses == None:
             bal = 0
+            uses = 0
+        else:
+            bal = baluses["coins"]
+            uses = baluses["uses"]
         # Tell the user
         em = discord.Embed(color = discord.Color.blue())
         em.set_author(name = f"{uid.name}#{uid.discriminator}", icon_url = uid.avatar_url)
         em.add_field(name = "Bro Coins", value = f"{bal:,d} {self.tcoinimage}")
+        em.add_field(name = "Shovel Uses", value = f"{uses:,d} uses")
         await ctx.send(embed = em)
 
     # Leaderboard
