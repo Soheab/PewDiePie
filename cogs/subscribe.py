@@ -98,6 +98,7 @@ class Subscribe:
     # Update subgap background task
     async def subgtask(self):
         await self.bot.wait_until_ready()
+        await asyncio.sleep(1)
         counter = 0
         r = 1000000
         while counter < r:
