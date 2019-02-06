@@ -68,8 +68,6 @@ class Subscribe:
                 "l": pscpts
             }
             return retdict
-        elif p.lower() == "gap":
-            await ctx.invoke(self.bot.get_command("subgstart"))
         else:
             # Send sub count in embed
             em = discord.Embed(color = discord.Color.red())
