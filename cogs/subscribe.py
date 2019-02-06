@@ -11,6 +11,18 @@ class Subscribe:
     def __init__(self, bot):
         self.bot = bot
 
+    # Cache subgap information
+    async def subgcache(self):
+        self.bot.subgap = {"guild": {}}
+        information = await self.bot.pool.fetch("SELECT * FROM subgap")
+        for x in information:
+            self.bot.subgap["guild"][x["guildid"]] = {}
+            guild = self.bot.subgap["guild"][x["guildid"]]
+            guild["channelid"] = x["channelid"]
+            guild["guildid"] = x["guildid"]
+            guild["msgid"] = x["msgid"]
+            guild["count"] = x["count"]
+
     # Gets the PewDiePie and T-Series subcount
     @commands.command(aliases = ["subscribercount"])
     async def subcount(self, ctx, p: str = "", stping: bool = True):
@@ -57,7 +69,7 @@ class Subscribe:
             }
             return retdict
         elif p.lower() == "gap":
-            await ctx.invoke(self.bot.get_command("subgap"))
+            await ctx.invoke(self.bot.get_command("subgactivate"))
         else:
             # Send sub count in embed
             em = discord.Embed(color = discord.Color.red())
@@ -84,25 +96,29 @@ class Subscribe:
         return False
 
     # Update subgap background task
-    async def subgtask(self, r: int, message: int, guild: int, channel: int):
+    async def subgtask(self):
         await self.bot.wait_until_ready()
         counter = 0
+        r = 1000000
         while counter < r:
-            # Run command
-            await self.subgloop(message, guild, channel)
+            # Get subgap information
+            for guild_id in self.bot.subgap["guild"]:
+                message = self.bot.subgap["guild"][guild_id]["msgid"]
+                guild = guild_id
+                channel = self.bot.subgap["guild"][guild_id]["channelid"]
+                await self.subgloop(message, guild, channel)
             # Add one to counter
             counter += 1
             # Wait
             await asyncio.sleep(30)
         # Delete from database after everything is done
         await self.bot.pool.execute("DELETE FROM subgap WHERE msgid = $1 AND guildid = $2 AND channelid = $3", message, guild, channel)
-        # Return
         return
 
     # Subcount gap command
-    @commands.command()
+    @commands.command(name = "subgap")
     @commands.has_permissions(administrator = True)
-    async def subgap(self, ctx, r: int = 10000000):
+    async def subgstart(self, ctx, r: int = 10000000):
         # ====START CHECKS====
 
         # Before doing anything, check if the guild is authorized
@@ -141,16 +157,10 @@ class Subscribe:
 
         # Add the subgap to the database
         await self.bot.pool.execute("INSERT INTO subgap VALUES ($1, $2, $3, $4)", stmsg.id, ctx.channel.id, ctx.guild.id, r)
-        # Make channel variable
-        channel = ctx.channel
-        # Make message variable
-        message = stmsg.id
-        # Make guild variable
-        guild = ctx.guild.id
         # Wait 30 seconds to update
         await asyncio.sleep(30)
-        # Start task which updates loop
-        self.bot.loop.create_task(self.subgtask(r, message, guild, channel.id))
+        # Update cache
+        await self.subgcache()
 
     # SUBGAP LOOP -- THIS IS NOT A COMMAND BECAUSE OF NO CONTEXT IN ON_READY
     async def subgloop(self, message: int, guild: int, channel: int):
@@ -162,11 +172,15 @@ class Subscribe:
             # Check if the message exists or not
             await channel.get_message(message)
         except AttributeError:
+            # Remove from cache
+            self.bot.subgap["guild"].pop(guild)
             # Delete message from database
             await self.bot.pool.execute("DELETE FROM subgap WHERE msgid = $1 AND guildid = $2", message, guild)
             # Return
             return False
         except discord.NotFound:
+            # Remove from cache
+            self.bot.subgap["guild"].pop(guild)
             # Delete message from database
             await self.bot.pool.execute("DELETE FROM subgap WHERE msgid = $1 AND guildid = $2", message, guild)
             # Return
@@ -193,14 +207,12 @@ class Subscribe:
     # Start background tasks on ready
     async def on_ready(self):
         # Start updating subgap messages again
-        subgapguilds = await self.bot.pool.fetch("SELECT * FROM subgap")
-        if subgapguilds != None:
-            for g in subgapguilds:
-                # Run command to update
-                self.bot.loop.create_task(self.subgtask(g["count"], g["msgid"], g["guildid"], g["channelid"]))
-                # Print
-                print(f"Created subgap loop task. Msg ID: {g['msgid']}  Guild ID: {g['guildid']}  Channel ID: {g['channelid']}")
-
+        self.bot.loop.create_task(self.subgtask())
+        # Print to the console for the sole purpose of telling me that it works
+        for x in self.bot.subgap["guild"]:
+            g = self.bot.subgap
+            print(f"Started subgap! Msg ID: {g['guild'][x]['msgid']}  Guild ID: {x}  Channel ID: {g['guild'][x]['channelid']}")
 
 def setup(bot):
+    bot.loop.create_task(Subscribe(bot).subgcache())
     bot.add_cog(Subscribe(bot))
