@@ -9,8 +9,8 @@ class Economy:
         self.bot = bot
         self.tcoinimage = "<:bro_coin:541363630189576193>"
 
-    async def on_ready(self):
-        # Cache shovel phrases
+    # Cache shovel phrases
+    async def shovel_cache(self):
         self.bot.pos = await self.bot.pool.fetch("SELECT name, id FROM shovel WHERE fate = true")
         self.bot.neg = await self.bot.pool.fetch("SELECT name, id FROM shovel WHERE fate = false")
     
@@ -360,4 +360,5 @@ class Economy:
 
 
 def setup(bot):
+    bot.loop.create_task(Economy(bot).shovel_cache())
     bot.add_cog(Economy(bot))
