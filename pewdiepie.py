@@ -34,7 +34,7 @@ extensions = (
 )
 
 # Important extensions
-important = ("jishaku", "authsupport")
+important = ("jishaku")
 
 # Bot
 class PewDiePie(commands.AutoShardedBot):
