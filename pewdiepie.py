@@ -114,5 +114,5 @@ class PewDiePie(commands.AutoShardedBot):
 
 
 if __name__ == "__main__":
-    bot = PewDiePie(config.pubtoken)
+    bot = PewDiePie(config.pubtoken) # pylint: disable=no-member
     bot.run()
