@@ -74,7 +74,12 @@ class Owner:
             stdout = asyncio.subprocess.PIPE,
             stderr = asyncio.subprocess.PIPE
         )
-        com = str(await pro.communicate())
+        try:
+            com = await asyncio.wait_for(pro.communicate(), timeout = 10)
+            com = str(com[0])
+        except asyncio.TimeoutError:
+            await ctx.send("Took too long to respond")
+            return
         reg = r"(.*?)\.py"
         found = re.findall(reg, com)
         if found:
