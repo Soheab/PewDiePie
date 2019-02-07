@@ -88,8 +88,11 @@ class Owner:
             for x in found:
                 extension = re.sub(r"\s+", "", x)
                 extension = extension.replace("/", ".")
-                self.bot.unload_extension(extension)
-                self.bot.load_extension(extension)
+                try:
+                    self.bot.unload_extension(extension)
+                    self.bot.load_extension(extension)
+                except ModuleNotFoundError:
+                    continue
                 updated.append(extension)
             for b in updated:
                 final_string += f"`{b}` "
