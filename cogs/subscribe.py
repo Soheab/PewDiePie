@@ -22,6 +22,17 @@ class Subscribe:
             guild["guildid"] = x["guildid"]
             guild["msgid"] = x["msgid"]
             guild["count"] = x["count"]
+        # Start updating subgap messages again
+        self.bot.loop.create_task(self.subgtask())
+
+    # Update subgap cache command
+    async def subgupcache(self, message: int, guild: int, channel: int, count: int):
+        self.bot.subgap["guild"][guild] = {}
+        gdict = self.bot.subgap["guild"][guild]
+        gdict["channelid"] = channel
+        gdict["guildid"] = guild
+        gdict["msgid"] = message
+        gdict["count"] = count
 
     # Gets the PewDiePie and T-Series subcount
     @commands.command(aliases = ["subscribercount"])
@@ -96,16 +107,30 @@ class Subscribe:
     # Update subgap background task
     async def subgtask(self):
         await self.bot.wait_until_ready()
-        await asyncio.sleep(1)
         counter = 0
         r = 1000000
         while counter < r:
+            run = True
+            amount = 10
             # Get subgap information
-            for guild_id in self.bot.subgap["guild"]:
-                message = self.bot.subgap["guild"][guild_id]["msgid"]
-                guild = guild_id
-                channel = self.bot.subgap["guild"][guild_id]["channelid"]
-                await self.subgloop(message, guild, channel)
+            while run:
+                try:
+                    for guild_id in self.bot.subgap["guild"]:
+                        message = self.bot.subgap["guild"][guild_id]["msgid"]
+                        guild = guild_id
+                        channel = self.bot.subgap["guild"][guild_id]["channelid"]
+                        await self.subgloop(message, guild, channel)
+                    run = False
+                    amount = 0
+                except RuntimeError:
+                    if amount == 0:
+                        await self.bot.get_channel(519378596104765442).send("""
+                        <@498678645716418578> Subgap update task has been killed (RUNTIME ERROR)
+                        """)
+                        return
+                    else:
+                        amount -= 1
+                        continue
             # Add one to counter
             counter += 1
             # Wait
@@ -159,7 +184,7 @@ class Subscribe:
         # Wait 30 seconds to update
         await asyncio.sleep(30)
         # Update cache
-        await self.subgcache()
+        await self.subgupcache(stmsg.id, ctx.guild.id, ctx.channel.id, r)
 
     # SUBGAP LOOP -- THIS IS NOT A COMMAND BECAUSE OF NO CONTEXT IN ON_READY
     async def subgloop(self, message: int, guild: int, channel: int):
@@ -205,8 +230,6 @@ class Subscribe:
 
     # Start background tasks on ready
     async def on_ready(self):
-        # Start updating subgap messages again
-        self.bot.loop.create_task(self.subgtask())
         # Print to the console for the sole purpose of telling me that it works
         for x in self.bot.subgap["guild"]:
             g = self.bot.subgap
