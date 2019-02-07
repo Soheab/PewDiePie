@@ -22,8 +22,11 @@ class Subscribe:
             guild["guildid"] = x["guildid"]
             guild["msgid"] = x["msgid"]
             guild["count"] = x["count"]
+        # Check if current task is running then cancel if it is
+        if hasattr(self.bot, "subgap_task"):
+            self.bot.subgap_task.cancel()
         # Start updating subgap messages again
-        self.bot.loop.create_task(self.subgtask())
+        self.bot.subgap_task = self.bot.loop.create_task(self.subgtask())
 
     # Update subgap cache command
     async def subgupcache(self, message: int, guild: int, channel: int, count: int):
