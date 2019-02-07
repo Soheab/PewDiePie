@@ -76,7 +76,7 @@ class Owner:
         )
         try:
             com = await asyncio.wait_for(pro.communicate(), timeout = 10)
-            com = str(com[0])
+            com = com[0].decode() + "\n" + com[1].decode()
         except asyncio.TimeoutError:
             await ctx.send("Took too long to respond")
             return
