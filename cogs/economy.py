@@ -137,11 +137,15 @@ class Economy:
         else:
             bal = baluses["coins"]
             uses = baluses["uses"]
+        if uses == 1:
+            u = "use"
+        else:
+            u = "uses"
         # Tell the user
         em = discord.Embed(color = discord.Color.blue())
         em.set_author(name = f"{uid.name}#{uid.discriminator}", icon_url = uid.avatar_url)
         em.add_field(name = "Bro Coins", value = f"{bal:,d} {self.tcoinimage}")
-        em.add_field(name = "Shovel Uses", value = f"{uses:,d} uses")
+        em.add_field(name = "Shovel Uses", value = f"{uses:,d} {u}")
         await ctx.send(embed = em)
 
     # Leaderboard
@@ -336,6 +340,10 @@ class Economy:
         tcall = econ_info["sum"]
         # Shovel command uses
         tcsuses = await self.bot.pool.fetchval("SELECT SUM(uses) FROM econ")
+        if tcsuses == 1:
+            u = "use"
+        else:
+            u = "uses"
         # Leading economy user
         tlu = await self.bot.pool.fetchrow("SELECT userid, coins FROM econ ORDER BY coins DESC LIMIT 1")
         # Shovel phrases count
@@ -353,7 +361,7 @@ class Economy:
         em.add_field(name = "Leading User", value = f"{tluname}")
         em.add_field(name = "Leading User Amount", value = f"{tlu['coins']:,d} {self.tcoinimage}")
         em.add_field(name = "Shovel Phrases", value = f"{spc:,d} phrases")
-        em.add_field(name = "Shovel Uses", value = f"{round(tcsuses):,d} uses")
+        em.add_field(name = "Shovel Uses", value = f"{round(tcsuses):,d} {u}")
         # Timestamp
         em.timestamp = datetime.datetime.utcnow()
         await ctx.send(embed = em)
