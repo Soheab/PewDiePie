@@ -22,7 +22,7 @@ async def custom_prefix(bot, message):
         rnd = random.randint(12**13, 12**200)
         return str(rnd)
     if prefixes == None:
-        return commands.when_mentioned_or(*bot.default_prefix)(bot, message)
+        return commands.when_mentioned_or(*bot.default_prefixes)(bot, message)
     else:
         return commands.when_mentioned_or(prefixes)(bot, message)
 
@@ -38,9 +38,8 @@ important = ("jishaku",)
 
 # Bot
 class PewDiePie(commands.AutoShardedBot):
-    def __init__(self, token):
+    def __init__(self):
         self.custom_prefix = custom_prefix
-        self.token = token
         super().__init__(
             command_prefix = self.custom_prefix,
             case_insensitive = True,
@@ -73,6 +72,10 @@ class PewDiePie(commands.AutoShardedBot):
                 print("\n", error)
 
     async def on_connect(self):
+        try:
+            self.loop.create_task(self.database())
+        except:
+            print("There was a problem creating the database task")
         await asyncio.sleep(0.5) # Preventing self.pool not being ready yet
         # Custom cachable prefixes
         prefixes = await self.pool.fetch("SELECT * FROM prefixes")
@@ -80,7 +83,7 @@ class PewDiePie(commands.AutoShardedBot):
         for current_row in prefixes:
             self.prefixes[current_row["guildid"]] = current_row["prefix"]
         # Default prefixes
-        self.default_prefix = [
+        self.default_prefixes = [
             "ts!", "ts.", "t.", "t!",
             "Ts!", "tS!", "TS!", "T.", "T!",
             "Ts.", "tS.", "TS.", "p.", "P.",
@@ -101,18 +104,7 @@ class PewDiePie(commands.AutoShardedBot):
                 print()
                 print(e)
 
-    def run(self):
-        try:
-            self.loop.create_task(self.database())
-        except:
-            print("There was a problem creating the database task")
-        try:
-            super().run(self.token)
-        except Exception as error:
-            print("There was a problem running the bot")
-            print("\n", error)
-
 
 if __name__ == "__main__":
-    bot = PewDiePie(config.pubtoken) # pylint: disable=no-member
-    bot.run()
+    bot = PewDiePie()
+    bot.run(config.pubtoken) # pylint: disable=no-member
