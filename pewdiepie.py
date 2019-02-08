@@ -84,10 +84,10 @@ class PewDiePie(commands.AutoShardedBot):
             self.prefixes[current_row["guildid"]] = current_row["prefix"]
         # Default prefixes
         self.default_prefixes = [
+            "p.", "P.", "p!", "P!",
             "ts!", "ts.", "t.", "t!",
-            "Ts!", "tS!", "TS!", "T.", "T!",
-            "Ts.", "tS.", "TS.", "p.", "P.",
-            "p!", "P!"
+            "Ts!", "tS!", "TS!", "T.", "T!", 
+            "Ts.", "tS.", "TS."
         ]
         # Load in important extensions
         for x in important:
