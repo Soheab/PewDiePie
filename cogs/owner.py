@@ -93,6 +93,9 @@ class Owner:
                     self.bot.load_extension(extension)
                 except ModuleNotFoundError:
                     continue
+                except Exception as error:
+                    await ctx.send(f"Error: ```{error}```")
+                    continue
                 updated.append(extension)
             for b in updated:
                 final_string += f"`{b}` "
