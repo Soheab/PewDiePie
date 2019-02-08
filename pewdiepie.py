@@ -47,8 +47,6 @@ class PewDiePie(commands.AutoShardedBot):
             fetch_offline_members = False,
             reconnect = True
         )
-        # Client session
-        self.session = aiohttp.ClientSession(loop = self.loop)
 
     async def on_ready(self):
         if hasattr(self, "uptime") == False:
