@@ -18,12 +18,15 @@ class Events:
     async def on_command_completion(self, ctx):
         print()
         print(f"COMPLETED COMMAND: {ctx.command.name}. Invoked by: {ctx.author.name}#{ctx.author.discriminator}")
-        print(f"GUILD: {ctx.guild.name} | GUILD ID: {ctx.guild.id} | USER ID: {ctx.author.id}")
+        print(f"""
+        GUILD: {ctx.guild.name} | GUILD ID: {ctx.guild.id}
+        USER ID: {ctx.author.id} | CHANNEL ID: {ctx.channel.id}
+        """)
 
     # On guild join
     async def on_guild_join(self, guild):
         print(f"Joined guild named '{guild.name}' with {guild.member_count} members")
-        # Log guild join into T-Series log channel
+        # Log guild join into PewDiePie log channel
         logchannel = self.bot.get_channel(501089724421767178)
         em = discord.Embed(title = "Joined Guild", color = discord.Color.teal())
         em.set_thumbnail(url = guild.icon_url)
@@ -42,7 +45,7 @@ class Events:
     # On guild remove (leave)
     async def on_guild_remove(self, guild):
         print(f"Left guild named '{guild.name}' that had {guild.member_count} members")
-        # Log guild remove into T-Series log channel
+        # Log guild remove into PewDiePie log channel
         logchannel = self.bot.get_channel(501089724421767178)
         em = discord.Embed(title = "Left Guild", color = discord.Color.purple())
         em.set_thumbnail(url = guild.icon_url)
