@@ -98,7 +98,7 @@ class Owner:
                     if inspect.getfile(self.bot.__class__).replace(".py", "") in extension:
                         continue
                     else:
-                        await ctx.send(f"Error: ```{error}```")
+                        await ctx.send(f"Error: ```\n{error}\n```")
                         continue
                 updated.append(extension)
             for b in updated:
