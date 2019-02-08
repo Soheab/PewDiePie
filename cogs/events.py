@@ -22,7 +22,7 @@ class Events:
 
     # On guild join
     async def on_guild_join(self, guild):
-        print("Joined guild named '" + guild.name + "' with " + str(guild.member_count) + " members")
+        print(f"Joined guild named '{guild.name}' with {guild.member_count} members")
         # Log guild join into T-Series log channel
         logchannel = self.bot.get_channel(501089724421767178)
         em = discord.Embed(title = "Joined Guild", color = discord.Color.teal())
@@ -41,7 +41,7 @@ class Events:
 
     # On guild remove (leave)
     async def on_guild_remove(self, guild):
-        print("Left guild named '" + guild.name + "' that had " + str(guild.member_count) + " members")
+        print(f"Left guild named '{guild.name}' that had {guild.member_count} members")
         # Log guild remove into T-Series log channel
         logchannel = self.bot.get_channel(501089724421767178)
         em = discord.Embed(title = "Left Guild", color = discord.Color.purple())

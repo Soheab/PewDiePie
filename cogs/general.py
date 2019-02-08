@@ -57,11 +57,11 @@ class General:
 
         # Use aiohttp to make GET requests all in one session
         async with aiohttp.ClientSession() as cs:
-            async with cs.get(base + "/channels?part=snippet,contentDetails&id=" + tci + end) as tureq:
+            async with cs.get(f"{base}/channels?part=snippet,contentDetails&id={tci}{end}") as tureq:
                 # Get T-Series upload playlist
                 tujson = await tureq.json()
             tupl = tujson["items"][0]["contentDetails"]["relatedPlaylists"]["uploads"]
-            async with cs.get(base + "/playlistItems?playlistId=" + tupl + "&maxResults=15&part=snippet,contentDetails" + end) as tuvids:
+            async with cs.get(f"{base}/playlistItems?playlistId={tupl}&maxResults=15&part=snippet,contentDetails{end}") as tuvids:
                 # Get the first 15 videos
                 tuvidsjson = await tuvids.json()
         tuvidslist = []
@@ -75,11 +75,11 @@ class General:
 
         # Use aiohttp to make GET requests all in one session
         async with aiohttp.ClientSession() as pcs:
-            async with pcs.get(base + "/channels?part=snippet,contentDetails&id=" + pci + end) as pureq:
+            async with pcs.get(f"{base}/channels?part=snippet,contentDetails&id={pci}{end}") as pureq:
                 # Get T-Series upload playlist
                 pujson = await pureq.json()
             pupl = pujson["items"][0]["contentDetails"]["relatedPlaylists"]["uploads"]
-            async with pcs.get(base + "/playlistItems?playlistId=" + pupl + "&maxResults=15&part=snippet,contentDetails" + end) as puvids:
+            async with pcs.get(f"{base}/playlistItems?playlistId={pupl}&maxResults=15&part=snippet,contentDetails{end}") as puvids:
                 # Get the first 15 videos
                 puvidsjson = await puvids.json()
         puvidslist = []
@@ -96,9 +96,9 @@ class General:
         # Get random video
         rndptvids = random.choice(ptuvidslist)
         # Make the video ID a URL
-        rndptvidsed = "https://www.youtube.com/watch?v=" + rndptvids
+        rndptvidsed = f"https://www.youtube.com/watch?v={rndptvids}"
         # Get video thumbnail
-        rndptvidthumb = "https://img.youtube.com/vi/" + rndptvids + "/maxresdefault.jpg"
+        rndptvidthumb = f"https://img.youtube.com/vi/{rndptvids}/maxresdefault.jpg"
         # Send as embed
         em = discord.Embed(color = discord.Color.green())
         em.add_field(name = "YouTube Video", value = rndptvidsed)
@@ -124,7 +124,7 @@ class General:
         em.add_field(name = "Bot Creator", value = "A Discord User#4063")
         em.add_field(name = "Bot Library", value = "discord.py rewrite")
         em.add_field(name = "Support Server", value = "https://discord.gg/we4DQ5u")
-        em.add_field(name = "Bot Latency", value = str(botlat) + " ms")
+        em.add_field(name = "Bot Latency", value = f"{botlat} ms")
         await ctx.send(embed = em)
 
     # Invite command
