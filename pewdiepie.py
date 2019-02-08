@@ -85,8 +85,8 @@ class PewDiePie(commands.AutoShardedBot):
         # Default prefixes
         self.default_prefixes = [
             "p.", "P.", "p!", "P!",
-            "ts!", "ts.", "t.", "t!",
-            "Ts!", "tS!", "TS!", "T.", "T!", 
+            "t.", "t!", "ts!", "ts.",
+            "Ts!", "tS!", "TS!", "T.", "T!",
             "Ts.", "tS.", "TS."
         ]
         # Load in important extensions
