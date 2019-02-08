@@ -36,9 +36,6 @@ class Help:
         `prefixtut`: This will give you a tutorial on how to use custom prefixes on {self.bot.user.name}
         `prefix`: Returns the current prefix that {self.bot.user.name} uses in your server
         """, inline = False)
-        # Timestamp
-        em.timestamp = datetime.datetime.utcnow()
-        em.set_footer(icon_url = ctx.author.avatar_url, text = f"{ctx.author.name}#{ctx.author.discriminator}")
         await ctx.send(embed = em)
 
     # Help: economy
@@ -64,9 +61,6 @@ class Help:
         `shop buy`: Buys an item from the shop (you must have enough coins)
         **Please note: The bot must have the manage roles permission and be higher than the role in the shop to use the shop feature**
         """, inline = False)
-        # Timestamp
-        em.timestamp = datetime.datetime.utcnow()
-        em.set_footer(icon_url = ctx.author.avatar_url, text = f"{ctx.author.name}#{ctx.author.discriminator}")
         await ctx.send(embed = em)
 
 
