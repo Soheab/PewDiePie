@@ -6,6 +6,7 @@ import io
 import traceback
 import asyncio
 import re
+import inspect
 
 
 class Owner:
@@ -94,8 +95,11 @@ class Owner:
                 except ModuleNotFoundError:
                     continue
                 except Exception as error:
-                    await ctx.send(f"Error: ```{error}```")
-                    continue
+                    if inspect.getfile(self.bot.__class__).replace(".py", "") in extension:
+                        continue
+                    else:
+                        await ctx.send(f"Error: ```{error}```")
+                        continue
                 updated.append(extension)
             for b in updated:
                 final_string += f"`{b}` "
