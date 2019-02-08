@@ -33,14 +33,12 @@ class General:
                     return
                 # Tell user
                 await ctx.send(f"Connected to `{ctx.voice_client.channel.name}`")
-                print(f"Started playing BL in VC. Guild: {ctx.guild.name}")
             else:
                 await ctx.send("You must be connected to a voice channel")
         elif param == "stop" or param == "leave":
             if ctx.voice_client != None:
                 await ctx.voice_client.disconnect()
                 await ctx.send("Disconnected from voice channel")
-                print(f"Disconnected from VC in {ctx.guild.name}")
             else:
                 await ctx.send(f"{self.bot.user.name} is not currently in a voice channel")
         else:
@@ -106,7 +104,6 @@ class General:
         em.add_field(name = "YouTube Video", value = rndptvidsed)
         em.set_image(url = rndptvidthumb)
         await ctx.send(embed = em)
-        print("Got a random video. Video ID: " + rndptvids)
 
     # YouTube channels command
     @commands.command(aliases = ["yt"])
@@ -129,7 +126,6 @@ class General:
         em.add_field(name = "Support Server", value = "https://discord.gg/we4DQ5u")
         em.add_field(name = "Bot Latency", value = str(botlat) + " ms")
         await ctx.send(embed = em)
-        print("Sent bot info. Ping time: " + str(botlat))
 
     # Invite command
     @commands.command()
@@ -138,7 +134,6 @@ class General:
         em = discord.Embed(color = discord.Color.orange())
         em.add_field(name = "Invite", value = "[Invite me here!](https://discordapp.com/oauth2/authorize?client_id=500868806776979462&scope=bot&permissions=72710)")
         await ctx.send(embed = em)
-        print("Sent bot invite!")
 
     # Feedback command
     @commands.command()
