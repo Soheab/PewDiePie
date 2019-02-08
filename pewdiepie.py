@@ -93,16 +93,16 @@ class PewDiePie(commands.AutoShardedBot):
         for x in important:
             try:
                 self.load_extension(x)
-            except:
+            except Exception as error:
                 print(f"There was a problem loading in the {x} extension")
+                print("\n", error)
         # Load in extensions
         for x in extensions:
             try:
                 self.load_extension("cogs." + x)
-            except Exception as e:
+            except Exception as error:
                 print(f"There was a problem loading in the {x} extension")
-                print()
-                print(e)
+                print("\n", error)
 
 
 if __name__ == "__main__":
