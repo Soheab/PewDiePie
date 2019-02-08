@@ -293,7 +293,7 @@ class Economy:
         transfercheck = await self.bot.pool.fetchval("SELECT transfer FROM econ WHERE userid = $1 AND guildid = $2", ctx.author.id, ctx.guild.id)
         if transfercheck:
             em = discord.Embed(color = discord.Color.dark_teal())
-            em.add_field(name = "Already Transferred", value = "You have already transferred your Bro Coins to this guild")
+            em.add_field(name = "Already Transferred", value = "You have already transferred your Bro Coins from this guild")
             await ctx.send(embed = em)
             return
         # Get user coins
