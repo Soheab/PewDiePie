@@ -13,11 +13,11 @@ class Prefixes:
         em.add_field(name = "Command Use", value = f"""
         Sets the prefix for the current server. You must have the manage messages permission to use this command.
         **Set or change prefix**
-        `ts!setprefix [prefix here]`
+        `p.setprefix [prefix here]`
         **Revert back to default prefix**
-        `ts!setprefix`
+        `p.setprefix`
         **Show current prefix**
-        `ts!prefix` (does not require any special permissions to view)
+        `p.prefix` (does not require any special permissions to view)
         """)
         await ctx.send(embed = em)
 
@@ -27,7 +27,15 @@ class Prefixes:
         # Get prefix
         prefixes = await self.bot.pool.fetchval("SELECT prefix FROM prefixes WHERE guildid = $1", ctx.guild.id)
         if prefixes == None:
-            prefix = "ts!, ts., t., and t!"
+            prefix = ""
+            formatted = []
+            for x in self.bot.default_prefixes:
+                formatted.append(x.lower())
+            formatted = list(dict.fromkeys(formatted))
+            for x in formatted:
+                prefix += f"{x}, "
+            if prefix.endswith(", "):
+                prefix = prefix[:-2]
         else:
             prefix = prefixes
         # Send
