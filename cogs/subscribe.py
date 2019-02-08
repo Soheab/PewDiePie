@@ -198,14 +198,7 @@ class Subscribe:
             channel = guildobj.get_channel(channel)
             # Check if the message exists or not
             await channel.get_message(message)
-        except AttributeError:
-            # Remove from cache
-            self.bot.subgap["guild"].pop(guild)
-            # Delete message from database
-            await self.bot.pool.execute("DELETE FROM subgap WHERE msgid = $1 AND guildid = $2", message, guild)
-            # Return
-            return False
-        except discord.NotFound:
+        except (AttributeError, discord.DiscordException):
             # Remove from cache
             self.bot.subgap["guild"].pop(guild)
             # Delete message from database
