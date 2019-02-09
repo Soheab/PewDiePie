@@ -78,22 +78,20 @@ class Events:
             await self.bot.change_presence(activity = discord.Game(name = "Subscribe to PewDiePie!"))
             await asyncio.sleep(30)
 
-    async def on_ready(self):
-        try:
-            self.dbl_gc = self.bot.loop.create_task(self.update_dblservercount())
-        except:
-            print("There was an issue updating the DBL server count")
-        try:
-            self.au_status = self.bot.loop.create_task(self.autostatus())
-        except:
-            print("There was an issue updating the bot status")
+    async def bkg_start(self):
+        if "status" in self.bot.tasks:
+            self.bot.tasks["status"].cancel()
+        if "dbl_gc" in self.bot.tasks:
+            self.bot.tasks["dbl_gc"].cancel()
+
+        self.bot.tasks["dbl_gc"] = self.bot.loop.create_task(self.update_dblservercount())
+        self.bot.tasks["status"] = self.bot.loop.create_task(self.autostatus())
 
     async def close(self):
         # Close dblpy client session
         await self.dblpy.close()
-        # Close tasks
-        self.dbl_gc.close()
-        self.au_status.close()
+
 
 def setup(bot):
+    bot.loop.create_task(Events(bot).bkg_start())
     bot.add_cog(Events(bot))
