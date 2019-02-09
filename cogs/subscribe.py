@@ -110,9 +110,7 @@ class Subscribe:
     # Update subgap background task
     async def subgtask(self):
         await self.bot.wait_until_ready()
-        counter = 0
-        r = 1000000
-        while counter < r:
+        while not self.bot.is_closed():
             run = True
             amount = 10
             # Get subgap information
@@ -134,13 +132,7 @@ class Subscribe:
                     else:
                         amount -= 1
                         continue
-            # Add one to counter
-            counter += 1
-            # Wait
             await asyncio.sleep(30)
-        # Delete from database after everything is done
-        await self.bot.pool.execute("DELETE FROM subgap WHERE msgid = $1 AND guildid = $2 AND channelid = $3", message, guild, channel)
-        return
 
     # Subcount gap command
     @commands.command(name = "subgap")
