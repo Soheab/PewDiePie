@@ -192,18 +192,15 @@ class Subscribe:
     # SUBGAP LOOP -- THIS IS NOT A COMMAND BECAUSE OF NO CONTEXT IN ON_READY
     async def subgloop(self, message: int, guild: int, channel: int):
         try:
-            # Get guild
+            # Get message
             guildobj = self.bot.get_guild(guild)
-            # Get channel
             channel = guildobj.get_channel(channel)
-            # Check if the message exists or not
             await channel.get_message(message)
         except (AttributeError, discord.DiscordException, commands.CommandError):
             # Remove from cache
             self.bot.subgap["guild"].pop(guild)
             # Delete message from database
             await self.bot.pool.execute("DELETE FROM subgap WHERE msgid = $1 AND guildid = $2", message, guild)
-            # Return
             return False
         # Get subscriber count information
         subinfo = await self.subcount.callback(None, None, "retint", False) # pylint: disable=no-member
