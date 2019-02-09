@@ -8,9 +8,9 @@ class EconomyPhrases:
 
     # Updates the cache
     async def update_shovel(self):
-        if hasattr(self.bot, "pos") and hasattr(self.bot, "neg"):
-            self.bot.pos = await self.bot.pool.fetch("SELECT * FROM shovel WHERE fate = true")
-            self.bot.neg = await self.bot.pool.fetch("SELECT * FROM shovel WHERE fate = false")
+        if "pos" in self.bot.econ and "neg" in self.bot.econ:
+            self.bot.econ["pos"] = await self.bot.pool.fetch("SELECT * FROM shovel WHERE fate = true")
+            self.bot.econ["neg"] = await self.bot.pool.fetch("SELECT * FROM shovel WHERE fate = false")
         else:
             print("Cog not loaded in")
 
