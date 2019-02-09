@@ -30,7 +30,7 @@ async def custom_prefix(bot, message):
 extensions = (
     "economy", "general", "subscribe", "owner",
     "error_handler", "events", "economy_phrases", "economy_shop",
-    "economy_owner", "prefixes", "help"
+    "economy_owner", "prefixes", "help", "disstrack"
 )
 
 # Important extensions
