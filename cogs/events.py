@@ -1,8 +1,8 @@
 import discord
 from discord.ext import commands
-import dbl
 import datetime
 import asyncio
+import aiohttp
 import sys
 sys.path.append("../")
 import config
@@ -11,8 +11,6 @@ import config
 class Events:
     def __init__(self, bot):
         self.bot = bot
-        self.token = config.dbltoken
-        self.dblpy = dbl.Client(self.bot, self.token, loop = self.bot.loop)
 
     # Log command completion
     async def on_command_completion(self, ctx):
@@ -61,14 +59,17 @@ class Events:
     # Push guild count to Discord Bot List
     async def update_dblservercount(self):
         await self.bot.wait_until_ready()
+        base = "https://discordbots.org/api"
         while not self.bot.is_closed():
-            try:
-                await self.dblpy.post_server_count()
-                print("Posted server count on DBL")
-            except Exception as e:
-                print("Failed to post the server count on DBL")
-                print("Error: " + str(e))
-            await asyncio.sleep(1800)
+            async with aiohttp.ClientSession() as cs:
+                post = await cs.post(f"{base}/bots/{self.bot.user.id}/stats",
+                headers = {"Authorization": config.dbltoken}, data = {"server_count": len(self.bot.guilds)})
+                post = await post.json()
+                if "error" in post:
+                    print(f"Couldn't post server count, {post['error']}")
+                else:
+                    print("Posted server count on DBL")
+            await asyncio.sleep(3600)
 
     async def autostatus(self):
         await self.bot.wait_until_ready()
@@ -86,10 +87,6 @@ class Events:
 
         self.bot.tasks["dbl_gc"] = self.bot.loop.create_task(self.update_dblservercount())
         self.bot.tasks["status"] = self.bot.loop.create_task(self.autostatus())
-
-    async def close(self):
-        # Close dblpy client session
-        await self.dblpy.close()
 
 
 def setup(bot):
