@@ -21,7 +21,7 @@ class Events:
     # On guild join
     async def on_guild_join(self, guild):
         print(f"Joined guild named '{guild.name}' with {guild.member_count} members")
-        # Log guild join into PewDiePie log channel
+
         logchannel = self.bot.get_channel(501089724421767178)
         em = discord.Embed(title = "Joined Guild", color = discord.Color.teal())
         em.set_thumbnail(url = guild.icon_url)
@@ -32,15 +32,14 @@ class Events:
         em.add_field(name = "Verification Level", value = str(guild.verification_level))
         em.add_field(name = "Channel Count", value = str(len(guild.channels)))
         em.add_field(name = "Creation Time", value = guild.created_at)
-        # Add timestamp
+
         em.timestamp = datetime.datetime.utcnow()
-        # Send to channel
         await logchannel.send(embed = em)
 
     # On guild remove (leave)
     async def on_guild_remove(self, guild):
         print(f"Left guild named '{guild.name}' that had {guild.member_count} members")
-        # Log guild remove into PewDiePie log channel
+
         logchannel = self.bot.get_channel(501089724421767178)
         em = discord.Embed(title = "Left Guild", color = discord.Color.purple())
         em.set_thumbnail(url = guild.icon_url)
@@ -51,12 +50,10 @@ class Events:
         em.add_field(name = "Verification Level", value = str(guild.verification_level))
         em.add_field(name = "Channel Count", value = str(len(guild.channels)))
         em.add_field(name = "Creation Time", value = guild.created_at)
-        # Add timestamp
+
         em.timestamp = datetime.datetime.utcnow()
-        # Send to channel
         await logchannel.send(embed = em)
 
-    # Push guild count to Discord Bot List
     async def update_dblservercount(self):
         await self.bot.wait_until_ready()
         base = "https://discordbots.org/api"
