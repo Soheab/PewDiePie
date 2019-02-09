@@ -198,7 +198,7 @@ class Subscribe:
             channel = guildobj.get_channel(channel)
             # Check if the message exists or not
             await channel.get_message(message)
-        except (AttributeError, discord.DiscordException):
+        except (AttributeError, discord.DiscordException, commands.CommandError):
             # Remove from cache
             self.bot.subgap["guild"].pop(guild)
             # Delete message from database
@@ -230,6 +230,11 @@ class Subscribe:
         for x in self.bot.subgap["guild"]:
             g = self.bot.subgap
             print(f"Started subgap! Msg ID: {g['guild'][x]['msgid']}  Guild ID: {x}  Channel ID: {g['guild'][x]['channelid']}")
+
+    # Prevent subgap spam in console
+    async def close(self):
+        if hasattr(self.bot, "subgap_task"):
+            self.bot.subgap_task.close()
 
 
 def setup(bot):
