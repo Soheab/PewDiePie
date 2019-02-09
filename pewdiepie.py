@@ -75,6 +75,7 @@ class PewDiePie(commands.AutoShardedBot):
         except:
             print("There was a problem creating the database task")
         await asyncio.sleep(0.5) # Preventing self.pool not being ready yet
+
         # Custom cachable prefixes
         prefixes = await self.pool.fetch("SELECT * FROM prefixes")
         self.prefixes = {}
@@ -87,14 +88,14 @@ class PewDiePie(commands.AutoShardedBot):
             "Ts!", "tS!", "TS!", "T.", "T!",
             "Ts.", "tS.", "TS."
         ]
-        # Load in important extensions
+
         for x in important:
             try:
                 self.load_extension(x)
             except Exception as error:
                 print(f"There was a problem loading in the {x} extension")
                 print("\n", error)
-        # Load in extensions
+
         for x in extensions:
             try:
                 self.load_extension("cogs." + x)
