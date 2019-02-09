@@ -13,37 +13,6 @@ class General:
     def __init__(self, bot):
         self.bot = bot
 
-    # T-SERIES DISS TRACK
-    @commands.command()
-    async def disstrack(self, ctx, param: str = "play"):
-        if param == "play":
-            if ctx.author.voice != None:
-                # Connect
-                try:
-                    await ctx.author.voice.channel.connect()
-                except discord.ClientException:
-                    pass
-                # Get file
-                source = discord.FFmpegPCMAudio("lasagna.mp3")
-                # Play audio
-                try:
-                    ctx.voice_client.play(source)
-                except discord.ClientException:
-                    await ctx.send("Already playing audio")
-                    return
-                # Tell user
-                await ctx.send(f"Connected to `{ctx.voice_client.channel.name}`")
-            else:
-                await ctx.send("You must be connected to a voice channel")
-        elif param == "stop" or param == "leave":
-            if ctx.voice_client != None:
-                await ctx.voice_client.disconnect()
-                await ctx.send("Disconnected from voice channel")
-            else:
-                await ctx.send(f"{self.bot.user.name} is not currently in a voice channel")
-        else:
-            await ctx.send("That is not a valid parameter")
-
     # Gets a random T-Series or PewDiePie video
     @commands.command()
     async def randomvid(self, ctx):
