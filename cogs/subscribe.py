@@ -189,7 +189,7 @@ class Subscribe:
         # Update cache
         await self.subgupcache(stmsg.id, ctx.guild.id, ctx.channel.id, r)
 
-    # SUBGAP LOOP -- THIS IS NOT A COMMAND BECAUSE OF NO CONTEXT IN ON_READY
+    # SUBGAP LOOP
     async def subgloop(self, message: int, guild: int, channel: int):
         try:
             # Get message
@@ -209,7 +209,7 @@ class Subscribe:
         # Take away one from count
         await self.bot.pool.execute("UPDATE subgap SET count = count - 1 WHERE msgid = $1 AND guildid = $2 AND channelid = $3", message, guild, channel.id)
 
-    # SUBGAP EDIT -- THIS IS NOT A COMMAND DUE TO THERE BEING NO CONTEXT PASSED FROM SUBGLOOP
+    # SUBGAP EDIT
     async def subgedit(self, c: int, m: int, lndmsg: str):
         # Embed
         em = discord.Embed(color = discord.Color.blurple())
