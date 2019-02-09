@@ -203,7 +203,7 @@ class Economy:
         # See if they have enough coins
         if usercoins >= amount:
             # Gamble (all or nothing)
-            choice = random.choice([True, False, False, False, False])
+            choice = random.choice([True, False, False, True, False])
             if choice:
                 cm = "Gained"
             else:
