@@ -11,16 +11,48 @@ class Economy:
 
     # Cache shovel phrases
     async def shovel_cache(self):
-        self.bot.pos = await self.bot.pool.fetch("SELECT name, id FROM shovel WHERE fate = true")
-        self.bot.neg = await self.bot.pool.fetch("SELECT name, id FROM shovel WHERE fate = false")
-    
+        self.bot.econ["pos"] = await self.bot.pool.fetch("SELECT name, id FROM shovel WHERE fate = true")
+        self.bot.econ["neg"] = await self.bot.pool.fetch("SELECT name, id FROM shovel WHERE fate = false")
+
+    # Cache users
+    async def user_cache(self):
+        users = await self.bot.pool.fetch("SELECT * FROM econ")
+        self.bot.econ["users"] = {}
+        self.bot.econ["users"]["guildid"] = {}
+        for member in users:
+            if not member["guildid"] in self.bot.econ["users"]["guildid"]:
+                self.bot.econ["users"]["guildid"][member["guildid"]] = {}
+
+            self.bot.econ["users"]["guildid"][member["guildid"]][member["userid"]] = {}
+            g = self.bot.econ["users"]["guildid"][member["guildid"]][member["userid"]]
+            g["guildid"] = member["guildid"]
+            g["userid"] = member["userid"]
+            g["coins"] = member["coins"]
+            g["transfer"] = member["transfer"]
+            g["uses"] = member["uses"]
+
+    # Add user
+    async def up_usercache(self, guild: int, user: int, coins: int, transfer: bool, uses: int):
+        self.bot.econ["users"]["guildid"][guild][user] = {}
+        g = self.bot.econ["users"]["guildid"][guild][user]
+        g["guildid"] = guild
+        g["userid"] = user
+        g["coins"] = coins
+        g["transfer"] = transfer
+        g["uses"] = uses
+
     # Add user to DB and check
-    async def cad_user(ctx): # pylint: disable=E0213
-        dbcheck = await ctx.bot.pool.fetchrow("SELECT * FROM econ WHERE userid = $1 AND guildid = $2", ctx.author.id, ctx.guild.id) # pylint: disable=E1101
-        if dbcheck == None or dbcheck == []:
-            await ctx.bot.pool.execute("INSERT INTO econ VALUES ($1, $2, $3)", 0, ctx.author.id, ctx.guild.id) # pylint: disable=E1101
+    async def cad_user(ctx): # pylint: disable=no-self-argument
+        # pylint: disable=E1101
+        if not ctx.guild.id in ctx.bot.econ["users"]["guildid"]:
+            ctx.bot.econ["users"]["guildid"][ctx.guild.id] = {}
+
+        dc = ctx.bot.econ["users"]["guildid"][ctx.guild.id]
+        if ctx.author.id in dc:
             return True
         else:
+            await ctx.bot.pool.execute("INSERT INTO econ VALUES ($1, $2, $3)", 0, ctx.author.id, ctx.guild.id)
+            await Economy.up_usercache(ctx, ctx.guild.id, ctx.author.id, 0, False, 0)
             return True
         return False
 
@@ -28,9 +60,9 @@ class Economy:
     async def econmsg(self, fate: bool, ctg: int):
         # Check fate to determine which phrase to get
         if fate:
-            phrases = self.bot.pos
+            phrases = self.bot.econ["pos"]
         else:
-            phrases = self.bot.neg
+            phrases = self.bot.econ["neg"]
         # Get random asyncpg.Record object
         phrases = random.choice(phrases)
         # Get phrase ID
@@ -369,4 +401,5 @@ class Economy:
 
 def setup(bot):
     bot.loop.create_task(Economy(bot).shovel_cache())
+    bot.loop.create_task(Economy(bot).user_cache())
     bot.add_cog(Economy(bot))
