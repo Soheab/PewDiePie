@@ -8,9 +8,10 @@ I made this bot because I was very intrigued into the PewDiePie vs T-Series war.
 
 Post your server invite in the [support server](https://discord.gg/we4DQ5u) containing...
 
-1. Why we should authorized your server.
+1. Why we should authorize your server.
 2. Agreeing to **create a new channel for the subgap command**.
 3. Making the channel easy to view by members in your server.
+4. Changing permissions to not allow regular members to message in the subgap channel.
 
 ## How should I run the bot?
 
