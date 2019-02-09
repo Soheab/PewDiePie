@@ -1,4 +1,4 @@
-# PewDiePie Discord bot
+# PewDiePie Discord Bot
 
 ## Why did I make this bot?
 
