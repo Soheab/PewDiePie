@@ -80,18 +80,20 @@ class Events:
 
     async def on_ready(self):
         try:
-            self.bot.loop.create_task(self.update_dblservercount())
+            self.dbl_gc = self.bot.loop.create_task(self.update_dblservercount())
         except:
             print("There was an issue updating the DBL server count")
         try:
-            self.bot.loop.create_task(self.autostatus())
+            self.au_status = self.bot.loop.create_task(self.autostatus())
         except:
             print("There was an issue updating the bot status")
 
     async def close(self):
         # Close dblpy client session
         await self.dblpy.close()
-
+        # Close tasks
+        self.dbl_gc.close()
+        self.au_status.close()
 
 def setup(bot):
     bot.add_cog(Events(bot))
