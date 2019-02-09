@@ -34,7 +34,7 @@ extensions = (
 )
 
 # Important extensions
-important = ("jishaku",)
+important = ("cogs.functions", "jishaku")
 
 # Bot
 class PewDiePie(commands.AutoShardedBot):
