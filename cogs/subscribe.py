@@ -221,7 +221,7 @@ class Subscribe:
         # Edit message
         await message.edit(embed = em)
 
-    # Start background tasks on ready
+    # Log subgap tasks to the console
     async def on_ready(self):
         # Print to the console for the sole purpose of telling me that it works
         for x in self.bot.subgap["guild"]:
