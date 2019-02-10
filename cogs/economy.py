@@ -27,19 +27,13 @@ class Economy:
             g = self.bot.econ["users"]["guildid"][member["guildid"]][member["userid"]]
             g["guildid"] = member["guildid"]
             g["userid"] = member["userid"]
-            g["coins"] = member["coins"]
-            g["transfer"] = member["transfer"]
-            g["uses"] = member["uses"]
 
     # Add user
-    async def up_usercache(self, guild: int, user: int, coins: int, transfer: bool, uses: int):
+    async def up_usercache(self, guild: int, user: int):
         self.bot.econ["users"]["guildid"][guild][user] = {}
         g = self.bot.econ["users"]["guildid"][guild][user]
         g["guildid"] = guild
         g["userid"] = user
-        g["coins"] = coins
-        g["transfer"] = transfer
-        g["uses"] = uses
 
     # Add user to DB and check
     async def cad_user(ctx): # pylint: disable=no-self-argument
@@ -52,7 +46,7 @@ class Economy:
             return True
         else:
             await ctx.bot.pool.execute("INSERT INTO econ VALUES ($1, $2, $3)", 0, ctx.author.id, ctx.guild.id)
-            await Economy.up_usercache(ctx, ctx.guild.id, ctx.author.id, 0, False, 0)
+            await Economy.up_usercache(ctx, ctx.guild.id, ctx.author.id)
             return True
         return False
 
