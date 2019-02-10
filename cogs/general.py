@@ -24,51 +24,39 @@ class General:
         tci = "UCq-Fj5jknLsUf-MWSy4_brA"
         # ====T-SERIES SECTION====
 
-        # Use aiohttp to make GET requests all in one session
         async with aiohttp.ClientSession() as cs:
             async with cs.get(f"{base}/channels?part=snippet,contentDetails&id={tci}{end}") as tureq:
-                # Get T-Series upload playlist
                 tujson = await tureq.json()
             tupl = tujson["items"][0]["contentDetails"]["relatedPlaylists"]["uploads"]
             async with cs.get(f"{base}/playlistItems?playlistId={tupl}&maxResults=15&part=snippet,contentDetails{end}") as tuvids:
-                # Get the first 15 videos
                 tuvidsjson = await tuvids.json()
         tuvidslist = []
         vid = 0
-        # Iterate through the list and append them to tuvidslist
         while vid < len(tuvidsjson["items"]):
             tvidid = tuvidsjson["items"][vid]["snippet"]["resourceId"]["videoId"]
             tuvidslist.append(tvidid)
             vid += 1
         # ====PEWDIEPIE SECTION====
 
-        # Use aiohttp to make GET requests all in one session
         async with aiohttp.ClientSession() as pcs:
             async with pcs.get(f"{base}/channels?part=snippet,contentDetails&id={pci}{end}") as pureq:
-                # Get T-Series upload playlist
                 pujson = await pureq.json()
             pupl = pujson["items"][0]["contentDetails"]["relatedPlaylists"]["uploads"]
             async with pcs.get(f"{base}/playlistItems?playlistId={pupl}&maxResults=15&part=snippet,contentDetails{end}") as puvids:
-                # Get the first 15 videos
                 puvidsjson = await puvids.json()
         puvidslist = []
         vid = 0
-        # Iterate through the list and append them to puvidslist
         while vid < len(puvidsjson["items"]):
             pvidid = puvidsjson["items"][vid]["snippet"]["resourceId"]["videoId"]
             puvidslist.append(pvidid)
             vid += 1
         # ====COMPARE AND SEND====
 
-        # Compine both lists together
         ptuvidslist = tuvidslist + puvidslist
-        # Get random video
         rndptvids = random.choice(ptuvidslist)
-        # Make the video ID a URL
         rndptvidsed = f"https://www.youtube.com/watch?v={rndptvids}"
-        # Get video thumbnail
         rndptvidthumb = f"https://img.youtube.com/vi/{rndptvids}/maxresdefault.jpg"
-        # Send as embed
+
         em = discord.Embed(color = discord.Color.green())
         em.add_field(name = "YouTube Video", value = rndptvidsed)
         em.set_image(url = rndptvidthumb)
@@ -77,7 +65,6 @@ class General:
     # YouTube channels command
     @commands.command(aliases = ["yt"])
     async def youtube(self, ctx):
-        # Sends T-Series and PewDiePie's channel
         em = discord.Embed(color = discord.Color.light_grey())
         em.add_field(name = "PewDiePie", value = "https://www.youtube.com/user/PewDiePie")
         em.add_field(name = "T-Series", value = "https://www.youtube.com/user/tseries")
@@ -86,9 +73,8 @@ class General:
     # Bot information command
     @commands.command(aliases = ["info", "bot", "information", "botinformation", "support"])
     async def botinfo(self, ctx):
-        # Get bot latency
         botlat = f"{self.bot.latency * 1000:.3f}"
-        # Bot info embed
+
         em = discord.Embed(title = f"{self.bot.user.name} Bot Information", color = discord.Color.green())
         em.add_field(name = "Bot Creator", value = "A Discord User#4063")
         em.add_field(name = "Bot Library", value = "discord.py rewrite")
@@ -99,7 +85,6 @@ class General:
     # Invite command
     @commands.command()
     async def invite(self, ctx):
-        # Embed
         em = discord.Embed(color = discord.Color.orange())
         em.add_field(name = "Invite", value = "[Invite me here!](https://discordapp.com/oauth2/authorize?client_id=500868806776979462&scope=bot&permissions=72710)")
         await ctx.send(embed = em)
@@ -107,14 +92,13 @@ class General:
     # Feedback command
     @commands.command()
     async def feedback(self, ctx, *, message: str):
-        # Feedback embed
         em = discord.Embed(color = discord.Color.blue())
         em.add_field(name = "Feedback", value = f"""
         Your feedback for {self.bot.user.name} has been submitted
         If you abuse this command, you could lose your ability to send feedback.
         """)
         await ctx.send(embed = em)
-        # Send in PewDiePie Support
+
         feedbackchannel = self.bot.get_channel(518603886483996683)
         emb = discord.Embed(title = "Feedback", color = discord.Color.blue())
         emb.set_thumbnail(url = ctx.author.avatar_url)
@@ -123,9 +107,8 @@ class General:
         emb.add_field(name = "Issue / Suggestion", value = message, inline = False)
         emb.add_field(name = "Guild Name", value = ctx.guild.name)
         emb.add_field(name = "Guild ID", value = str(ctx.guild.id))
-        # Timestamp
         emb.timestamp = datetime.datetime.utcnow()
-        # Send
+
         await feedbackchannel.send(embed = emb)
 
     # Spoiler command

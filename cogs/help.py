@@ -14,7 +14,7 @@ class Help:
     async def help(self, ctx):
         em = discord.Embed(color = discord.Color.gold())
         em.set_author(name = f"{self.bot.user.name} Help Page")
-        # Main commands
+
         em.add_field(name = "Main Commands", value = """
         `disstrack`: Plays Bitch Lasagna in a voice channel. To disconnect, run `p.disstrack stop` or `p.disstrack leave`
         `subcount`: Shows T-Series' and PewDiePie's subscriber count
@@ -24,11 +24,11 @@ class Help:
         `youtube (yt)`: Sends you the link to PewDiePie's and T-Series' YouTube channel
         `spoiler`: Sends any message you provide as a spoiler in an annoying form
         """, inline = False)
-        # Bro Coin (economy) commands
+
         em.add_field(name = "Bro Coin (economy)", value = """
         Run `p.help economy` to view the list of commands for Bro Coin
         """)
-        # Meta commands
+
         em.add_field(name = "Meta Commands", value = f"""
         `botinfo`: Information on {self.bot.user.name}
         `invite`: Sends the bot invite
@@ -43,6 +43,7 @@ class Help:
     async def economy(self, ctx):
         em = discord.Embed(color = discord.Color.gold())
         em.set_author(name = f"{self.bot.user.name} Economy Help Page")
+
         em.add_field(name = "Bro Coin Commands", value = """
         `shovel`: You work all day shoveling for Bro Coins
         `balance (bal)`: Informs you on how many Bro Coins you have
@@ -53,6 +54,7 @@ class Help:
         `transfer`: Sends Bro Coins to another server. The max amount is 50% of your coins.
         `statistics (stats)`: Statistics on Bro Coin usage
         """, inline = False)
+
         em.add_field(name = "Shop", value = """
         `shop`: View all the items (roles) in the shop
         `shop add`: Adds a role to the shop (you must have the manage roles permission)

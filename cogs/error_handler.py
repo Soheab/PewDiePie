@@ -8,7 +8,6 @@ class ErrorHandler:
 
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown) == False:
-            # Reset cooldown if there is one
             try:
                 self.bot.get_command(ctx.command.name).reset_cooldown(ctx)
             except AttributeError:
@@ -78,7 +77,7 @@ class ErrorHandler:
                     ist1 = ""
             else:
                 ist1 = ""
-            # Send embed
+
             em = discord.Embed(color = discord.Color.dark_teal())
             em.add_field(name = "Error: Cooldown", value = f"Please wait {hours} {ist} {minutes} {ist1} {seconds} to use `{ctx.command.name}` again")
             if ctx.command.name == "shovel":
