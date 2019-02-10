@@ -21,7 +21,7 @@ I strongly recommend that you [invite the bot](https://discordbots.org/bot/50086
 
 ## What are the commands?
 
-**I recommend that you invite the bot to your server to see the latest commands as these will most likely never be updated but here they are as of February 8th, 2019.**
+**I recommend that you invite the bot to your server to see the latest commands as these will most likely never be updated but here they are as of February 10th, 2019.**
 
 ### General Commands
 |Name|Description|
@@ -40,6 +40,7 @@ I strongly recommend that you [invite the bot](https://discordbots.org/bot/50086
 |balance (bal)|Informs you on the amount of Bro Coins you have|
 |pay|Pays another user a specified amount of Bro Coins|
 |leaderboard (lb)|Shows the leaderboard for Bro Coins|
+|leaderboard server (guild)|Shows the leaderboard of Bro Coins for your server|
 |gamble|Gambles all or a specific amount of Bro Coins|
 |steal (rob)|Steals from a user|
 |transfer|Sends any amount that you specify to another server. The max amount is 50% of your coins|
