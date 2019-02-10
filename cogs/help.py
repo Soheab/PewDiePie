@@ -49,6 +49,7 @@ class Help:
         `balance (bal)`: Informs you on how many Bro Coins you have
         `pay`: Pays a user with a specified amount of Bro Coins
         `leaderboard (lb)`: Shows the leaderboard for Bro Coins
+        `leaderboard server (guild)`: Shows the leaderboard for Bro Coins in your server
         `gamble`: You can gamble a specific amount of Bro Coins
         `steal (rob)`: Steals from a user that you specify
         `transfer`: Sends Bro Coins to another server. The max amount is 50% of your coins.
