@@ -13,6 +13,8 @@ Post your server invite in the [support server](https://discord.gg/we4DQ5u) cont
 3. Making the channel easy to view by members in your server.
 4. Changing permissions to not allow regular members to message in the subgap channel.
 
+**Please post your server invite in the [#approval](https://discordapp.com/channels/499357399690379264/521430484861976582) channel.**
+
 ## How should I run the bot?
 
 I strongly recommend that you [invite the bot](https://discordbots.org/bot/500868806776979462/) and no effort will be extended to running an instance of my bot with the code provided in this repository.
