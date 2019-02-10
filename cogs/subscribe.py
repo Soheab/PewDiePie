@@ -125,6 +125,7 @@ class Subscribe:
                         """)
                         return
                     else:
+                        await asyncio.sleep(1)
                         amount -= 1
                         continue
             await asyncio.sleep(30)
