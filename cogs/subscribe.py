@@ -79,7 +79,6 @@ class Subscribe:
             }
             return retdict
         else:
-
             em = discord.Embed(color = discord.Color.red())
             if pscint >= tscint:
                 em.add_field(name = "PewDiePie Sub Count", value = prf)
