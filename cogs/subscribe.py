@@ -116,13 +116,11 @@ class Subscribe:
                         channel = self.bot.subgap["guild"][guild_id]["channelid"]
                         await self.subgloop(message, guild, channel)
                     run = False
-                    amount = 0
+                    amount = 10
                 except RuntimeError:
                     if amount == 0:
-                        await self.bot.get_channel(519378596104765442).send("""
-                        <@498678645716418578> Subgap update task has been killed (RUNTIME ERROR)
-                        """)
-                        return
+                        print("Subgap tries exceeded. Restarting background task")
+                        await self.subgcache()
                     else:
                         await asyncio.sleep(1)
                         amount -= 1
