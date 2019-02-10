@@ -7,6 +7,9 @@ import traceback
 import asyncio
 import re
 import inspect
+import sys
+sys.path.append("../")
+import config
 
 
 class Owner:
