@@ -135,7 +135,6 @@ class Subscribe:
     async def subgstart(self, ctx, r: int = 10000000):
         # ====START CHECKS====
 
-        # Before doing anything, check if the guild is authorized
         check = await self.authcheck(ctx.guild.id)
         if check:
             pass
@@ -146,7 +145,7 @@ class Subscribe:
             """)
             await ctx.send(embed = emb)
             return
-        # Check if guild is already using subgap
+
         sgchck = await self.bot.pool.fetchrow("SELECT * FROM subgap WHERE guildid = $1", ctx.guild.id)
         if sgchck != None:
             emd = discord.Embed(color = discord.Color.dark_teal())
@@ -160,9 +159,8 @@ class Subscribe:
 
         # ====START ORIGINAL MESSAGE====
 
-        # Sub info 1
         stsubinfo = await ctx.invoke(self.bot.get_command("subcount"), p = "retint", stping = False)
-        # Create embed then send
+
         em = discord.Embed(color = discord.Color.blurple())
         em.add_field(name = "Leading Channel", value = stsubinfo["l"])
         stmsg = await ctx.send(embed = em)
