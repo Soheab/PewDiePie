@@ -161,14 +161,20 @@ class Economy:
 
     # Leaderboard
     @commands.command(aliases = ["lb", "lead", "board", "leadboard"])
-    async def leaderboard(self, ctx):
-        coins = await self.bot.pool.fetch("SELECT * FROM econ ORDER BY coins DESC LIMIT 5")
+    async def leaderboard(self, ctx, param: str = ""):
+        if param.lower() in ["server", "guild"]:
+            coins = await self.bot.pool.fetch("SELECT * FROM econ WHERE guildid = $1 ORDER BY coins DESC LIMIT 5", ctx.guild.id)
+        else:
+            coins = await self.bot.pool.fetch("SELECT * FROM econ ORDER BY coins DESC LIMIT 5")
         em = discord.Embed(color = discord.Color.dark_red())
 
         if coins == []:
             em.add_field(name = "Leaderboard", value = "No one is using Bro Coin so there is nothing on the leaderboard")
         else:
-            em.set_author(name = "Leaderboard")
+            if param.lower() in ["server", "guild"]:
+                em.set_author(name = f"{ctx.guild.name}'s Leaderboard")
+            else:
+                em.set_author(name = "Leaderboard")
 
         lbcount = 0
         for x in coins:
@@ -183,10 +189,12 @@ class Economy:
                 uname = uname[:-5] + "..."
             if len(gname) > 20:
                 gname = gname[:-7] + "..."
+
             coins = format(x["coins"], ",d")
             uses = format(x["uses"], ",d")
 
             em.add_field(name = f"#{lbcount} - {uname} ({gname})", value = f"Bro Coins: {coins} {self.tcoinimage}\nShovel Uses: {uses}", inline = False)
+
         em.set_footer(text = "PROTIP: Use p.shovel to collect Bro Coins")
         await ctx.send(embed = em)
 
