@@ -6,13 +6,11 @@ class Functions:
     def __init__(self, bot):
         self.bot = bot
 
-    async def tasks(self):
-        if not hasattr(self.bot, "tasks"):
-            self.bot.tasks = {}
-
-    async def economy_cache(self):
-        if not hasattr(self.bot, "econ"):
-            self.bot.econ = {}
+    async def add(self):
+        d = ["tasks", "econ"]
+        for entry in d:
+            if not hasattr(self.bot, entry):
+                setattr(self.bot, entry, {})
 
     async def close(self):
         if hasattr(self.bot, "tasks"):
@@ -21,6 +19,5 @@ class Functions:
 
 
 def setup(bot):
-    bot.loop.create_task(Functions(bot).tasks())
-    bot.loop.create_task(Functions(bot).economy_cache())
+    bot.loop.create_task(Functions(bot).add())
     bot.add_cog(Functions(bot))
