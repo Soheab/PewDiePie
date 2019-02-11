@@ -17,11 +17,11 @@ Post your server invite in the [support server](https://discord.gg/we4DQ5u) cont
 
 ## How should I run the bot?
 
-I strongly recommend that you [invite the bot](https://discordbots.org/bot/500868806776979462/) and no effort will be extended to running an instance of my bot with the code provided in this repository.
+I strongly recommend that you [invite the bot](https://discordbots.org/bot/500868806776979462/) and no effort will be extended to running an instance of the bot with the code provided in this repository.
 
 ## What are the commands?
 
-**I recommend that you invite the bot to your server to see the latest commands as these will most likely never be updated but here they are as of February 10th, 2019.**
+**I recommend that you invite the bot to your server to see the latest commands as these will most likely never be updated but here they are as of February 11th, 2019.**
 
 ### General Commands
 |Name|Description|
