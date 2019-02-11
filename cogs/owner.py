@@ -100,7 +100,10 @@ class Owner:
                 updated.append(extension)
             for b in updated:
                 final_string += f"`{b}` "
-            await ctx.send(f"Updated cogs: {final_string}")
+            if updated == []:
+                await ctx.send("No cogs were updated")
+            else:
+                await ctx.send(f"Updated cogs: {final_string}")
         else:
             await ctx.send("No cogs were updated")
 
