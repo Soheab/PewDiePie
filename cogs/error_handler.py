@@ -29,7 +29,6 @@ class ErrorHandler:
                 ets = {}
                 ets["msg"] = "An unexpected error has occurred.\n[ERROR]"
                 ets["ty"] = "Unexpected Error"
-                print(ets)
             em = discord.Embed(color = discord.Color.dark_teal())
             em.add_field(name = f"Error: {ets['ty']}", value = ets["msg"].replace("[ERROR]", f"```\n{error}\n```"))
             await ctx.send(embed = em)
