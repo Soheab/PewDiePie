@@ -33,7 +33,8 @@ class ErrorHandler:
         elif isinstance(error, commands.MissingRequiredArgument):
             em = discord.Embed(color = discord.Color.dark_teal())
             em.add_field(name = "Error: Missing Argument", value = f"""
-            I'm missing a parameter, specifically `{error.param}`. Please make sure you entered the command in correctly then try again.
+            I'm missing a parameter, `{str(error.param).partition(':')[0]}`.
+            Make sure you ran the command correctly then try again.
             """)
             await ctx.send(embed = em)
         elif isinstance(error, commands.NotOwner):
