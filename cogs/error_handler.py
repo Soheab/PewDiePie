@@ -31,7 +31,13 @@ class ErrorHandler:
                 ets["ty"] = "Unexpected Error"
             em = discord.Embed(color = discord.Color.dark_teal())
             em.add_field(name = f"Error: {ets['ty']}", value = ets["msg"].replace("[ERROR]", f"```\n{error}\n```"))
-            await ctx.send(embed = em)
+            try:
+                await ctx.send(embed = em)
+            except discord.Forbidden:
+                try:
+                    await ctx.author.send(embed = em)
+                except:
+                    pass
 
         if isinstance(error, commands.CommandNotFound):
             return
