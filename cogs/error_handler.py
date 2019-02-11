@@ -12,34 +12,34 @@ class ErrorHandler:
                 self.bot.get_command(ctx.command.name).reset_cooldown(ctx)
             except AttributeError:
                 pass
+
+        errors = {
+            commands.MissingPermissions: {"msg": "You are missing permissions to run this command.", "ty": "Missing Permissions"},
+            commands.BotMissingPermissions: {"msg": "The bot does not have permissions to run this command.", "ty": "Bot Missing Permissions"},
+            discord.HTTPException: {"msg": "There was an error connecting to Discord. Please try again.", "ty": "HTTP Exception"},
+            commands.CommandInvokeError: {"msg": "There was an issue running the command.\n[ERROR]", "ty": "Command Invoke Error"},
+            commands.NotOwner: {"msg": "You are not the owner.", "ty": "Not Owner"}
+        }
+
+        ex = (commands.MissingRequiredArgument, commands.CommandOnCooldown, commands.CommandNotFound)
+
+        if not isinstance(error, ex):
+            ets = errors.get(error.__class__)
+            if ets == None:
+                ets["msg"] = "An unexpected error has occurred.\n[ERROR]",
+                ets["ty"] = "Unexpected Error"
+            em = discord.Embed(color = discord.Color.dark_teal())
+            em.add_field(name = f"Error: {ets['ty']}", value = ets["msg"].replace("[ERROR]", f"```\n{error}\n```"))
+            await ctx.send(embed = em)
+
         if isinstance(error, commands.CommandNotFound):
             return
-        elif isinstance(error, commands.MissingPermissions):
-            em = discord.Embed(color = discord.Color.dark_teal())
-            em.add_field(name = "Error: Missing Permissions", value = "You are missing permissions to run this command")
-            await ctx.send(embed = em)
-        elif isinstance(error, commands.BotMissingPermissions):
-            em = discord.Embed(color = discord.Color.dark_teal())
-            em.add_field(name = "Error: Bot Missing Permissions", value = f"{self.bot.user.name} doesn't have permissions to run this command")
-            await ctx.send(embed = em)
-        elif isinstance(error, discord.HTTPException):
-            em = discord.Embed(color = discord.Color.dark_teal())
-            em.add_field(name = "Error: HTTP Exception", value = "There was an error connecting to Discord. Please try again")
-            await ctx.send(embed = em)
-        elif isinstance(error, commands.CommandInvokeError):
-            em = discord.Embed(color = discord.Color.dark_teal())
-            em.add_field(name = "Error: Command Invoke Error", value = f"There was an issue running the command.\nError: `{error}`")
-            await ctx.send(embed = em)
         elif isinstance(error, commands.MissingRequiredArgument):
             em = discord.Embed(color = discord.Color.dark_teal())
             em.add_field(name = "Error: Missing Argument", value = f"""
             I'm missing a parameter, `{str(error.param).partition(':')[0]}`.
             Make sure you ran the command correctly then try again.
             """)
-            await ctx.send(embed = em)
-        elif isinstance(error, commands.NotOwner):
-            em = discord.Embed(color = discord.Color.dark_teal())
-            em.add_field(name = "Error: Not Owner", value = "You are not the owner")
             await ctx.send(embed = em)
         elif isinstance(error, commands.CommandOnCooldown):
             # Time
@@ -85,10 +85,6 @@ class ErrorHandler:
                 await ctx.send(embed = em, delete_after = error.retry_after)
             else:
                 await ctx.send(embed = em)
-        else:
-            em = discord.Embed(color = discord.Color.dark_teal())
-            em.add_field(name = "Unknown Error", value = f"An unexpected error occurred.\nError: `{error}`")
-            await ctx.send(embed = em)
 
 
 def setup(bot):
