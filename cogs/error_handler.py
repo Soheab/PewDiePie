@@ -26,6 +26,7 @@ class ErrorHandler:
         if not isinstance(error, ex):
             ets = errors.get(error.__class__)
             if ets == None:
+                ets = {}
                 ets["msg"] = "An unexpected error has occurred.\n[ERROR]",
                 ets["ty"] = "Unexpected Error"
             em = discord.Embed(color = discord.Color.dark_teal())
