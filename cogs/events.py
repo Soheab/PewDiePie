@@ -81,7 +81,7 @@ class Events:
             for w in watching:
                 await self.bot.change_presence(activity = discord.Activity(type = discord.ActivityType.watching, name = w))
                 await asyncio.sleep(30)
-            await self.bot.change_presence(activity = discord.Game(name = "Banning T-Series subscribers"))
+            await self.bot.change_presence(activity = discord.Game(name = "Banning T-Series subs"))
             await asyncio.sleep(30)
 
     async def bkg_start(self):
