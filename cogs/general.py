@@ -86,7 +86,7 @@ class General:
     @commands.command()
     async def invite(self, ctx):
         em = discord.Embed(color = discord.Color.orange())
-        em.add_field(name = "Invite", value = "[Invite me here!](https://discordapp.com/oauth2/authorize?client_id=500868806776979462&scope=bot&permissions=72710)")
+        em.add_field(name = "Invite", value = "[Invite me here!](https://discordapp.com/oauth2/authorize?client_id=500868806776979462&scope=bot&permissions=338709569)")
         await ctx.send(embed = em)
 
     # Set prefix tutorial command
