@@ -125,14 +125,15 @@ class Subscribe:
                         await asyncio.sleep(1)
                         amount -= 1
                         continue
+                except:
+                    await asyncio.sleep(1)
+                    await self.subgcache()
             await asyncio.sleep(30)
 
     # Subcount gap command
     @commands.command(name = "subgap")
     @commands.has_permissions(administrator = True)
     async def subgstart(self, ctx, r: int = 10000000):
-        # ====START CHECKS====
-
         check = await self.authcheck(ctx.guild.id)
         if check:
             pass
@@ -153,17 +154,11 @@ class Subscribe:
             await ctx.send(embed = emd)
             return
 
-        # ====END CHECKS====
-
-        # ====START ORIGINAL MESSAGE====
-
         stsubinfo = await ctx.invoke(self.bot.get_command("subcount"), p = "retint", stping = False)
 
         em = discord.Embed(color = discord.Color.blurple())
         em.add_field(name = "Leading Channel", value = stsubinfo["l"])
         stmsg = await ctx.send(embed = em)
-
-        # ====END ORIGINAL MESSAGE====
 
         await self.bot.pool.execute("INSERT INTO subgap VALUES ($1, $2, $3, $4)", stmsg.id, ctx.channel.id, ctx.guild.id, r)
         await asyncio.sleep(30)
