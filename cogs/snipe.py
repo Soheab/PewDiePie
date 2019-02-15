@@ -11,6 +11,9 @@ class Snipe:
     async def on_message_delete(self, message):
         if message.content == "":
             return
+        if len(message.content) > 1900:
+            return
+
         try:
             await self.bot.pool.execute("""
             INSERT INTO snipe VALUES ($1, $2, $3, $4, $5, $6, $7)
