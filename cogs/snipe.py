@@ -11,13 +11,11 @@ class Snipe:
     async def on_message_delete(self, message):
         if message.content == "":
             return
-        if len(message.content) > 1900:
-            return
 
         try:
             await self.bot.pool.execute("""
             INSERT INTO snipe VALUES ($1, $2, $3, $4, $5, $6, $7)
-            """, message.content, message.author.id, message.guild.id,
+            """, message.content[:1900], message.author.id, message.guild.id,
             message.channel.id, message.id, message.author.bot,
             datetime.datetime.utcnow())
         except Exception as error:
