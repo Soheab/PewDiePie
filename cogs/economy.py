@@ -49,6 +49,7 @@ class Economy:
             await Economy.up_usercache(ctx, ctx.guild.id, ctx.author.id)
             return True
         return False
+        # pylint: enable=E1101
 
     # Economy message
     async def econmsg(self, fate: bool, ctg: int):
@@ -181,9 +182,11 @@ class Economy:
             lbcount += 1
             try:
                 uname = self.bot.get_user(x["userid"]).name
-                gname = self.bot.get_guild(x["guildid"]).name
             except AttributeError:
                 uname = "User Not Found"
+            try:
+                gname = self.bot.get_guild(x["guildid"]).name
+            except AttributeError:
                 gname = "Guild Not Found"
             if len(uname) > 17:
                 uname = uname[:-5] + "..."
