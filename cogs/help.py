@@ -13,11 +13,11 @@ class Help:
         prefix = ctx.prefix.replace(self.bot.user.mention, f"@{self.bot.user.name}")
         em.set_author(name = f"{self.bot.user.name} Commands")
 
-        em.add_field(name = "Main Commands", value = f"{prefix}help main")
-        em.add_field(name = "Meta Commands", value = f"{prefix}help meta")
-        em.add_field(name = "Economy Commands", value = f"{prefix}help economy")
-        em.add_field(name = "Economy Shop Commands", value = f"{prefix}help shop")
-        em.add_field(name = "Snipe Commands", value = f"{prefix}help snipe")
+        em.add_field(name = "Main", value = f"{prefix}help main")
+        em.add_field(name = "Meta", value = f"{prefix}help meta")
+        em.add_field(name = "Economy", value = f"{prefix}help economy")
+        em.add_field(name = "Economy Shop", value = f"{prefix}help shop")
+        em.add_field(name = "Snipe", value = f"{prefix}help snipe")
 
         await ctx.send(embed = em)
 
