@@ -314,7 +314,7 @@ class Economy:
             em.add_field(name = "Not Enough", value = f"You do not have enough Bro Coins to transfer {amount:,d} {self.tcoinimage} to `{guild.name}`")
             em.set_footer(text = "NOTE: You are only able to transfer up to 50% of your Bro Coins")
             await ctx.send(embed = em)
-    
+
     # Statistics command
     @commands.command(aliases = ["stats", "stat"])
     async def statistics(self, ctx):
@@ -331,6 +331,8 @@ class Economy:
 
         tlu = await self.bot.pool.fetchrow("SELECT userid, coins FROM econ ORDER BY coins DESC LIMIT 1")
         spc = await self.bot.pool.fetchval("SELECT COUNT(name) FROM shovel")
+        ft = await self.bot.pool.fetchval("SELECT COUNT(*) FROM shovel WHERE fate = true")
+        ff = await self.bot.pool.fetchval("SELECT COUNT(*) FROM shovel WHERE fate = false")
         tluname = self.bot.get_user(tlu["userid"])
         if tluname == None:
             tluname = "User Not Found"
@@ -344,6 +346,8 @@ class Economy:
         em.add_field(name = "Leading User Amount", value = f"{tlu['coins']:,d} {self.tcoinimage}")
         em.add_field(name = "Shovel Phrases", value = f"{spc:,d} phrases")
         em.add_field(name = "Shovel Uses", value = f"{round(tcsuses):,d} {u}")
+        em.add_field(name = "Positive Phrases", value = f"{ft:,d} phrases")
+        em.add_field(name = "Negative Phrases", value = f"{ff:,d} phrases")
         em.timestamp = datetime.datetime.utcnow()
         await ctx.send(embed = em)
 
