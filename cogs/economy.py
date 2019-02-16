@@ -16,7 +16,7 @@ class Economy:
 
     # Cache users
     async def user_cache(self):
-        users = await self.bot.pool.fetch("SELECT * FROM econ")
+        users = await self.bot.pool.fetch("SELECT guildid, userid FROM econ")
         self.bot.econ["users"] = {}
         self.bot.econ["users"]["guildid"] = {}
         for member in users:
