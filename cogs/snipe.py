@@ -58,7 +58,13 @@ class Snipe:
         ctx.guild.id, ctx.channel.id, c)
         await self.data(ctx, data)
 
-    @snipe.command(name = "list", aliases = ["l", "show"])
+    @snipe.command(name = "bot", aliases = ["b", "bots"])
+    async def _bot(self, ctx):
+        data = await self.bot.pool.fetchrow(f"SELECT * FROM snipe WHERE guild = $1 AND channel = $2 AND bot = true {self.ta}",
+        ctx.guild.id, ctx.channel.id)
+        await self.data(ctx, data)
+
+    @snipe.command(name = "list", aliases = ["l", "show", "recent"])
     async def _list(self, ctx):
         data = await self.bot.pool.fetch("SELECT * FROM snipe WHERE guild = $1 ORDER BY time DESC LIMIT 5", ctx.guild.id)
 
