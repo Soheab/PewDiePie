@@ -170,6 +170,28 @@ class General:
         else:
             self.bot.prefixes.pop(ctx.guild.id)
 
+    # Meme command
+    @commands.command(aliases = ["memes"])
+    async def meme(self, ctx):
+        subreddit = ["pewdiepiesubmissions", "memes", "meme", "dankmemes", "wholesomememes"]
+        subreddit = random.choice(subreddit)
+        base = "https://www.reddit.com/r/" + subreddit
+        async with aiohttp.ClientSession() as session:
+            async with session.get(f"{base}/random.json") as response:
+                j = await response.json()
+
+        data = j[0]["data"]["children"][0]["data"]
+        image_url = data["url"]
+        title = data["title"]
+        link = "https://www.reddit.com" + data["permalink"]
+        upvotes = data["ups"]
+
+        em = discord.Embed(title = title, url = link, color = discord.Color.red())
+        em.set_image(url = image_url)
+        em.set_footer(text = f"\N{THUMBS UP SIGN} {upvotes:,d}")
+        em.timestamp = datetime.datetime.utcfromtimestamp(data["created_utc"])
+        await ctx.send(embed = em)
+
     # Feedback command
     @commands.command()
     async def feedback(self, ctx, *, message: str):
