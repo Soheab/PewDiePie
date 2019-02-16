@@ -46,7 +46,7 @@ I strongly recommend that you [invite the bot](https://discordbots.org/bot/50086
 |transfer|Sends any amount that you specify to another server. The max amount is 50% of your coins|
 |statistics (stats)|Statistics on Bro Coin usage|
 
-### Shop commands for Bro Coin
+### Shop Commands for Bro Coin
 |Name|Description|
 |----|-----------|
 |shop|View all items (roles) in the shop|
@@ -55,7 +55,7 @@ I strongly recommend that you [invite the bot](https://discordbots.org/bot/50086
 |shop delete (remove)|Removes a role from the shop (manage roles permission required by user)|
 |shop buy|Buys an item from the shop (you must have enough coins)|
 
-### Snipe commands
+### Snipe Commands
 |Name|Description|
 |---|------------|
 |snipe|Shows the last deleted message in the current channel|
@@ -65,7 +65,7 @@ I strongly recommend that you [invite the bot](https://discordbots.org/bot/50086
 |snipe list (l)|List the previous 5 deleted messages in the server|
 |snipe bot (b)|Snipes the last deleted message sent by a bot in the current channel|
 
-### Other commands
+### Other Commands
 |Name|Description|
 |----|-----------|
 |botinfo|Information on the bot|
