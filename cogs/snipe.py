@@ -47,7 +47,7 @@ class Snipe:
         await self.data(ctx, data)
 
     @snipe.command(aliases = ["user", "u"])
-    async def member(self, ctx, member: discord.Member):
+    async def member(self, ctx, *, member: discord.Member):
         data = await self.bot.pool.fetchrow(f"SELECT * FROM snipe WHERE guild = $1 AND channel = $2 AND usr = $3 {self.ta}",
         ctx.guild.id, ctx.channel.id, member.id)
         await self.data(ctx, data)
