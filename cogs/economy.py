@@ -346,13 +346,9 @@ class Economy:
         em.add_field(name = "Leading User Amount", value = f"{tlu['coins']:,d} {self.tcoinimage}")
         em.add_field(name = "Shovel Phrases", value = f"{spc:,d} phrases")
         em.add_field(name = "Shovel Uses", value = f"{round(tcsuses):,d} {u}")
-<<<<<<< HEAD
-        em.add_field(name = "Positive Phrases", value = f"{ff:,d} phrases")
-        em.add_field(name = "Negative Phrases", value = f"{ft:,d} phrases")
-=======
         em.add_field(name = "Positive Phrases", value = f"{ft:,d} phrases")
         em.add_field(name = "Negative Phrases", value = f"{ff:,d} phrases")
->>>>>>> 6b9dbe49a53ba947d8d25d395a7dddc85dd3b023
+
         em.timestamp = datetime.datetime.utcnow()
         await ctx.send(embed = em)
 
