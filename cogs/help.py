@@ -14,10 +14,10 @@ class Help:
         em.set_author(name = f"{self.bot.user.name} Commands")
 
         em.add_field(name = "Main Commands", value = f"{prefix}help main")
-        em.add_field(name = "Meta Commands", value = f"{prefix}help normal (meta)")
+        em.add_field(name = "Meta Commands", value = f"{prefix}help meta")
         em.add_field(name = "Economy Commands", value = f"{prefix}help economy")
         em.add_field(name = "Economy Shop Commands", value = f"{prefix}help shop")
-        # em.add_field(name = "Snipe Commands", value = f"{prefix}help snipe")
+        em.add_field(name = "Snipe Commands", value = f"{prefix}help snipe")
 
         await ctx.send(embed = em)
 
@@ -87,6 +87,27 @@ class Help:
         em.add_field(name = f"{prefix}shop delete (remove) [role name]", value = "Removes a role from the shop", inline = False)
         em.add_field(name = f"{prefix}shop buy [role name]", value = "Buys an item from the shop", inline = False)
         em.set_footer(text = "Note: The bot must have the manage roles permission and be higher than the role in the shop to use the shop features")
+
+        await ctx.send(embed = em)
+
+    @help.command()
+    async def snipe(self, ctx):
+        em = discord.Embed(color = discord.Color.gold())
+        prefix = ctx.prefix.replace(self.bot.user.mention, f"@{self.bot.user.name}")
+        em.set_author(name = "Snipe Commands")
+
+        em.add_field(name = f"{prefix}snipe", value = "Shows the last deleted message in the current channel", inline = False)
+        em.add_field(name = f"{prefix}snipe channel (ch) [channel]", value = "Snipes the last deleted message in the channel provided", inline = False)
+        em.add_field(name = f"{prefix}snipe member (u) [@user (or name)]", value = """
+        Snipes the last deleted message from the user provided in the current channel
+        """, inline = False)
+        em.add_field(name = f"{prefix}snipe count (c) [count]", value = """
+        Snipes the [count] message in the current channel
+        """, inline = False)
+        em.add_field(name = f"{prefix}snipe list (l)", value = """
+        List the previous 5 deleted messages in the server
+        """, inline = False)
+        em.set_footer(text = "If you would like a snipe removed, please DM me with the message ID")
 
         await ctx.send(embed = em)
 
