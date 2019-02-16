@@ -198,7 +198,8 @@ class Economy:
 
             em.add_field(name = f"#{lbcount} - {uname} ({gname})", value = f"Bro Coins: {coins} {self.tcoinimage}\nShovel Uses: {uses}", inline = False)
 
-        em.set_footer(text = "PROTIP: Use p.shovel to collect Bro Coins")
+        prefix = ctx.prefix.replace(self.bot.user.mention, f"@{self.bot.user.name}")
+        em.set_footer(text = f"PROTIP: Use {prefix}shovel to collect Bro Coins")
         await ctx.send(embed = em)
 
     # Gamble command
