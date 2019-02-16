@@ -15,7 +15,7 @@ class Snipe:
         try:
             await self.bot.pool.execute("""
             INSERT INTO snipe VALUES ($1, $2, $3, $4, $5, $6, $7)
-            """, message.content[:1900], message.author.id, message.guild.id,
+            """, message.content[:980], message.author.id, message.guild.id,
             message.channel.id, message.id, message.author.bot,
             datetime.datetime.utcnow())
         except Exception as error:
@@ -32,7 +32,7 @@ class Snipe:
         except AttributeError:
             deleted_user = "https://discordapp.com/assets/0e291f67c9274a1abdddeb3fd919cbaa.png"
             em.set_author(name = "Missing User", icon_url = deleted_user)
-        em.add_field(name = "Message", value = dta["contents"])
+        em.add_field(name = "Message", value = dta["contents"][:980])
         em.timestamp = dta["time"]
         await ctx.send(embed = em)
 
