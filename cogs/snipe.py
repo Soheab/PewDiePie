@@ -84,7 +84,7 @@ class Snipe:
             if len(ch) > 19:
                 ch = ch[:-8] + "..."
 
-            em.add_field(name = f"**{user}**: #{ch}", value = row["contents"][:300], inline = False)
+            em.add_field(name = f"**{user}**: #{ch}", value = row["contents"][:230], inline = False)
 
         await ctx.send(embed = em)
 
