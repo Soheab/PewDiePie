@@ -108,7 +108,7 @@ class Help:
         List the previous 5 deleted messages in the server
         """, inline = False)
         em.add_field(name = f"{prefix}snipe bot (b)", value = """
-        Snipes the last deleted message sent by a bot in the channel provided
+        Snipes the last deleted message sent by a bot in the current channel
         """, inline = False)
         em.set_footer(text = "If you would like a snipe removed, please DM me with the message ID")
 
