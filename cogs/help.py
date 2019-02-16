@@ -17,7 +17,7 @@ class Help:
         em.add_field(name = "Meta Commands", value = f"{prefix}help normal (meta)")
         em.add_field(name = "Economy Commands", value = f"{prefix}help economy")
         em.add_field(name = "Economy Shop Commands", value = f"{prefix}help shop")
-        em.add_field(name = "Snipe Commands", value = f"{prefix}help snipe")
+        # em.add_field(name = "Snipe Commands", value = f"{prefix}help snipe")
 
         await ctx.send(embed = em)
 
