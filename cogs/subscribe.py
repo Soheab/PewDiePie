@@ -55,9 +55,7 @@ class Subscribe:
         async with aiohttp.ClientSession() as anccs:
             async with anccs.get(base + "/channels?part=snippet,contentDetails,statistics&id=" + pci + end) as preq:
                 pjson = await preq.json()
-        print(tjson)
-        print()
-        print(pjson)
+
         tsc = tjson["items"][0]["statistics"]["subscriberCount"]
         psc = pjson["items"][0]["statistics"]["subscriberCount"]
 
