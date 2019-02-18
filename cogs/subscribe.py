@@ -69,6 +69,7 @@ class Subscribe:
                 em = discord.Embed(color = discord.Color.dark_teal())
                 em.add_field(name = "Error: Unknown", value = "Couldn't access error message")
                 await ctx.send(embed = em)
+            return
 
         tscint = int(tsc)
         pscint = int(psc)
