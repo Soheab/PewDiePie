@@ -115,7 +115,6 @@ class Subscribe:
                         guild = guild_id
                         channel = self.bot.subgap["guild"][guild_id]["channelid"]
                         await self.subgloop(message, guild, channel)
-                        print("UPDATED")
                     run = False
                     amount = 10
                 except RuntimeError:
