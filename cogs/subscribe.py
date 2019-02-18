@@ -110,11 +110,12 @@ class Subscribe:
             amount = 10
             while run:
                 try:
+                    subinfo = await self.subcount.callback(None, None, "retint", False) # pylint: disable=no-member
                     for guild_id in self.bot.subgap["guild"]:
                         message = self.bot.subgap["guild"][guild_id]["msgid"]
                         guild = guild_id
                         channel = self.bot.subgap["guild"][guild_id]["channelid"]
-                        await self.subgloop(message, guild, channel)
+                        await self.subgloop(message, guild, channel, subinfo)
                     run = False
                     amount = 10
                 except RuntimeError:
@@ -166,7 +167,7 @@ class Subscribe:
         await self.subgupcache(stmsg.id, ctx.guild.id, ctx.channel.id, r)
 
     # SUBGAP LOOP
-    async def subgloop(self, message: int, guild: int, channel: int):
+    async def subgloop(self, message: int, guild: int, channel: int, subinfo: dict):
         try:
             guildobj = self.bot.get_guild(guild)
             channel = guildobj.get_channel(channel)
@@ -176,7 +177,6 @@ class Subscribe:
             await self.bot.pool.execute("DELETE FROM subgap WHERE msgid = $1 AND guildid = $2", message, guild)
             return
 
-        subinfo = await self.subcount.callback(None, None, "retint", False) # pylint: disable=no-member
         await self.subgedit(channel.id, message, subinfo["l"])
         await self.bot.pool.execute("UPDATE subgap SET count = count - 1 WHERE msgid = $1 AND guildid = $2 AND channelid = $3", message, guild, channel.id)
 
