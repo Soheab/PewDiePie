@@ -11,7 +11,6 @@ class Subscribe:
     def __init__(self, bot):
         self.bot = bot
 
-    # Cache subgap information
     async def subgcache(self):
         self.bot.subgap = {"guild": {}}
         information = await self.bot.pool.fetch("SELECT * FROM subgap")
@@ -28,7 +27,6 @@ class Subscribe:
 
         self.bot.tasks["subgap"] = self.bot.loop.create_task(self.subgtask())
 
-    # Update subgap cache command
     async def subgupcache(self, message: int, guild: int, channel: int, count: int):
         self.bot.subgap["guild"][guild] = {}
         gdict = self.bot.subgap["guild"][guild]
@@ -37,7 +35,6 @@ class Subscribe:
         gdict["msgid"] = message
         gdict["count"] = count
 
-    # Gets the PewDiePie and T-Series subcount
     @commands.command(aliases = ["subscribercount"])
     async def subcount(self, ctx, p: str = "", stping: bool = True):
         if stping:
@@ -92,7 +89,6 @@ class Subscribe:
             """, inline = False)
             await ctx.send(embed = em)
 
-    # Authorization checking
     async def authcheck(self, gid: int):
         chck = await self.bot.pool.fetch("SELECT * FROM authorized")
         for c in chck:
@@ -102,7 +98,6 @@ class Subscribe:
                 continue
         return False
 
-    # Update subgap background task
     async def subgtask(self):
         await self.bot.wait_until_ready()
         while not self.bot.is_closed():
@@ -113,9 +108,8 @@ class Subscribe:
                     subinfo = await self.subcount.callback(None, None, "retint", False) # pylint: disable=no-member
                     for guild_id in self.bot.subgap["guild"]:
                         message = self.bot.subgap["guild"][guild_id]["msgid"]
-                        guild = guild_id
                         channel = self.bot.subgap["guild"][guild_id]["channelid"]
-                        await self.subgloop(message, guild, channel, subinfo)
+                        await self.subgloop(message, guild_id, channel, subinfo)
                     run = False
                     amount = 10
                 except RuntimeError:
@@ -132,7 +126,6 @@ class Subscribe:
                     await self.subgcache()
             await asyncio.sleep(30)
 
-    # Subcount gap command
     @commands.command(name = "subgap")
     @commands.has_permissions(administrator = True)
     async def subgstart(self, ctx, r: int = 10000000):
@@ -166,7 +159,6 @@ class Subscribe:
         await asyncio.sleep(30)
         await self.subgupcache(stmsg.id, ctx.guild.id, ctx.channel.id, r)
 
-    # SUBGAP LOOP
     async def subgloop(self, message: int, guild: int, channel: int, subinfo: dict):
         try:
             guildobj = self.bot.get_guild(guild)
@@ -180,7 +172,6 @@ class Subscribe:
         await self.subgedit(channel.id, message, subinfo["l"])
         await self.bot.pool.execute("UPDATE subgap SET count = count - 1 WHERE msgid = $1 AND guildid = $2 AND channelid = $3", message, guild, channel.id)
 
-    # SUBGAP EDIT
     async def subgedit(self, c: int, m: int, lndmsg: str):
         em = discord.Embed(color = discord.Color.blurple())
         em.add_field(name = "Leading Channel", value = lndmsg)
@@ -189,7 +180,6 @@ class Subscribe:
         message = await channel.get_message(m)
         await message.edit(embed = em)
 
-    # Log subgap tasks to the console
     async def on_ready(self):
         for x in self.bot.subgap["guild"]:
             g = self.bot.subgap
