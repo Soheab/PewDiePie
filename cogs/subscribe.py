@@ -44,6 +44,7 @@ class Subscribe:
             await ctx.channel.trigger_typing()
         base = "https://www.googleapis.com/youtube/v3"
         apikey = config.ytdapi
+        print(apikey)
         end = "&key=" + apikey
         pci = "UC-lHJZR3Gqxm24_Vd_AJ5Yw"
         tci = "UCq-Fj5jknLsUf-MWSy4_brA"
