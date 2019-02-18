@@ -53,8 +53,18 @@ class Subscribe:
             async with anccs.get(base + "/channels?part=snippet,contentDetails,statistics&id=" + pci + end) as preq:
                 pjson = await preq.json()
 
-        tsc = tjson["items"][0]["statistics"]["subscriberCount"]
-        psc = pjson["items"][0]["statistics"]["subscriberCount"]
+        try:
+            tsc = tjson["items"][0]["statistics"]["subscriberCount"]
+            psc = pjson["items"][0]["statistics"]["subscriberCount"]
+        except KeyError:
+            if "error" in tsc:
+                em = discord.Embed(color = discord.Color.dark_teal())
+                em.add_field(name = f"Error Code: {tsc['error']['code']}", value = tsc["error"]["message"])
+                await ctx.send(embed = em)
+            elif "error" in psc:
+                em = discord.Embed(color = discord.Color.dark_teal())
+                em.add_field(name = f"Error Code: {psc['error']['code']}", value = psc["error"]["message"])
+                await ctx.send(embed = em)
 
         tscint = int(tsc)
         pscint = int(psc)
