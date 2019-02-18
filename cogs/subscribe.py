@@ -126,10 +126,7 @@ class Subscribe:
                         await asyncio.sleep(1)
                         amount -= 1
                         continue
-                except Exception as e:
-                    print(e)
-                    print()
-                    print("FALLBACK")
+                except:
                     run = False
                     await asyncio.sleep(1)
                     await self.subgcache()
