@@ -126,7 +126,9 @@ class Subscribe:
                         await asyncio.sleep(1)
                         amount -= 1
                         continue
-                except:
+                except Exception as e:
+                    print(e)
+                    print()
                     print("FALLBACK")
                     run = False
                     await asyncio.sleep(1)
