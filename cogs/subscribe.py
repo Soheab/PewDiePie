@@ -55,20 +55,17 @@ class Subscribe:
 
         try:
             tsc = tjson["items"][0]["statistics"]["subscriberCount"]
+        except KeyError:
+            em = discord.Embed(color = discord.Color.dark_teal())
+            em.add_field(name = f"Error Code: {tjson['error']['code']}", value = f"```\n{tjson['error']['message']}\n```")
+            await ctx.send(embed = em)
+            return
+        try:
             psc = pjson["items"][0]["statistics"]["subscriberCount"]
         except KeyError:
-            if "error" in tsc:
-                em = discord.Embed(color = discord.Color.dark_teal())
-                em.add_field(name = f"Error Code: {tsc['error']['code']}", value = tsc["error"]["message"])
-                await ctx.send(embed = em)
-            elif "error" in psc:
-                em = discord.Embed(color = discord.Color.dark_teal())
-                em.add_field(name = f"Error Code: {psc['error']['code']}", value = psc["error"]["message"])
-                await ctx.send(embed = em)
-            else:
-                em = discord.Embed(color = discord.Color.dark_teal())
-                em.add_field(name = "Error: Unknown", value = "Couldn't access error message")
-                await ctx.send(embed = em)
+            em = discord.Embed(color = discord.Color.dark_teal())
+            em.add_field(name = f"Error Code: {pjson['error']['code']}", value = f"```\n{pjson['error']['message']}\n```")
+            await ctx.send(embed = em)
             return
 
         tscint = int(tsc)
