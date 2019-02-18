@@ -65,6 +65,10 @@ class Subscribe:
                 em = discord.Embed(color = discord.Color.dark_teal())
                 em.add_field(name = f"Error Code: {psc['error']['code']}", value = psc["error"]["message"])
                 await ctx.send(embed = em)
+            else:
+                em = discord.Embed(color = discord.Color.dark_teal())
+                em.add_field(name = "Error: Unknown", value = "Couldn't access error message")
+                await ctx.send(embed = em)
 
         tscint = int(tsc)
         pscint = int(psc)
@@ -93,6 +97,7 @@ class Subscribe:
             else:
                 em.add_field(name = "T-Series Sub Count", value = trf)
                 em.add_field(name = "PewDiePie Sub Count", value = prf)
+
             em.add_field(name = "Leading Channel", value = pscpts, inline = False)
             em.add_field(name = "Real Time Subcount Websites", value = """
             [T-Series](https://socialblade.com/youtube/user/tseries/realtime) | [PewDiePie](https://socialblade.com/youtube/user/pewdiepie/realtime)
