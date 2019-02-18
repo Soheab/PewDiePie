@@ -44,7 +44,6 @@ class Subscribe:
             await ctx.channel.trigger_typing()
         base = "https://www.googleapis.com/youtube/v3"
         apikey = config.ytdapi
-        print(apikey)
         end = "&key=" + apikey
         pci = "UC-lHJZR3Gqxm24_Vd_AJ5Yw"
         tci = "UCq-Fj5jknLsUf-MWSy4_brA"
@@ -56,7 +55,9 @@ class Subscribe:
         async with aiohttp.ClientSession() as anccs:
             async with anccs.get(base + "/channels?part=snippet,contentDetails,statistics&id=" + pci + end) as preq:
                 pjson = await preq.json()
-
+        print(tjson)
+        print()
+        print(pjson)
         tsc = tjson["items"][0]["statistics"]["subscriberCount"]
         psc = pjson["items"][0]["statistics"]["subscriberCount"]
 
