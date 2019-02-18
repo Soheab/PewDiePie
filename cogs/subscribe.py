@@ -127,7 +127,7 @@ class Subscribe:
                         continue
                 except:
                     run = False
-                    await asyncio.sleep(1)
+                    await asyncio.sleep(15)
                     await self.subgcache()
             await asyncio.sleep(30)
 
