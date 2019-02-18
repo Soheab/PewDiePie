@@ -174,7 +174,7 @@ class Subscribe:
         except (AttributeError, discord.NotFound, commands.MissingPermissions, commands.BotMissingPermissions):
             self.bot.subgap["guild"].pop(guild)
             await self.bot.pool.execute("DELETE FROM subgap WHERE msgid = $1 AND guildid = $2", message, guild)
-            return False
+            return
 
         subinfo = await self.subcount.callback(None, None, "retint", False) # pylint: disable=no-member
         await self.subgedit(channel.id, message, subinfo["l"])
