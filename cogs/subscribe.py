@@ -56,6 +56,8 @@ class Subscribe:
         try:
             tsc = tjson["items"][0]["statistics"]["subscriberCount"]
         except KeyError:
+            if ctx == None:
+                raise KeyError(tjson["error"]["message"])
             em = discord.Embed(color = discord.Color.dark_teal())
             em.add_field(name = f"Error Code: {tjson['error']['code']}", value = f"```\n{tjson['error']['message']}\n```")
             await ctx.send(embed = em)
@@ -63,6 +65,8 @@ class Subscribe:
         try:
             psc = pjson["items"][0]["statistics"]["subscriberCount"]
         except KeyError:
+            if ctx == None:
+                raise KeyError(pjson["error"]["message"])
             em = discord.Embed(color = discord.Color.dark_teal())
             em.add_field(name = f"Error Code: {pjson['error']['code']}", value = f"```\n{pjson['error']['message']}\n```")
             await ctx.send(embed = em)
@@ -114,17 +118,15 @@ class Subscribe:
     async def subgtask(self):
         await self.bot.wait_until_ready()
         while not self.bot.is_closed():
-            run = True
             amount = 10
-            while run:
+            while True:
                 try:
                     subinfo = await self.subcount.callback(None, None, "retint", False) # pylint: disable=no-member
                     for guild_id in self.bot.subgap["guild"]:
                         message = self.bot.subgap["guild"][guild_id]["msgid"]
                         channel = self.bot.subgap["guild"][guild_id]["channelid"]
                         await self.subgloop(message, guild_id, channel, subinfo)
-                    run = False
-                    amount = 10
+                    break
                 except RuntimeError:
                     if amount == 0:
                         print("Subgap tries exceeded. Restarting background task")
@@ -134,7 +136,6 @@ class Subscribe:
                         amount -= 1
                         continue
                 except:
-                    run = False
                     await asyncio.sleep(15)
                     await self.subgcache()
             await asyncio.sleep(30)
@@ -143,9 +144,7 @@ class Subscribe:
     @commands.has_permissions(administrator = True)
     async def subgstart(self, ctx, r: int = 10000000):
         check = await self.authcheck(ctx.guild.id)
-        if check:
-            pass
-        else:
+        if not check:
             emb = discord.Embed(color = discord.Color.dark_teal())
             emb.add_field(name = "Not Authorized", value = """
             Your guild is not authorized to use this command. Visit the [support server](https://discord.gg/we4DQ5u) to request authorization.
@@ -162,7 +161,7 @@ class Subscribe:
             await ctx.send(embed = emd)
             return
 
-        stsubinfo = await ctx.invoke(self.bot.get_command("subcount"), p = "retint", stping = False)
+        stsubinfo = await self.subcount.callback(None, None, "retint", False) # pylint: disable=no-member
 
         em = discord.Embed(color = discord.Color.blurple())
         em.add_field(name = "Leading Channel", value = stsubinfo["l"])
