@@ -177,8 +177,8 @@ class Subscribe:
             channel = guildobj.get_channel(channel)
             await channel.get_message(message)
         except (AttributeError, discord.NotFound, commands.MissingPermissions, commands.BotMissingPermissions):
-            self.bot.subgap["guild"].pop(guild)
             await self.bot.pool.execute("DELETE FROM subgap WHERE msgid = $1 AND guildid = $2", message, guild)
+            self.bot.subgap["guild"].pop(guild)
             return
 
         await self.subgedit(channel.id, message, subinfo["l"])
