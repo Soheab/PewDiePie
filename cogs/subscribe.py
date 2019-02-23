@@ -177,6 +177,7 @@ class Subscribe(commands.Cog):
             channel = guildobj.get_channel(channel)
             await channel.get_message(message)
         except (AttributeError, discord.NotFound, commands.MissingPermissions, commands.BotMissingPermissions):
+            await self.bot.pool.execute("INSERT INTO subgapbackup (msgid, channelid, guildid, count) SELECT msgid, channelid, guildid, count FROM subgap WHERE msgid = $1 AND guildid = $2", message, guild)
             await self.bot.pool.execute("DELETE FROM subgap WHERE msgid = $1 AND guildid = $2", message, guild)
             self.bot.subgap["guild"].pop(guild)
             return
