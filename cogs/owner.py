@@ -12,7 +12,7 @@ sys.path.append("../")
 import config # Note: Only importing config module since it's easier to use in eval
 
 
-class Owner:
+class Owner(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 

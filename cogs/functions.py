@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 
 
-class Functions:
+class Functions(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -12,6 +12,7 @@ class Functions:
             if not hasattr(self.bot, entry):
                 setattr(self.bot, entry, {})
 
+	@commands.Cog.listener()
     async def close(self):
         if hasattr(self.bot, "tasks"):
             for tsk in self.bot.tasks:

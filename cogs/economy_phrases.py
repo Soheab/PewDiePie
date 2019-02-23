@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 
 
-class EconomyPhrases:
+class EconomyPhrases(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 

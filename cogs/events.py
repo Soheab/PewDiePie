@@ -8,17 +8,19 @@ sys.path.append("../")
 import config
 
 
-class Events:
+class Events(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     # Log command completion
+	@commands.Cog.listener()
     async def on_command_completion(self, ctx):
         print()
         print(f"COMPLETED COMMAND: {ctx.command.name}. Invoked by: {ctx.author.name}#{ctx.author.discriminator}")
         print(f"GUILD: {ctx.guild.name} | GUILD ID: {ctx.guild.id}\nUSER ID: {ctx.author.id} | CHANNEL ID: {ctx.channel.id}")
 
     # On guild join
+	@commands.Cog.listener()
     async def on_guild_join(self, guild):
         print(f"Joined guild named '{guild.name}' with {guild.member_count} members")
 
@@ -40,6 +42,7 @@ class Events:
         await logchannel.send(embed = em)
 
     # On guild remove (leave)
+	@commands.Cog.listener()
     async def on_guild_remove(self, guild):
         print(f"Left guild named '{guild.name}' that had {guild.member_count} members")
 

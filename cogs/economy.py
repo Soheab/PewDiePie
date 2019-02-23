@@ -4,7 +4,7 @@ import random
 import datetime
 
 
-class Economy:
+class Economy(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.tcoinimage = "<:bro_coin:541363630189576193>"

@@ -3,11 +3,12 @@ from discord.ext import commands
 import datetime
 
 
-class Snipe:
+class Snipe(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.ta = "ORDER BY time DESC LIMIT 1"
 
+	@commands.Cog.listener()
     async def on_message_delete(self, message):
         if message.content == "":
             return

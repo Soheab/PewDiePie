@@ -7,7 +7,7 @@ sys.path.append("../")
 import config
 
 
-class Subscribe:
+class Subscribe(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -192,6 +192,7 @@ class Subscribe:
         message = await channel.get_message(m)
         await message.edit(embed = em)
 
+	@commands.Cog.listener()
     async def on_ready(self):
         for x in self.bot.subgap["guild"]:
             g = self.bot.subgap
