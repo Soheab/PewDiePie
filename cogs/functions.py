@@ -12,7 +12,7 @@ class Functions(commands.Cog):
             if not hasattr(self.bot, entry):
                 setattr(self.bot, entry, {})
 
-	@commands.Cog.listener()
+    @commands.Cog.listener()
     async def close(self):
         if hasattr(self.bot, "tasks"):
             for tsk in self.bot.tasks:

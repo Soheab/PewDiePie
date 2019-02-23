@@ -8,7 +8,7 @@ class Snipe(commands.Cog):
         self.bot = bot
         self.ta = "ORDER BY time DESC LIMIT 1"
 
-	@commands.Cog.listener()
+    @commands.Cog.listener()
     async def on_message_delete(self, message):
         if message.content == "":
             return

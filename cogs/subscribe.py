@@ -192,7 +192,7 @@ class Subscribe(commands.Cog):
         message = await channel.get_message(m)
         await message.edit(embed = em)
 
-	@commands.Cog.listener()
+    @commands.Cog.listener()
     async def on_ready(self):
         for x in self.bot.subgap["guild"]:
             g = self.bot.subgap
