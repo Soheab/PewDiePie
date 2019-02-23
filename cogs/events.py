@@ -42,7 +42,7 @@ class Events(commands.Cog):
         await logchannel.send(embed = em)
 
     # On guild remove (leave)
-	@commands.Cog.listener()
+    @commands.Cog.listener()
     async def on_guild_remove(self, guild):
         print(f"Left guild named '{guild.name}' that had {guild.member_count} members")
 
