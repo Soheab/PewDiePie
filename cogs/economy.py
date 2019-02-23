@@ -62,10 +62,10 @@ class Economy:
         phraseid = phrases["id"]
         freturnp = phrases["name"].replace("{ctg}", str(format(ctg, ",d"))).replace("{tcoinimage}", self.tcoinimage)
 
-        freturn = {
-            "phrase": freturnp,
-            "phraseid": phraseid
-        }
+        freturn = (
+            freturnp,
+            phraseid
+        )
         return freturn
 
     # Shovel command
@@ -84,8 +84,8 @@ class Economy:
         else:
             em = discord.Embed(color = discord.Color.red())
 
-        em.add_field(name = "Shovel", value = message["phrase"])
-        em.set_footer(text = f"Phrase #{message['phraseid']:,d}")
+        em.add_field(name = "Shovel", value = message[0])
+        em.set_footer(text = f"Phrase #{message[1]:,d}")
         await ctx.send(embed = em)
 
         await self.bot.pool.execute("UPDATE econ SET coins = coins + $1 WHERE userid = $2 AND guildid = $3", ctg, ctx.author.id, ctx.guild.id)
