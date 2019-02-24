@@ -16,7 +16,7 @@ class Functions(commands.Cog):
     async def close(self):
         if hasattr(self.bot, "tasks"):
             for tsk in self.bot.tasks:
-                tsk.close()
+                tsk.cancel()
 
 
 def setup(bot):
