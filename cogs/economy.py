@@ -57,15 +57,18 @@ class Economy(commands.Cog):
             phrases = self.bot.econ["pos"]
         else:
             phrases = self.bot.econ["neg"]
+        
+        try:
+            phrases = random.choice(phrases)
+        except IndexError:
+            phrases = {}
+            phrases["id"] = 1
+            phrases["name"] = "You need {ctg} {tcoinimage} to add phrases."
 
-        phrases = random.choice(phrases)
         phraseid = phrases["id"]
         freturnp = phrases["name"].replace("{ctg}", str(format(ctg, ",d"))).replace("{tcoinimage}", self.tcoinimage)
 
-        freturn = (
-            freturnp,
-            phraseid
-        )
+        freturn = (freturnp, phraseid)
         return freturn
 
     # Shovel command
