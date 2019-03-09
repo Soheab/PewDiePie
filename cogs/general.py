@@ -83,10 +83,11 @@ class General(commands.Cog):
         await ctx.send(embed = em)
 
     # Invite command
-    @commands.command()
+    @commands.command(aliases = ["vote"])
     async def invite(self, ctx):
         em = discord.Embed(color = discord.Color.orange())
-        em.add_field(name = "Invite", value = "[Invite me here!](https://discordapp.com/oauth2/authorize?client_id=500868806776979462&scope=bot&permissions=338717761)")
+        em.add_field(name = "Invite", value = "[Invite me here!](https://discordapp.com/oauth2/authorize?client_id=500868806776979462&scope=bot&permissions=338717761)", inline = False)
+        em.add_field(name = "Vote", value = "[Vote for the bot](https://discordbots.org/bot/500868806776979462/vote)", inline = False)
         await ctx.send(embed = em)
 
     # Set prefix tutorial command
