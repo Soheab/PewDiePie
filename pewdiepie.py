@@ -64,7 +64,7 @@ class PewDiePie(commands.Bot):
                 print("\n", error)
 
     async def on_ready(self):
-        if self.loop.prepared.is_set():
+        if asyncio.Event.prepared.is_set():
             return
 
         try:
