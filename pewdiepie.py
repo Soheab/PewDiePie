@@ -64,9 +64,6 @@ class PewDiePie(commands.Bot):
                 print("\n", error)
 
     async def on_ready(self):
-        if asyncio.Event.prepared.is_set():
-            return
-
         try:
             self.loop.create_task(self.database())
         except:
