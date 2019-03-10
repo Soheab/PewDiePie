@@ -49,21 +49,12 @@ class PewDiePie(commands.Bot):
         )
 
     async def on_ready(self):
-        print("On ready has been ran!")
         if not hasattr(self, "uptime"):
             self.uptime = datetime.datetime.utcnow()
         
         print(f"{self.user.name} is ready!")
 
     async def on_connect(self):
-        print("on connect has been ran")
-        """
-        try:
-            self.loop.create_task(self.database())
-        except:
-            print("There was a problem creating the database task") # Preventing self.pool not being ready yet
-        """
-
         if not hasattr(self, "pool"):
             pool_creds = {
                 "user": config.db_user,
@@ -72,10 +63,8 @@ class PewDiePie(commands.Bot):
                 "host": "localhost",
                 "database": "tseries"
             }
-            print("attemping pool...")
             try:
                 self.pool = await asyncpg.create_pool(**pool_creds)
-                print("pool created")
             except Exception as error:
                 print("There was a problem connecting to the database")
                 print("\n", error)
@@ -96,7 +85,6 @@ class PewDiePie(commands.Bot):
         for x in important:
             try:
                 self.load_extension(x)
-                print(x)
             except Exception as error:
                 print(f"There was a problem loading in the {x} extension")
                 print("\n", error)
@@ -104,7 +92,6 @@ class PewDiePie(commands.Bot):
         for x in extensions:
             try:
                 self.load_extension("cogs." + x)
-                print("cogs." + x)
             except Exception as error:
                 print(f"There was a problem loading in the {x} extension")
                 print("\n", error)
