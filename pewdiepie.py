@@ -37,7 +37,7 @@ extensions = (
 important = ("cogs.functions", "jishaku")
 
 # Bot
-class PewDiePie(commands.AutoShardedBot):
+class PewDiePie(commands.Bot):
     def __init__(self):
         self.custom_prefix = custom_prefix
         super().__init__(
