@@ -48,14 +48,6 @@ class PewDiePie(commands.Bot):
             reconnect = True
         )
 
-    async def on_ready(self):
-        if self.prepared.is_set():
-            return
-        if hasattr(self, "uptime") == False:
-            self.uptime = datetime.datetime.utcnow()
-        
-        print(f"{self.user.name} is ready!")
-
     async def database(self):
         if hasattr(self, "pool") == False:
             pool_creds = {
@@ -71,7 +63,10 @@ class PewDiePie(commands.Bot):
                 print("There was a problem connecting to the database")
                 print("\n", error)
 
-    async def on_connect(self):
+    async def on_ready(self):
+        if self.prepared.is_set():
+            return
+
         try:
             self.loop.create_task(self.database())
         except:
@@ -104,6 +99,10 @@ class PewDiePie(commands.Bot):
             except Exception as error:
                 print(f"There was a problem loading in the {x} extension")
                 print("\n", error)
+        if hasattr(self, "uptime") == False:
+            self.uptime = datetime.datetime.utcnow()
+        
+        print(f"{self.user.name} is ready!")
 
 
 if __name__ == "__main__":
