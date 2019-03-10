@@ -49,6 +49,8 @@ class PewDiePie(commands.Bot):
         )
 
     async def on_ready(self):
+        if self.prepared.is_set():
+            return
         if hasattr(self, "uptime") == False:
             self.uptime = datetime.datetime.utcnow()
         
