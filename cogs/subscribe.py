@@ -137,7 +137,7 @@ class Subscribe(commands.Cog):
                         continue
                 except KeyError:
                     await self.bot.get_channel(519378596104765442).send("Subgap task has been cancelled")
-                    self.bot.tasks["subgap"].cancel()
+                    return
                 except Exception as e:
                     await self.bot.get_channel(519378596104765442).send(f"```\n{e}\n```")
                     await asyncio.sleep(15)
