@@ -1,3 +1,6 @@
+"""
+The code here for subgap has been removed while I rewrite the code for the command
+"""
 import discord
 from discord.ext import commands
 import aiohttp
@@ -10,30 +13,6 @@ import config
 class Subscribe(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
-    async def subgcache(self):
-        self.bot.subgap = {"guild": {}}
-        information = await self.bot.pool.fetch("SELECT * FROM subgap")
-        for x in information:
-            self.bot.subgap["guild"][x["guildid"]] = {}
-            guild = self.bot.subgap["guild"][x["guildid"]]
-            guild["channelid"] = x["channelid"]
-            guild["guildid"] = x["guildid"]
-            guild["msgid"] = x["msgid"]
-            guild["count"] = x["count"]
-
-        if "subgap" in self.bot.tasks:
-            self.bot.tasks["subgap"].cancel()
-
-        self.bot.tasks["subgap"] = self.bot.loop.create_task(self.subgtask())
-
-    async def subgupcache(self, message: int, guild: int, channel: int, count: int):
-        self.bot.subgap["guild"][guild] = {}
-        gdict = self.bot.subgap["guild"][guild]
-        gdict["channelid"] = channel
-        gdict["guildid"] = guild
-        gdict["msgid"] = message
-        gdict["count"] = count
 
     @commands.command(aliases = ["subscribercount"])
     async def subcount(self, ctx, p: str = "", stping: bool = True):
@@ -106,104 +85,6 @@ class Subscribe(commands.Cog):
             """, inline = False)
             await ctx.send(embed = em)
 
-    async def authcheck(self, gid: int):
-        chck = await self.bot.pool.fetch("SELECT * FROM authorized")
-        for c in chck:
-            if str(gid) in str(c["guildid"]):
-                return True
-            else:
-                continue
-        return False
-
-    async def subgtask(self):
-        await self.bot.wait_until_ready()
-        while not self.bot.is_closed():
-            amount = 10
-            while True:
-                try:
-                    subinfo = await self.subcount.callback(None, None, "retint", False) # pylint: disable=no-member
-                    for guild_id in self.bot.subgap["guild"]:
-                        message = self.bot.subgap["guild"][guild_id]["msgid"]
-                        channel = self.bot.subgap["guild"][guild_id]["channelid"]
-                        await self.subgloop(message, guild_id, channel, subinfo)
-                    break
-                except RuntimeError:
-                    if amount == 0:
-                        print("Subgap tries exceeded. Restarting background task")
-                        await self.subgcache()
-                    else:
-                        await asyncio.sleep(1)
-                        amount -= 1
-                        continue
-                except KeyError:
-                    await self.bot.get_channel(519378596104765442).send("Subgap task has been cancelled")
-                    return
-                except Exception as e:
-                    await self.bot.get_channel(519378596104765442).send(f"```\n{e}\n```")
-                    await asyncio.sleep(15)
-                    await self.subgcache()
-            await asyncio.sleep(30)
-
-    @commands.command(name = "subgap")
-    @commands.has_permissions(administrator = True)
-    async def subgstart(self, ctx, r: int = 10000000):
-        check = await self.authcheck(ctx.guild.id)
-        if not check:
-            emb = discord.Embed(color = discord.Color.dark_teal())
-            emb.add_field(name = "Not Authorized", value = """
-            Your guild is not authorized to use this command. Visit the [support server](https://discord.gg/we4DQ5u) to request authorization.
-            """)
-            await ctx.send(embed = emb)
-            return
-
-        sgchck = await self.bot.pool.fetchrow("SELECT * FROM subgap WHERE guildid = $1", ctx.guild.id)
-        if sgchck != None:
-            emd = discord.Embed(color = discord.Color.dark_teal())
-            emd.add_field(name = "Subgap Command In Use", value = """
-            The subgap command is already being used in your server. Please delete the message containing the subgap command then try again after 30 seconds.
-            """)
-            await ctx.send(embed = emd)
-            return
-
-        stsubinfo = await self.subcount.callback(None, None, "retint", False) # pylint: disable=no-member
-
-        em = discord.Embed(color = discord.Color.blurple())
-        em.add_field(name = "Leading Channel", value = stsubinfo["l"])
-        stmsg = await ctx.send(embed = em)
-
-        await self.bot.pool.execute("INSERT INTO subgap VALUES ($1, $2, $3, $4)", stmsg.id, ctx.channel.id, ctx.guild.id, r)
-        await asyncio.sleep(30)
-        await self.subgupcache(stmsg.id, ctx.guild.id, ctx.channel.id, r)
-
-    async def subgloop(self, message: int, guild: int, channel: int, subinfo: dict):
-        try:
-            guildobj = self.bot.get_guild(guild)
-            channel = guildobj.get_channel(channel)
-            await channel.get_message(message)
-        except (AttributeError, discord.NotFound, commands.MissingPermissions, commands.BotMissingPermissions):
-            await self.bot.pool.execute("INSERT INTO subgapbackup (msgid, channelid, guildid, count) SELECT msgid, channelid, guildid, count FROM subgap WHERE msgid = $1 AND guildid = $2", message, guild)
-            await self.bot.pool.execute("DELETE FROM subgap WHERE msgid = $1 AND guildid = $2", message, guild)
-            self.bot.subgap["guild"].pop(guild)
-            return
-
-        await self.subgedit(channel.id, message, subinfo["l"])
-        await self.bot.pool.execute("UPDATE subgap SET count = count - 1 WHERE msgid = $1 AND guildid = $2 AND channelid = $3", message, guild, channel.id)
-
-    async def subgedit(self, c: int, m: int, lndmsg: str):
-        em = discord.Embed(color = discord.Color.blurple())
-        em.add_field(name = "Leading Channel", value = lndmsg)
-
-        channel = self.bot.get_channel(c)
-        message = await channel.get_message(m)
-        await message.edit(embed = em)
-
-    @commands.Cog.listener()
-    async def on_ready(self):
-        for x in self.bot.subgap["guild"]:
-            g = self.bot.subgap
-            print(f"Started subgap! Msg ID: {g['guild'][x]['msgid']}  Guild ID: {x}  Channel ID: {g['guild'][x]['channelid']}")
-
 
 def setup(bot):
-    bot.loop.create_task(Subscribe(bot).subgcache())
     bot.add_cog(Subscribe(bot))
