@@ -134,10 +134,13 @@ class Subscribe(commands.Cog):
                     else:
                         await asyncio.sleep(1)
                         amount -= 1
+                        print("keep on trying")
                         continue
-                except:
+                except Exception as e:
                     await asyncio.sleep(15)
+                    print(f"\n{e}")
                     await self.subgcache()
+            print("subgap ran")
             await asyncio.sleep(30)
 
     @commands.command(name = "subgap")
