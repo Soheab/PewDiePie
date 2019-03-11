@@ -138,7 +138,7 @@ class Subscribe(commands.Cog):
                         continue
                 except Exception as e:
                     await asyncio.sleep(15)
-                    print(f"\n{e}")
+                    print(f"\n{e}\n{type(e)}")
                     await self.subgcache()
             print("subgap ran")
             await asyncio.sleep(30)
