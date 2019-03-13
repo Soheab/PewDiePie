@@ -34,8 +34,6 @@ class Subscribe(commands.Cog):
         gdict["msgid"] = message
 
     async def subgremove(self, guild: int):
-        if not await self.bot.is_ready():
-            return 0
         if "keep_alive" in self.bot.subgap["guild"][guild]:
             return 1
 
