@@ -18,7 +18,7 @@ class Subscribe(commands.Cog):
         for info in information:
             self.bot.subgap["guild"][info["guildid"]] = {}
             guild = self.bot.subgap["guild"][info["guildid"]]
-            guild["channelid"] = info["channel"]
+            guild["channelid"] = info["channelid"]
             guild["guildid"] = info["guildid"]
             guild["msgid"] = info["msgid"]
 
