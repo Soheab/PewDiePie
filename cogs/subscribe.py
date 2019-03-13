@@ -1,6 +1,3 @@
-"""
-The code here for subgap has been removed while I rewrite the code for the command
-"""
 import discord
 from discord.ext import commands
 import aiohttp
@@ -13,6 +10,88 @@ import config
 class Subscribe(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+
+    async def subgcache(self):
+        self.bot.subgap = {"guild": {}}
+        self.bot.subgap["continue"] = True
+        information = await self.bot.pool.fetch("SELECT * FROM subgap")
+        for info in information:
+            self.bot.subgap["guild"][info["guildid"]] = {}
+            guild = self.bot.subgap["guild"][info["guildid"]]
+            guild["channelid"] = info["channel"]
+            guild["guildid"] = info["guildid"]
+            guild["msgid"] = info["msgid"]
+
+        if "subgap" in self.bot.tasks:
+            self.bot.tasks["subgap"].cancel()
+
+        self.bot.tasks["subgap"] = self.bot.loop.create_task(self.subgtask())
+
+    async def subgupcache(self, channel: int, guild: int, message: int):
+        gdict = self.bot.subgap["guild"][guild] = {}
+        gdict["channelid"] = channel
+        gdict["guildid"] = guild
+        gdict["msgid"] = message
+
+    async def subgremove(self, guild: int):
+        if self.bot._connection.unavailable:
+            return 0
+        if not await self.bot.is_ready():
+            return 0
+        if "keep_alive" in self.bot.subgap["guild"][guild]:
+            return 1
+
+        await self.bot.pool.execute("INSERT INTO subgapbackup SELECT * FROM subgap WHERE guildid = $1", guild)
+        await self.bot.pool.execute("DELETE FROM subgap WHERE guildid = $1", guild)
+        self.bot.subgap["guild"].pop(guild)
+
+        return 0
+
+    async def subgcheck(self, channel: int, guild: int, message: int, submsg: str):
+        guild = self.bot.get_guild(guild)
+        if guild == None:
+            if await self.subgremove == 0:
+                return
+        channel = guild.get_channel(channel)
+        if channel == None:
+            if await self.subgremove(guild) == 0:
+                return
+        try:
+            await channel.get_message(message)
+        except discord.NotFound:
+            if await self.subgremove(guild) == 0:
+                return
+
+        await self.subgedit(channel.id, guild.id, message, submsg)
+
+    async def subgedit(self, channel: int, guild: int, message: int, msg: str):
+        em = discord.Embed(color = discord.Color.blurple())
+        em.add_field(name = "Leading Channel", value = msg)
+
+        guild = self.bot.get_guild(guild)
+        channel = guild.get_channel(channel)
+        message = await channel.get_message(message)
+        await message.edit(embed = em)
+
+    async def subgtask(self):
+        await self.bot.wait_until_ready()
+
+        while self.bot.subgap["continue"]:
+            while True:
+                try:
+                    try:
+                        info = await self.subcount.callback(None, None, "retint", False) # pylint: disable=no-member
+                        info = info["l"]
+                    except KeyError:
+                        self.bot.subgap["continue"] = False
+                        return
+                    for guild in self.bot.subgap["guild"]:
+                        await self.subgcheck(guild["channel"], guild, guild["msgid"], info)
+                    break
+                except RuntimeError:
+                    await asyncio.sleep(1)
+                    continue
+            await asyncio.sleep(30)
 
     @commands.command(aliases = ["subscribercount"])
     async def subcount(self, ctx, p: str = "", stping: bool = True):
@@ -87,4 +166,5 @@ class Subscribe(commands.Cog):
 
 
 def setup(bot):
+    bot.loop.create_task(Subscribe(bot).subgcache())
     bot.add_cog(Subscribe(bot))
