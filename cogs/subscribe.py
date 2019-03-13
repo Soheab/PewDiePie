@@ -85,8 +85,9 @@ class Subscribe(commands.Cog):
                     except KeyError:
                         self.bot.subgap["continue"] = False
                         return
-                    for guild in self.bot.subgap["guild"]:
-                        await self.subgcheck(guild["channel"], guild, guild["msgid"], info)
+                    for sub in self.bot.subgap["guild"]:
+                        guild = self.bot.subgap["guild"][sub]
+                        await self.subgcheck(guild["channel"], sub, guild["msgid"], info)
                     break
                 except RuntimeError:
                     await asyncio.sleep(1)
