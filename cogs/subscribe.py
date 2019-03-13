@@ -50,12 +50,12 @@ class Subscribe(commands.Cog):
                 return
         channel = guild.get_channel(channel)
         if channel == None:
-            if await self.subgremove(guild) == 0:
+            if await self.subgremove(guild.id) == 0:
                 return
         try:
             await channel.get_message(message)
         except discord.NotFound:
-            if await self.subgremove(guild) == 0:
+            if await self.subgremove(guild.id) == 0:
                 return
 
         await self.subgedit(channel.id, guild.id, message, submsg)
