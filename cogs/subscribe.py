@@ -88,7 +88,7 @@ class Subscribe(commands.Cog):
                 except RuntimeError:
                     await asyncio.sleep(1)
                     continue
-                await asyncio.sleep(30)
+            await asyncio.sleep(30)
 
     @commands.command(aliases = ["subscribercount"])
     async def subcount(self, ctx, p: str = "", stping: bool = True):
