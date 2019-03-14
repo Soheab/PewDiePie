@@ -90,6 +90,52 @@ class Subscribe(commands.Cog):
                     continue
             await asyncio.sleep(30)
 
+    @commands.group(invoke_without_command = True)
+    @commands.has_permissions(manage_guild = True)
+    async def subgap(self, ctx):
+        ch = await self.bot.pool.fetchrow("SELECT * FROM authorized WHERE guildid = $1", ctx.guild.id)
+        if ch == None:
+            em = discord.Embed(color = discord.Color.dark_teal())
+            g = "https://github.com/joshuapatel/PewDiePie/#how-do-i-get-authorized-for-the-subgap-command"
+            em.add_field(name = "Not Authorized",
+            value = f"Your server is not authorized to use this command. Please read the [guidelines]({g}) to getting authorized.")
+            await ctx.send(embed = em)
+            return
+
+        chtwo = await self.bot.pool.fetchrow("SELECT * FROM subgap WHERE guildid = $1", ctx.guild.id)
+        if chtwo != None:
+            prefix = ctx.prefix.replace(self.bot.user.mention, f"@{self.bot.user.name}")
+            em = discord.Embed(color = discord.Color.dark_teal())
+            em.add_field(name = "Subscriber Gap in Use",
+            value = f"The subgap command is being used in your server already. Please delete the subgap message or run `{prefix}subgap stop`.")
+            await ctx.send(embed = em)
+            return
+
+        info = await self.subcount.callback(None, None, "retint", False) # pylint: disable=no-member
+        em = discord.Embed(color = discord.Color.blurple())
+        em.add_field(name = "Leading Channel", value = info["l"])
+        stmsg = await ctx.send(embed = em)
+
+        await self.bot.pool.execute("INSERT INTO subgap VALUES ($1, $2, $3)", stmsg.id, ctx.channel.id, ctx.guild.id)
+        await asyncio.sleep(30)
+        await self.subgupcache(ctx.channel.id, ctx.guild.id, stmsg.id)
+
+    @subgap.command(aliases = ["remove"])
+    @commands.has_permissions(manage_guild = True)
+    async def stop(self, ctx):
+        c = await self.bot.pool.fetchrow("SELECT * FROM subgap WHERE guildid = $1", ctx.guild.id)
+        if c == None:
+            em = discord.Embed(color = discord.Color.dark_teal())
+            em.add_field(name = "Subscriber Gap Not Running", value = "The subgap command is not currently being used in your server.")
+            await ctx.send(embed = em)
+            return
+
+        await self.subgremove(ctx.guild.id)
+
+        em = discord.Embed(color = discord.Color.dark_red())
+        em.add_field(name = "Subscriber Gap Stopped", value = "The subgap message has stopped updating in your server.")
+        await ctx.send(embed = em)
+
     @commands.command(aliases = ["subscribercount"])
     async def subcount(self, ctx, p: str = "", stping: bool = True):
         if stping:
