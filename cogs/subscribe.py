@@ -64,11 +64,11 @@ class Subscribe(commands.Cog):
     async def subgovpt(self):
         while self.bot.subgap["continue"]:
             if self.bot.subgap["rmusr"]["delete"]:
-                if len(self.bot.subgap["rmusr"]["t_time"]) >= 5:
+                if self.bot.subgap["rmusr"]["t_time"] >= 5:
                     self.bot.tasks["subgap"].cancel()
                 else:
                     await asyncio.sleep(5)
-                    if len(self.bot.subgap["rmusr"]["t_time"]) <= 5:
+                    if self.bot.subgap["rmusr"]["t_time"] <= 5:
                         self.bot.subgap["rmusr"]["delete"] = False
                     else:
                         self.bot.tasks["subgap"].cancel()
