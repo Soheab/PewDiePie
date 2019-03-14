@@ -28,9 +28,11 @@ I strongly recommend that you [invite the bot](https://discordbots.org/bot/50086
 ### General Commands
 |Name|Description|
 |----|-----------|
-|disstrack|Plays Bitch Lasagna in a voice channel. To disconnect, run `p.disstrack stop` or `p.disstrack leave`|
+|disstrack|Plays Bitch Lasagna in a voice channel|
+|disstrack stop (leave)|Disconnects from the voice channel|
 |subcount|Shows T-Series' and PewDiePie's subscriber count|
-|subgap|Sends a message then automatically starts updating it every 30 seconds. `p.subgap stop` will stop the current subgap message from updating|
+|subgap|Sends a message then automatically starts updating it every 30 seconds|
+|subgap stop (remove)|Stops the subgap message from updating in your server|
 |randomvid|Returns a random PewDiePie or T-Series video|
 |youtube (yt)|Sends you the link to PewDiePie's and T-Series' YouTube channel|
 |spoiler|Sends any message you provide as a spoiler in an annoying form|
