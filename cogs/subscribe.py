@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import aiohttp
 import asyncio
+from datetime import datetime as dt
 import sys
 sys.path.append("../")
 import config
@@ -14,6 +15,10 @@ class Subscribe(commands.Cog):
     async def subgcache(self):
         self.bot.subgap = {"guild": {}}
         self.bot.subgap["continue"] = True
+        self.bot.subgap["rmusr"] = {}
+        self.bot.subgap["rmusr"]["time"] = []
+        self.bot.subgap["rmusr"]["delete"] = False
+        self.bot.subgap["rmusr"]["t_time"] = 0
         information = await self.bot.pool.fetch("SELECT * FROM subgap")
         for info in information:
             self.bot.subgap["guild"][info["guildid"]] = {}
@@ -34,14 +39,37 @@ class Subscribe(commands.Cog):
         gdict["msgid"] = message
 
     async def subgremove(self, guild: int):
+        rmusr = self.bot.subgap["rmusr"]
+        if rmusr["delete"]:
+            rmusr["t_time"] += 1
+            return 0
+        if len(rmusr["time"]) > 1:
+            if rmusr["time"][1] - rmusr["time"][0] <= 3:
+                rmusr["delete"] = True
+                rmusr["time"].clear()
+                return 0
         if "keep_alive" in self.bot.subgap["guild"][guild]:
             return 1
 
         await self.bot.pool.execute("INSERT INTO subgapbackup SELECT * FROM subgap WHERE guildid = $1", guild)
         await self.bot.pool.execute("DELETE FROM subgap WHERE guildid = $1", guild)
         self.bot.subgap["guild"].pop(guild)
+        self.bot.subgap["rmusr"]["time"].append(round(dt.timestamp(dt.utcnow())))
 
         return 0
+
+    async def subgovpt(self):
+        while self.bot.subgap["continue"]:
+            if self.bot.subgap["rmusr"]["delete"]:
+                if len(self.bot.subgap["rmusr"]["t_time"]) >= 5:
+                    self.bot.tasks["subgap"].cancel()
+                else:
+                    await asyncio.sleep(5)
+                    if len(self.bot.subgap["rmusr"]["t_time"]) <= 5:
+                        self.bot.subgap["rmusr"]["delete"] = False
+                    else:
+                        self.bot.tasks["subgap"].cancel()
+            await asyncio.sleep(15)
 
     async def subgcheck(self, channel: int, guild: int, message: int, submsg: str):
         guild = self.bot.get_guild(guild)
