@@ -120,7 +120,7 @@ class Subscribe(commands.Cog):
         await asyncio.sleep(30)
         await self.subgupcache(ctx.channel.id, ctx.guild.id, stmsg.id)
 
-    @subgap.command(aliases = ["remove"])
+    @subgap.command(aliases = ["remove", "delete"])
     @commands.has_permissions(manage_guild = True)
     async def stop(self, ctx):
         c = await self.bot.pool.fetchrow("SELECT * FROM subgap WHERE guildid = $1", ctx.guild.id)
