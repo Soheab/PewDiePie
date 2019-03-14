@@ -98,7 +98,7 @@ class Subscribe(commands.Cog):
             em = discord.Embed(color = discord.Color.dark_teal())
             g = "https://github.com/joshuapatel/PewDiePie/#how-do-i-get-authorized-for-the-subgap-command"
             em.add_field(name = "Not Authorized",
-            value = f"Your server is not authorized to use this command. Please read the [guidelines]({g}) to getting authorized.")
+            value = f"Your server is not authorized to use this command. Please read the [guidelines]({g}) for getting authorized.")
             await ctx.send(embed = em)
             return
 
