@@ -30,7 +30,7 @@ I strongly recommend that you [invite the bot](https://discordbots.org/bot/50086
 |----|-----------|
 |disstrack|Plays Bitch Lasagna in a voice channel. To disconnect, run `p.disstrack stop` or `p.disstrack leave`|
 |subcount|Shows T-Series' and PewDiePie's subscriber count|
-|subgap|Automatically updates the current subscriber gap between PewDiePie and T-Series every 30 seconds. Your server must be authorized to use this feature. Please join the [support server](https://discord.gg/we4DQ5u) to request authorization.|
+|subgap|Sends a message then automatically starts updating it every 30 seconds. `p.subgap stop` will stop the current subgap message from updating.|
 |randomvid|Returns a random PewDiePie or T-Series video|
 |youtube (yt)|Sends you the link to PewDiePie's and T-Series' YouTube channel|
 |spoiler|Sends any message you provide as a spoiler in an annoying form|
