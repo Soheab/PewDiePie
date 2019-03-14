@@ -29,7 +29,7 @@ class Help(commands.Cog):
 
         em.add_field(name = f"{prefix}disstrack [leave/stop]", value = f"Plays Bitch Lasagna in a voice channel", inline = False)
         em.add_field(name = f"{prefix}subcount", value = "Shows T-Series' and PewDiePie's subscriber count", inline = False)
-        em.add_field(name = f"{prefix}subgap", value = "This command is currently being rewritten. Please check back later", inline = False)
+        em.add_field(name = f"{prefix}subgap [stop/remove]", value = "Sends the subgap between PewDiePie and T-Series then updates it every 30 seconds", inline = False)
         em.add_field(name = f"{prefix}randomvid", value = "Returns a random PewDiePie or T-Series video", inline = False)
         em.add_field(name = f"{prefix}youtube (yt)", value = "Sends you the link to PewDiePie's and T-Series' YouTube channel", inline = False)
         em.add_field(name = f"{prefix}spoiler [message]", value = "Sends any message you provide as a spoiler in an annoying form", inline = False)
