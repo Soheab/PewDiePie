@@ -29,8 +29,11 @@ class Subscribe(commands.Cog):
 
         if "subgap" in self.bot.tasks:
             self.bot.tasks["subgap"].cancel()
+        if "subgap_ovpt" in self.bot.tasks:
+            self.bot.tasks["subgap_ovpt"].cancel()
 
         self.bot.tasks["subgap"] = self.bot.loop.create_task(self.subgtask())
+        self.bot.tasks["subgap_ovpt"] = self.bot.loop.create_task(self.subgovpt())
 
     async def subgupcache(self, channel: int, guild: int, message: int):
         gdict = self.bot.subgap["guild"][guild] = {}
