@@ -81,7 +81,7 @@ class Subscribe(commands.Cog):
                 return
         try:
             await channel.get_message(message)
-        except discord.NotFound:
+        except (discord.NotFound, discord.Forbidden):
             if await self.subgremove(guild.id) == 0:
                 return
 
