@@ -161,7 +161,8 @@ class Subscribe(commands.Cog):
             await ctx.send(embed = em)
             return
 
-        await self.subgremove(ctx.guild.id)
+        if await self.subgremove(ctx.guild.id) == 1:
+            return
 
         em = discord.Embed(color = discord.Color.dark_red())
         em.add_field(name = "Subscriber Gap Stopped", value = "The subgap message has stopped updating in your server.")
