@@ -47,7 +47,7 @@ class Subscribe(commands.Cog):
             rmusr["t_time"] += 1
             return 0
         if len(rmusr["time"]) > 1:
-            if rmusr["time"][1] - rmusr["time"][0] <= 3:
+            if rmusr["time"][-2:][1] - rmusr["time"][-2:][0] <= 3:
                 rmusr["delete"] = True
                 rmusr["time"].clear()
                 return 0
