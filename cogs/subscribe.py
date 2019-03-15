@@ -41,21 +41,21 @@ class Subscribe(commands.Cog):
         rmusr = self.bot.subgap["rmusr"]
         if rmusr["delete"]:
             rmusr["t_time"] += 1
-            return 0
+            return True
         if len(rmusr["time"]) > 1:
             if rmusr["time"][-2:][1] - rmusr["time"][-2:][0] <= 3:
                 rmusr["delete"] = True
                 rmusr["time"].clear()
-                return 0
+                return True
         if "keep_alive" in self.bot.subgap["guild"][guild]:
-            return 1
+            return False
 
         await self.bot.pool.execute("INSERT INTO subgapbackup SELECT * FROM subgap WHERE guildid = $1", guild)
         await self.bot.pool.execute("DELETE FROM subgap WHERE guildid = $1", guild)
         self.bot.subgap["guild"].pop(guild)
         rmusr["time"].append(round(dt.timestamp(dt.utcnow())))
 
-        return 0
+        return True
 
     async def subgovpt(self):
         while not self.bot.is_closed():
@@ -73,17 +73,14 @@ class Subscribe(commands.Cog):
     async def subgcheck(self, channel: int, guild: int, message: int, submsg: str):
         guild = self.bot.get_guild(guild)
         if guild == None:
-            if await self.subgremove(guild.id) == 0:
-                return
+            if await self.subgremove(guild.id): return
         channel = guild.get_channel(channel)
         if channel == None:
-            if await self.subgremove(guild.id) == 0:
-                return
+            if await self.subgremove(guild.id): return
         try:
             await channel.get_message(message)
         except (discord.NotFound, discord.Forbidden):
-            if await self.subgremove(guild.id) == 0:
-                return
+            if await self.subgremove(guild.id): return
 
         await self.subgedit(channel.id, guild.id, message, submsg)
 
@@ -156,8 +153,7 @@ class Subscribe(commands.Cog):
             await ctx.send(embed = em)
             return
 
-        if await self.subgremove(ctx.guild.id) == 1:
-            return
+        if not await self.subgremove(ctx.guild.id): return
 
         em = discord.Embed(color = discord.Color.dark_red())
         em.add_field(name = "Subscriber Gap Stopped", value = "The subgap message has stopped updating in your server.")
