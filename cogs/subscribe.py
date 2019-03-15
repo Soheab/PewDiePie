@@ -148,7 +148,6 @@ class Subscribe(commands.Cog):
         stmsg = await ctx.send(embed = em)
 
         await self.bot.pool.execute("INSERT INTO subgap VALUES ($1, $2, $3)", stmsg.id, ctx.channel.id, ctx.guild.id)
-        await asyncio.sleep(30)
         await self.subgupcache(ctx.channel.id, ctx.guild.id, stmsg.id)
 
     @subgap.command(aliases = ["remove", "delete"])
