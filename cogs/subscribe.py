@@ -14,7 +14,6 @@ class Subscribe(commands.Cog):
 
     async def subgcache(self):
         self.bot.subgap = {"guild": {}}
-        self.bot.subgap["continue"] = True
         self.bot.subgap["rmusr"] = {}
         self.bot.subgap["rmusr"]["time"] = []
         self.bot.subgap["rmusr"]["delete"] = False
@@ -62,7 +61,7 @@ class Subscribe(commands.Cog):
         return 0
 
     async def subgovpt(self):
-        while self.bot.subgap["continue"]:
+        while not self.bot.is_closed():
             if self.bot.subgap["rmusr"]["delete"]:
                 if self.bot.subgap["rmusr"]["t_time"] >= 5:
                     self.bot.tasks["subgap"].cancel()
@@ -102,15 +101,15 @@ class Subscribe(commands.Cog):
 
     async def subgtask(self):
         await self.bot.wait_until_ready()
-
-        while self.bot.subgap["continue"]:
+        cont = True
+        while cont:
             while True:
                 try:
                     try:
                         info = await self.subcount.callback(None, None, "retint", False) # pylint: disable=no-member
                         info = info["l"]
                     except KeyError:
-                        self.bot.subgap["continue"] = False
+                        cont = False
                         return
                     for sub in self.bot.subgap["guild"]:
                         guild = self.bot.subgap["guild"][sub]
