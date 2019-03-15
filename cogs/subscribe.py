@@ -53,7 +53,7 @@ class Subscribe(commands.Cog):
         await self.bot.pool.execute("INSERT INTO subgapbackup SELECT * FROM subgap WHERE guildid = $1", guild)
         await self.bot.pool.execute("DELETE FROM subgap WHERE guildid = $1", guild)
         self.bot.subgap["guild"].pop(guild)
-        self.bot.subgap["rmusr"]["time"].append(round(dt.timestamp(dt.utcnow())))
+        rmusr["time"].append(round(dt.timestamp(dt.utcnow())))
 
         return 0
 
