@@ -180,7 +180,7 @@ class Subscribe(commands.Cog):
         async with aiohttp.ClientSession() as sccs:
             async with sccs.get(base + "/channels?part=snippet,contentDetails,statistics&id=" + tci + end) as treq:
                 tjson = await treq.json()
-            async with anccs.get(base + "/channels?part=snippet,contentDetails,statistics&id=" + pci + end) as preq:
+            async with sccs.get(base + "/channels?part=snippet,contentDetails,statistics&id=" + pci + end) as preq:
                 pjson = await preq.json()
 
         try:
