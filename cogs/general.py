@@ -76,7 +76,7 @@ class General(commands.Cog):
         botlat = f"{self.bot.latency * 1000:.3f}"
 
         em = discord.Embed(title = f"{self.bot.user.name} Information", color = discord.Color.green())
-        em.add_field(name = "Bot Creator", value = "A Discord User#4063")
+        em.add_field(name = "Bot Creator", value = self.bot.owner)
         em.add_field(name = "Bot Library", value = "discord.py rewrite")
         em.add_field(name = "Support Server", value = "https://discord.gg/we4DQ5u")
         em.add_field(name = "Bot Latency", value = f"{botlat} ms")
@@ -113,13 +113,14 @@ class General(commands.Cog):
         if prefixes == None:
             prefix = ""
             formatted = []
+
             for x in self.bot.default_prefixes:
                 formatted.append(x.lower())
             formatted = list(dict.fromkeys(formatted))
+
             for x in formatted:
                 prefix += f"{x}, "
-            if prefix.endswith(", "):
-                prefix = prefix[:-2]
+            prefix = prefix[:-2]
         else:
             prefix = prefixes
 
@@ -174,9 +175,10 @@ class General(commands.Cog):
     # Meme command
     @commands.command(aliases = ["memes"])
     async def meme(self, ctx):
-        subreddit = ["pewdiepiesubmissions", "memes", "meme", "dankmemes", "wholesomememes"]
+        subreddit = ["memes", "meme", "dankmemes", "wholesomememes"]
         subreddit = random.choice(subreddit)
         base = "https://www.reddit.com/r/" + subreddit
+
         async with aiohttp.ClientSession() as session:
             async with session.get(f"{base}/random.json") as response:
                 j = await response.json()
@@ -218,6 +220,11 @@ class General(commands.Cog):
     # Spoiler command
     @commands.command()
     async def spoiler(self, ctx, *, spoiler: str):
+        try:
+            await ctx.message.delete()
+        except discord.Forbidden:
+            pass
+
         x = ""
         for b in spoiler:
             x += f"||{b}||"
