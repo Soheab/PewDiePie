@@ -71,8 +71,8 @@ class Subscribe(commands.Cog):
             await asyncio.sleep(15)
 
     async def subgcheck(self, channel: int, guild: int, message: int, submsg: str):
-        guild = self.bot.get_guild(guild)
-        if guild == None:
+        g = self.bot.get_guild(guild)
+        if g == None:
             if await self.subgremove(guild): return
         channel = guild.get_channel(channel)
         if channel == None:
