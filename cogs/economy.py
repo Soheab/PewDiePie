@@ -27,7 +27,7 @@ class Economy(commands.Cog):
 
     async def up_usercache(self, guild: int, user: int):
         self.bot.econ["users"]["guildid"][guild][user] = {
-            "guild": guild,
+            "guildid": guild,
             "userid": user
         }
 
