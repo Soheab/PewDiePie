@@ -36,17 +36,14 @@ class EconomyShop(commands.Cog):
     # SHOP: Show roles (REQ_NONE)
     @commands.group(invoke_without_command = True)
     async def shop(self, ctx):
-        roles = await self.bot.pool.fetch("SELECT * FROM econshop WHERE guildid = $1", ctx.guild.id)
-        if roles == None or roles == []:
-            em = discord.Embed(color = discord.Color.dark_red())
-            em.set_thumbnail(url = ctx.guild.icon_url)
-            em.add_field(name = "No Roles", value = f"No roles have been found for {ctx.guild.name}")
-            await ctx.send(embed = em)
-            return
+        roles = await self.bot.pool.fetch("""
+        SELECT * FROM econshop WHERE guildid = $1 ORDER BY reqamount DESC
+        """, ctx.guild.id)
 
         em = discord.Embed(color = discord.Color.dark_red())
         em.set_thumbnail(url = ctx.guild.icon_url)
         em.set_author(name = f"{ctx.guild.name}'s Shop")
+
         for r in roles:
             role = ctx.guild.get_role(r["roleid"])
             if role == None:
@@ -54,6 +51,10 @@ class EconomyShop(commands.Cog):
                 continue
 
             em.add_field(name = f"Role: {role.name}", value = f"Required amount: {r['reqamount']:,d} {self.tcoinimage}", inline = False)
+
+        if len(em.fields) == 0:
+            em.set_author(name = "")
+            em.add_field(name = "No Roles", value = f"No roles have been found for {ctx.guild.name}")
 
         await ctx.send(embed = em)
 
