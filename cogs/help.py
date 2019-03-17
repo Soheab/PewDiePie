@@ -63,7 +63,7 @@ class Help(commands.Cog):
         em.add_field(name = f"{prefix}shovel", value = "You work all day shoveling for Bro Coins", inline = False)
         em.add_field(name = f"{prefix}balance (bal)", value = "Pays a user with a specified amount of Bro Coins", inline = False)
         em.add_field(name = f"{prefix}leaderboard (lb)", value = "Shows the leaderboard for Bro Coins", inline = False)
-        em.add_field(name = f"{prefix}leaderboard server (guild)", value = "Shows the leadreboard of Bro Coins for your server", inline = False)
+        em.add_field(name = f"{prefix}leaderboard server (guild)", value = "Shows the leaderboard of Bro Coins for your server", inline = False)
         em.add_field(name = f"{prefix}gamble [coins/all]", value = "You can gamble a specific amount of Bro Coins", inline = False)
         em.add_field(name = f"{prefix}steal (rob) [@user (or name)]", value = "Steals from a user that you specify", inline = False)
         em.add_field(name = f"{prefix}transfer [coins/all] [server name]", value = """
