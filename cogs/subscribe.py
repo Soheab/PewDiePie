@@ -74,15 +74,15 @@ class Subscribe(commands.Cog):
         g = self.bot.get_guild(guild)
         if g == None:
             if await self.subgremove(guild): return
-        channel = guild.get_channel(channel)
+        channel = g.get_channel(channel)
         if channel == None:
-            if await self.subgremove(guild.id): return
+            if await self.subgremove(g.id): return
         try:
             await channel.get_message(message)
         except (discord.NotFound, discord.Forbidden):
-            if await self.subgremove(guild.id): return
+            if await self.subgremove(g.id): return
 
-        await self.subgedit(channel.id, guild.id, message, submsg)
+        await self.subgedit(channel.id, g.id, message, submsg)
 
     async def subgedit(self, channel: int, guild: int, message: int, msg: str):
         em = discord.Embed(color = discord.Color.blurple())
