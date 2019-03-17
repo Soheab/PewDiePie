@@ -82,7 +82,7 @@ class General(commands.Cog):
         em.add_field(name = "Bot Library", value = "discord.py rewrite")
         em.add_field(name = "Support Server", value = "https://discord.gg/we4DQ5u")
         em.add_field(name = "Bot Latency", value = f"{botlat} ms")
-        em.add_field(name = "Server Count", value = f"{len(self.bot.guilds):,d}")
+        em.add_field(name = "Server Count", value = f"{len(self.bot.guilds):,d} servers")
         em.add_field(name = "Vote", value = "[Vote for me](https://discordbots.org/bot/500868806776979462/vote)")
         await ctx.send(embed = em)
 
