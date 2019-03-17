@@ -28,11 +28,13 @@ class Snipe(commands.Cog):
             return
 
         em = discord.Embed(color = discord.Color.green())
+
         try:
             em.set_author(name = self.bot.get_user(dta["usr"]), icon_url = self.bot.get_user(dta["usr"]).avatar_url)
         except AttributeError:
             deleted_user = "https://discordapp.com/assets/0e291f67c9274a1abdddeb3fd919cbaa.png"
             em.set_author(name = "Missing User", icon_url = deleted_user)
+
         em.add_field(name = "Message", value = dta["contents"][:980])
         em.timestamp = dta["time"]
         await ctx.send(embed = em)
@@ -82,10 +84,12 @@ class Snipe(commands.Cog):
                 user = self.bot.get_user(row["usr"]).name
             except AttributeError:
                 user = "User Not Found"
+
             try:
                 ch = self.bot.get_channel(row["channel"]).name
             except AttributeError:
                 ch = "Channel Not Found"
+
             if len(user) > 17:
                 user = user[:-5] + "..."
             if len(ch) > 19:

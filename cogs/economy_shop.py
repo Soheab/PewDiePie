@@ -8,7 +8,6 @@ class EconomyShop(commands.Cog):
         self.bot = bot
         self.tcoinimage = "<:bro_coin:541363630189576193>"
 
-    # Add user to DB and check
     async def cad_user(ctx): # pylint: disable=E0213
         dbcheck = await ctx.bot.pool.fetchrow("SELECT * FROM econ WHERE userid = $1 AND guildid = $2", ctx.author.id, ctx.guild.id) # pylint: disable=E1101
         if dbcheck == None or dbcheck == []:
@@ -18,7 +17,6 @@ class EconomyShop(commands.Cog):
             return True
         return False
 
-    # Amount or all
     class AmountConverter(commands.Converter):
         async def convert(self, ctx, argument):
             try:
@@ -33,7 +31,6 @@ class EconomyShop(commands.Cog):
             else:
                 return 0
 
-    # SHOP: Show roles (REQ_NONE)
     @commands.group(invoke_without_command = True)
     async def shop(self, ctx):
         roles = await self.bot.pool.fetch("""
@@ -58,7 +55,6 @@ class EconomyShop(commands.Cog):
 
         await ctx.send(embed = em)
 
-    # SHOP: Add roles (REQ_MANAGE_ROLES)
     @shop.command(aliases = ["role", "make"])
     @commands.bot_has_permissions(manage_roles = True)
     @commands.has_permissions(manage_roles = True)
@@ -82,7 +78,6 @@ class EconomyShop(commands.Cog):
         em.add_field(name = "Role Added", value = f"`{role.name}` has been added to the shop and requires {req_amount:,d} {self.tcoinimage} to purchase")
         await ctx.send(embed = em)
 
-    # SHOP: Buy roles (REQ_ENOUGH_COINS)
     @shop.command(aliases = ["purchase", "spend", "get"])
     @commands.bot_has_permissions(manage_roles = True)
     @commands.check(cad_user)
@@ -92,6 +87,7 @@ class EconomyShop(commands.Cog):
             em.add_field(name = "Role in Possession", value = f"You already have the `{role.name}` role therefore you cannot buy it")
             await ctx.send(embed = em)
             return
+
         req_amount = await self.bot.pool.fetchval("SELECT reqamount FROM econshop WHERE roleid = $1 AND guildid = $2", role.id, ctx.guild.id)
 
         if req_amount == None:
@@ -112,6 +108,7 @@ class EconomyShop(commands.Cog):
                 """)
                 await ctx.send(embed = em)
                 return
+
             await self.bot.pool.execute("UPDATE econ SET coins = coins - $1 WHERE userid = $2 AND guildid = $3", req_amount, ctx.author.id, ctx.guild.id)
 
             em = discord.Embed(color = discord.Color.dark_red())
@@ -125,7 +122,6 @@ class EconomyShop(commands.Cog):
             """)
             await ctx.send(embed = em)
 
-    # SHOP: Edit existing shop item (REQ_MANAGE_ROLES)
     @shop.command(aliases = ["change", "adjust"])
     @commands.has_permissions(manage_roles = True)
     async def edit(self, ctx, req_amount: AmountConverter, *, role: discord.Role):
@@ -148,7 +144,6 @@ class EconomyShop(commands.Cog):
         em.add_field(name = "Role Updated", value = f"`{role.name}`'s required amount to purchase has been changed to {req_amount:,d} {self.tcoinimage}")
         await ctx.send(embed = em)
 
-    # SHOP: Delete existing shop item (REQ_MANAGE_ROLES)
     @shop.command(aliases = ["remove"])
     @commands.has_permissions(manage_roles = True)
     async def delete(self, ctx, *, role: discord.Role):

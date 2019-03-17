@@ -30,8 +30,10 @@ class ErrorHandler(commands.Cog):
                 ets = {}
                 ets["msg"] = "An unexpected error has occurred.\n[ERROR]"
                 ets["ty"] = "Unexpected Error"
+
             em = discord.Embed(color = discord.Color.dark_teal())
             em.add_field(name = f"Error: {ets['ty']}", value = ets["msg"].replace("[ERROR]", f"```\n{error}\n```"))
+
             try:
                 await ctx.send(embed = em)
             except discord.Forbidden:
@@ -42,6 +44,7 @@ class ErrorHandler(commands.Cog):
 
         if isinstance(error, commands.CommandNotFound):
             return
+
         elif isinstance(error, commands.MissingRequiredArgument):
             em = discord.Embed(color = discord.Color.dark_teal())
             em.add_field(name = "Error: Missing Argument", value = f"""
@@ -49,6 +52,7 @@ class ErrorHandler(commands.Cog):
             Make sure you ran the command correctly then try again.
             """)
             await ctx.send(embed = em)
+
         elif isinstance(error, commands.CommandOnCooldown):
             # Time
             seconds = int(error.retry_after)

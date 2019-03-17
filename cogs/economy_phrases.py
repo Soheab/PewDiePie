@@ -6,7 +6,6 @@ class EconomyPhrases(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    # Updates the cache
     async def update_shovel(self):
         if "pos" in self.bot.econ and "neg" in self.bot.econ:
             self.bot.econ["pos"] = await self.bot.pool.fetch("SELECT * FROM shovel WHERE fate = true")
@@ -14,7 +13,6 @@ class EconomyPhrases(commands.Cog):
         else:
             print("Cog not loaded in")
 
-    # Phrase command
     @commands.group(invoke_without_command = True)
     async def phrase(self, ctx, pid: int):
         pcheck = await self.bot.pool.fetchrow("SELECT * FROM shovel WHERE id = $1", pid)
@@ -31,6 +29,7 @@ class EconomyPhrases(commands.Cog):
             em = discord.Embed(color = discord.Color.green())
         else:
             em = discord.Embed(color = discord.Color.red())
+
         em.add_field(name = "Shovel - Raw", value = p)
         em.set_footer(text = f"Phrase #{pid}")
         await ctx.send(embed = em)
@@ -45,13 +44,13 @@ class EconomyPhrases(commands.Cog):
             em = discord.Embed(color = discord.Color.green())
         else:
             em = discord.Embed(color = discord.Color.red())
+
         em.add_field(name = "Added Phrase", value = f"The phrase has been added to the shovel command. Fate: {fate}")
         em.set_footer(text = f"Phrase #{pid}")
         await ctx.send(embed = em)
 
         await self.update_shovel()
 
-    # Edit command
     @phrase.command()
     @commands.is_owner()
     async def edit(self, ctx, pid: int, *, phrase: str):

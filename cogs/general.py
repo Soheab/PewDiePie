@@ -4,6 +4,7 @@ import asyncio
 import random
 import aiohttp
 import datetime
+import textwrap
 import sys
 sys.path.append("../")
 import config
@@ -13,7 +14,6 @@ class General(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    # Gets a random T-Series or PewDiePie video
     @commands.command()
     async def randomvid(self, ctx):
         await ctx.channel.trigger_typing()
@@ -22,7 +22,6 @@ class General(commands.Cog):
         end = "&key=" + apikey
         pci = "UC-lHJZR3Gqxm24_Vd_AJ5Yw"
         tci = "UCq-Fj5jknLsUf-MWSy4_brA"
-        # ====T-SERIES SECTION====
 
         async with aiohttp.ClientSession() as cs:
             async with cs.get(f"{base}/channels?part=snippet,contentDetails&id={tci}{end}") as tureq:
@@ -30,13 +29,13 @@ class General(commands.Cog):
             tupl = tujson["items"][0]["contentDetails"]["relatedPlaylists"]["uploads"]
             async with cs.get(f"{base}/playlistItems?playlistId={tupl}&maxResults=15&part=snippet,contentDetails{end}") as tuvids:
                 tuvidsjson = await tuvids.json()
+
         tuvidslist = []
         vid = 0
         while vid < len(tuvidsjson["items"]):
             tvidid = tuvidsjson["items"][vid]["snippet"]["resourceId"]["videoId"]
             tuvidslist.append(tvidid)
             vid += 1
-        # ====PEWDIEPIE SECTION====
 
         async with aiohttp.ClientSession() as pcs:
             async with pcs.get(f"{base}/channels?part=snippet,contentDetails&id={pci}{end}") as pureq:
@@ -44,13 +43,13 @@ class General(commands.Cog):
             pupl = pujson["items"][0]["contentDetails"]["relatedPlaylists"]["uploads"]
             async with pcs.get(f"{base}/playlistItems?playlistId={pupl}&maxResults=15&part=snippet,contentDetails{end}") as puvids:
                 puvidsjson = await puvids.json()
+
         puvidslist = []
         vid = 0
         while vid < len(puvidsjson["items"]):
             pvidid = puvidsjson["items"][vid]["snippet"]["resourceId"]["videoId"]
             puvidslist.append(pvidid)
             vid += 1
-        # ====COMPARE AND SEND====
 
         ptuvidslist = tuvidslist + puvidslist
         rndptvids = random.choice(ptuvidslist)
@@ -62,7 +61,6 @@ class General(commands.Cog):
         em.set_image(url = rndptvidthumb)
         await ctx.send(embed = em)
 
-    # YouTube channels command
     @commands.command(aliases = ["yt"])
     async def youtube(self, ctx):
         em = discord.Embed(color = discord.Color.light_grey())
@@ -70,7 +68,6 @@ class General(commands.Cog):
         em.add_field(name = "T-Series", value = "https://www.youtube.com/user/tseries")
         await ctx.send(embed = em)
 
-    # Bot information command
     @commands.command(aliases = ["info", "bot", "information", "botinformation", "support"])
     async def botinfo(self, ctx):
         botlat = f"{self.bot.latency * 1000:.3f}"
@@ -86,7 +83,6 @@ class General(commands.Cog):
         em.add_field(name = "Vote", value = "[Vote for me](https://discordbots.org/bot/500868806776979462/vote)")
         await ctx.send(embed = em)
 
-    # Invite command
     @commands.command(aliases = ["vote"])
     async def invite(self, ctx):
         em = discord.Embed(color = discord.Color.orange())
@@ -94,11 +90,10 @@ class General(commands.Cog):
         em.add_field(name = "Vote", value = "[Vote for the bot](https://discordbots.org/bot/500868806776979462/vote)", inline = False)
         await ctx.send(embed = em)
 
-    # Set prefix tutorial command
     @commands.command(aliases = ["prefixtutorial", "tutprefix"])
     async def prefixtut(self, ctx):
         em = discord.Embed(color = discord.Color.dark_green())
-        em.add_field(name = "Command Use", value = f"""
+        em.add_field(name = "Command Use", value = textwrap.dedent(f"""
         Sets the prefix for the current server. You must have the manage messages permission to use this command.
         **Set or change prefix**
         `p.setprefix [prefix here]`
@@ -106,10 +101,9 @@ class General(commands.Cog):
         `p.setprefix`
         **Show current prefix**
         `p.prefix` (does not require any special permissions to view)
-        """)
+        """))
         await ctx.send(embed = em)
 
-    # Returns bot prefix in the current guild
     @commands.command(aliases = ["currentprefix", "botprefix", "serverprefix", "guildprefix"])
     async def prefix(self, ctx):
         prefixes = await self.bot.pool.fetchval("SELECT prefix FROM prefixes WHERE guildid = $1", ctx.guild.id)
@@ -132,7 +126,6 @@ class General(commands.Cog):
         em.add_field(name = "Current Prefix", value = f"The current prefix for {self.bot.user.mention} is `{prefix}`")
         await ctx.send(embed = em)
 
-    # Custom prefix
     @commands.command(aliases = ["sprefix"])
     @commands.has_permissions(manage_messages = True)
     async def setprefix(self, ctx, *, prefix: str = None):
@@ -176,7 +169,6 @@ class General(commands.Cog):
         else:
             self.bot.prefixes.pop(ctx.guild.id)
 
-    # Meme command
     @commands.command(aliases = ["memes"])
     async def meme(self, ctx):
         subreddit = ["memes", "meme", "dankmemes", "wholesomememes"]
@@ -199,7 +191,6 @@ class General(commands.Cog):
         em.timestamp = datetime.datetime.utcfromtimestamp(data["created_utc"])
         await ctx.send(embed = em)
 
-    # Feedback command
     @commands.command()
     async def feedback(self, ctx, *, message: str):
         em = discord.Embed(color = discord.Color.blue())
@@ -221,7 +212,6 @@ class General(commands.Cog):
 
         await feedbackchannel.send(embed = emb)
 
-    # Spoiler command
     @commands.command()
     async def spoiler(self, ctx, *, spoiler: str):
         try:

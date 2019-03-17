@@ -45,11 +45,13 @@ class Subscribe(commands.Cog):
         if rmusr["delete"]:
             rmusr["t_time"] += 1
             return True
+
         if len(rmusr["time"]) > 1:
             if rmusr["time"][-2:][1] - rmusr["time"][-2:][0] <= 3:
                 rmusr["delete"] = True
                 rmusr["time"].clear()
                 return True
+
         if "keep_alive" in self.bot.subgap["guild"][guild]:
             return False
 

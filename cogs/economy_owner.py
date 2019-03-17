@@ -8,7 +8,6 @@ class EconomyOwner(commands.Cog):
         self.bot = bot
         self.tcoinimage = "<:bro_coin:541363630189576193>"
 
-    # Amount or all
     class AmountConverter(commands.Converter):
         async def convert(self, ctx, argument):
             try:
@@ -24,7 +23,6 @@ class EconomyOwner(commands.Cog):
             else:
                 return 0
 
-    # Add Bro Coins command (REQ_BOT_OWNER)
     @commands.command()
     @commands.is_owner()
     async def addcoins(self, ctx, amount: AmountConverter, *, user: discord.Member):
@@ -39,13 +37,12 @@ class EconomyOwner(commands.Cog):
             await self.bot.pool.execute("INSERT INTO econ VALUES ($1, $2, $3)", amount, user.id, ctx.guild.id)
         else:
             await self.bot.pool.execute("UPDATE econ SET coins = coins + $1 WHERE userid = $2 AND guildid = $3", amount, user.id, ctx.guild.id)
-        # Tell user
+
         em = discord.Embed(color = discord.Color.dark_red())
         em.add_field(name = "Coins Added", value = f"{amount:,d} {self.tcoinimage} has been added to {user.mention}")
         em.timestamp = datetime.datetime.utcnow()
         await ctx.send(embed = em)
 
-    # Remove Bro Coins command (REQ_BOT_OWNER)
     @commands.command()
     @commands.is_owner()
     async def removecoins(self, ctx, amount: AmountConverter, *, user: discord.Member):
