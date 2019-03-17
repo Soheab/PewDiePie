@@ -47,12 +47,13 @@ class EconomyShop(commands.Cog):
         em = discord.Embed(color = discord.Color.dark_red())
         em.set_thumbnail(url = ctx.guild.icon_url)
         em.set_author(name = f"{ctx.guild.name}'s Shop")
-        for x in roles:
-            try:
-                role = ctx.guild.get_role(x["roleid"]).name
-            except AttributeError:
-                role = "Unknown Role"
-            em.add_field(name = f"Role: {role}", value = f"Required amount: {x['reqamount']:,d} {self.tcoinimage}", inline = False)
+        for r in roles:
+            role = ctx.guild.get_role(r["roleid"])
+            if role == None:
+                await self.bot.pool.execute("DELETE FROM econshop WHERE roleid = $1", r["roleid"])
+                continue
+
+            em.add_field(name = f"Role: {role.name}", value = f"Required amount: {r['reqamount']:,d} {self.tcoinimage}", inline = False)
 
         await ctx.send(embed = em)
 
