@@ -12,36 +12,31 @@ import sys
 if sys.platform == "win32":
     asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
 
-# Custom prefixes
 async def custom_prefix(bot, message):
     await bot.wait_until_ready()
+
     try:
-        prefixes = bot.prefixes.get(message.guild.id)
+        prefix = bot.prefixes.get(message.guild.id)
     except AttributeError:
-        # Is a DM
-        rnd = random.randint(12**13, 12**200)
+        rnd = random.randint(12**2, 12**4)
         return str(rnd)
-    if prefixes == None:
+
+    if prefix == None:
         return commands.when_mentioned_or(*bot.default_prefixes)(bot, message)
     else:
-        return commands.when_mentioned_or(prefixes)(bot, message)
+        return commands.when_mentioned_or(prefix)(bot, message)
 
-# Extensions
 extensions = (
-    "economy", "general", "subscribe", "owner",
-    "error_handler", "events", "economy_phrases", "economy_shop",
-    "economy_owner", "help", "disstrack", "snipe"
+    "cogs.functions", "jishaku", "cogs.economy", "cogs.general",
+    "cogs.subscribe", "cogs.owner", "cogs.error_handler",
+    "cogs.events", "cogs.economy_phrases", "cogs.economy_shop",
+    "cogs.economy_owner", "cogs.help", "cogs.disstrack", "cogs.snipe"
 )
 
-# Important extensions
-important = ("cogs.functions", "jishaku")
-
-# Bot
 class PewDiePie(commands.AutoShardedBot):
     def __init__(self):
-        self.custom_prefix = custom_prefix
         super().__init__(
-            command_prefix = self.custom_prefix,
+            command_prefix = custom_prefix,
             case_insensitive = True,
             max_messages = 500,
             fetch_offline_members = False,
@@ -63,18 +58,21 @@ class PewDiePie(commands.AutoShardedBot):
                 "host": "localhost",
                 "database": "tseries"
             }
+
             try:
                 self.pool = await asyncpg.create_pool(**pool_creds)
             except Exception as error:
                 print("There was a problem connecting to the database")
-                print("\n", error)
+                print(f"\n{error}")
+            
+        with open("schema.sql", "r") as schema:
+            await self.pool.execute(schema.read())
 
-        # Custom cachable prefixes
         prefixes = await self.pool.fetch("SELECT * FROM prefixes")
         self.prefixes = {}
         for current_row in prefixes:
             self.prefixes[current_row["guildid"]] = current_row["prefix"]
-        # Default prefixes
+
         self.default_prefixes = [
             "p.", "P.", "p!", "P!",
             "t.", "t!", "ts!", "ts.",
@@ -82,21 +80,33 @@ class PewDiePie(commands.AutoShardedBot):
             "Ts.", "tS.", "TS."
         ]
 
-        for x in important:
+        for extension in extensions:
             try:
-                self.load_extension(x)
+                self.load_extension(extension)
             except Exception as error:
-                print(f"There was a problem loading in the {x} extension")
-                print("\n", error)
+                print(f"There was a problem loading in the {extension} extension")
+                print(f"\n{error}")
 
-        for x in extensions:
-            try:
-                self.load_extension("cogs." + x)
-            except Exception as error:
-                print(f"There was a problem loading in the {x} extension")
-                print("\n", error)
+    async def start(self):
+        await self.login(config.pubtoken)
+        try:
+            await self.connect()
+        except KeyboardInterrupt:
+            await self.stop()
+
+    async def stop(self):
+        for cog in self.cogs:
+            self.unload_extension(cog)
+
+        await self.pool.close()
+        await super().logout()
+
+    def run(self):
+        try:
+            asyncio.get_event_loop().run_until_complete(self.start())
+        except KeyboardInterrupt:
+            asyncio.get_event_loop().run_until_complete(self.stop())
 
 
 if __name__ == "__main__":
-    bot = PewDiePie()
-    bot.run(config.pubtoken) # pylint: disable=no-member
+    PewDiePie().run()
