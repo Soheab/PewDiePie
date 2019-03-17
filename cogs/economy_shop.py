@@ -48,7 +48,10 @@ class EconomyShop(commands.Cog):
         em.set_thumbnail(url = ctx.guild.icon_url)
         em.set_author(name = f"{ctx.guild.name}'s Shop")
         for x in roles:
-            role = ctx.guild.get_role(x["roleid"])
+            try:
+                role = ctx.guild.get_role(x["roleid"])
+            except AttributeError:
+                role = "Unknown Role"
             em.add_field(name = f"Role: {role.name}", value = f"Required amount: {x['reqamount']:,d} {self.tcoinimage}", inline = False)
 
         await ctx.send(embed = em)
