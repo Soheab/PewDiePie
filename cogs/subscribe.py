@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import aiohttp
 import asyncio
+import textwrap
 from datetime import datetime as dt
 import sys
 sys.path.append("../")
@@ -100,8 +101,7 @@ class Subscribe(commands.Cog):
             while True:
                 try:
                     try:
-                        info = await self.subcount.callback(None, None, "retint", False) # pylint: disable=no-member
-                        info = info["l"]
+                        info = await self.subcount.callback(None, None, False) # pylint: disable=no-member
                     except KeyError:
                         cont = False
                         return
@@ -135,9 +135,9 @@ class Subscribe(commands.Cog):
             await ctx.send(embed = em)
             return
 
-        info = await self.subcount.callback(None, None, "retint", False) # pylint: disable=no-member
+        info = await self.subcount.callback(None, None, False) # pylint: disable=no-member
         em = discord.Embed(color = discord.Color.blurple())
-        em.add_field(name = "Leading Channel", value = info["l"])
+        em.add_field(name = "Leading Channel", value = info)
         stmsg = await ctx.send(embed = em)
 
         await self.bot.pool.execute("INSERT INTO subgap VALUES ($1, $2, $3)", stmsg.id, ctx.channel.id, ctx.guild.id)
@@ -159,74 +159,38 @@ class Subscribe(commands.Cog):
         em.add_field(name = "Subscriber Gap Stopped", value = "The subgap message has stopped updating in your server.")
         await ctx.send(embed = em)
 
-    @commands.command(aliases = ["subscribercount"])
-    async def subcount(self, ctx, p: str = "", stping: bool = True):
-        if stping:
-            await ctx.channel.trigger_typing()
-        base = "https://www.googleapis.com/youtube/v3"
-        apikey = config.ytdapi
-        end = "&key=" + apikey
-        pci = "UC-lHJZR3Gqxm24_Vd_AJ5Yw"
-        tci = "UCq-Fj5jknLsUf-MWSy4_brA"
+    @commands.command(aliases = ["subscribercount", "sc"])
+    async def subcount(self, ctx, _type: bool = True):
+        if _type: await ctx.channel.trigger_typing()
+        
+        base_uri = "https://www.googleapis.com/youtube/v3/channels"
+        pew_chid = "UC-lHJZR3Gqxm24_Vd_AJ5Yw"
+        ts_chid = "UCq-Fj5jknLsUf-MWSy4_brA"
 
-        async with aiohttp.ClientSession() as sccs:
-            async with sccs.get(base + "/channels?part=snippet,contentDetails,statistics&id=" + tci + end) as treq:
-                tjson = await treq.json()
-            async with sccs.get(base + "/channels?part=snippet,contentDetails,statistics&id=" + pci + end) as preq:
-                pjson = await preq.json()
+        async with aiohttp.ClientSession() as session:
+            async with session.get(f"{base_uri}?part=snippet,contentDetails,statistics&id={pew_chid}&key={config.ytdapi}") as p:
+                pew_json = await p.json()
+            async with session.get(f"{base_uri}?part=snippet,contentDetails,statistics&id={ts_chid}&key={config.ytdapi}") as t:
+                ts_json = await t.json()
 
-        try:
-            tsc = tjson["items"][0]["statistics"]["subscriberCount"]
-        except KeyError:
-            if ctx == None:
-                raise KeyError(tjson["error"]["message"])
-            em = discord.Embed(color = discord.Color.dark_teal())
-            em.add_field(name = f"Error Code: {tjson['error']['code']}", value = f"```\n{tjson['error']['message']}\n```")
-            await ctx.send(embed = em)
-            return
-        try:
-            psc = pjson["items"][0]["statistics"]["subscriberCount"]
-        except KeyError:
-            if ctx == None:
-                raise KeyError(pjson["error"]["message"])
-            em = discord.Embed(color = discord.Color.dark_teal())
-            em.add_field(name = f"Error Code: {pjson['error']['code']}", value = f"```\n{pjson['error']['message']}\n```")
-            await ctx.send(embed = em)
-            return
+        pew_count = int(pew_json["items"][0]["statistics"]["subscriberCount"])
+        ts_count = int(ts_json["items"][0]["statistics"]["subscriberCount"])
 
-        tscint = int(tsc)
-        pscint = int(psc)
-        trf = format(tscint, ",d")
-        prf = format(pscint, ",d")
-
-        if pscint >= tscint:
-            pscp = pscint - tscint
-            pscpts = f"PewDiePie is leading with {pscp:,d} more subscribers than T-Series"
+        if pew_count >= ts_count:
+            sg = f"PewDiePie is leading with {pew_count - ts_count:,d} more subscribers than T-Series"
         else:
-            pscp = tscint - pscint
-            pscpts = f"T-Series is leading with {pscp:,d} more subscribers than PewDiePie"
+            sg = f"T-Series is leading with {ts_count - pew_count:,d} more subscribers than PewDiePie"
 
-        if p.lower() == "retint":
-            retdict = {
-                "t": tscint,
-                "p": pscint,
-                "l": pscpts
-            }
-            return retdict
-        else:
-            em = discord.Embed(color = discord.Color.red())
-            if pscint >= tscint:
-                em.add_field(name = "PewDiePie Sub Count", value = prf)
-                em.add_field(name = "T-Series Sub Count", value = trf)
-            else:
-                em.add_field(name = "T-Series Sub Count", value = trf)
-                em.add_field(name = "PewDiePie Sub Count", value = prf)
+        if not _type: return sg
 
-            em.add_field(name = "Leading Channel", value = pscpts, inline = False)
-            em.add_field(name = "Real Time Subcount Websites", value = """
-            [T-Series](https://socialblade.com/youtube/user/tseries/realtime) | [PewDiePie](https://socialblade.com/youtube/user/pewdiepie/realtime)
-            """, inline = False)
-            await ctx.send(embed = em)
+        em = discord.Embed(color = discord.Color.red())
+        em.add_field(name = "PewDiePie", value = f"{pew_count:,d}")
+        em.add_field(name = "T-Series", value = f"{ts_count:,d}")
+        em.add_field(name = "Leading Channel", value = sg, inline = False)
+        em.add_field(name = "Live Count Websites", value = textwrap.dedent("""
+        [PewDiePie](https://socialblade.com/youtube/user/pewdiepie/realtime) | [T-Series](https://socialblade.com/youtube/user/tseries/realtime)
+        """), inline = False)
+        await ctx.send(embed = em)
 
 
 def setup(bot):
