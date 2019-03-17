@@ -17,6 +17,7 @@ class Subscribe(commands.Cog):
         self.bot.subgap = {"guild": {}}
         self.bot.subgap["rmusr"] = {"time": [], "delete": False, "t_time": 0}
         information = await self.bot.pool.fetch("SELECT * FROM subgap")
+
         for info in information:
             self.bot.subgap["guild"][info["guildid"]] = {}
             guild = self.bot.subgap["guild"][info["guildid"]]
@@ -40,6 +41,7 @@ class Subscribe(commands.Cog):
 
     async def subgremove(self, guild: int):
         rmusr = self.bot.subgap["rmusr"]
+
         if rmusr["delete"]:
             rmusr["t_time"] += 1
             return True
@@ -149,6 +151,7 @@ class Subscribe(commands.Cog):
     @commands.has_permissions(manage_guild = True)
     async def stop(self, ctx):
         c = await self.bot.pool.fetchrow("SELECT * FROM subgap WHERE guildid = $1", ctx.guild.id)
+
         if c == None:
             em = discord.Embed(color = discord.Color.dark_teal())
             em.add_field(name = "Subscriber Gap Not Running", value = "The subgap command is not currently being used in your server.")
