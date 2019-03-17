@@ -82,6 +82,7 @@ class General(commands.Cog):
         em.add_field(name = "Bot Library", value = "discord.py rewrite")
         em.add_field(name = "Support Server", value = "https://discord.gg/we4DQ5u")
         em.add_field(name = "Bot Latency", value = f"{botlat} ms")
+        em.add_field(name = "Server Count", value = f"{len(bot.guilds):,d}")
         await ctx.send(embed = em)
 
     # Invite command
