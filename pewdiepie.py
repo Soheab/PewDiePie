@@ -88,7 +88,7 @@ class PewDiePie(commands.AutoShardedBot):
                 print(f"\n{error}")
 
     async def start(self):
-        await self.login(config.pubtoken)
+        await self.login(config.pubtoken) # pylint: disable=no-member
         try:
             await self.connect()
         except KeyboardInterrupt:
@@ -102,10 +102,11 @@ class PewDiePie(commands.AutoShardedBot):
         await super().logout()
 
     def run(self):
+        loop = asyncio.get_event_loop()
         try:
-            asyncio.get_event_loop().run_until_complete(self.start())
+            loop.run_until_complete(self.start())
         except KeyboardInterrupt:
-            asyncio.get_event_loop().run_until_complete(self.stop())
+            loop.run_until_complete(self.stop())
 
 
 if __name__ == "__main__":
