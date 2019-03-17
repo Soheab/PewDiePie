@@ -67,23 +67,30 @@ class Events(commands.Cog):
         await self.bot.wait_until_ready()
         base = "https://discordbots.org/api"
         while not self.bot.is_closed():
+            if config.dbltoken == None:
+                break
+
             async with aiohttp.ClientSession() as cs:
                 post = await cs.post(f"{base}/bots/{self.bot.user.id}/stats",
                 headers = {"Authorization": config.dbltoken}, data = {"server_count": len(self.bot.guilds)})
                 post = await post.json()
+
                 if "error" in post:
                     print(f"Couldn't post server count, {post['error']}")
                 else:
                     print("Posted server count on DBL")
+
             await asyncio.sleep(3600)
 
     async def autostatus(self):
         await self.bot.wait_until_ready()
         while not self.bot.is_closed():
             watching = ["Pew News", f"for p.help in {len(self.bot.guilds):,d} servers"]
+
             for w in watching:
                 await self.bot.change_presence(activity = discord.Activity(type = discord.ActivityType.watching, name = w))
                 await asyncio.sleep(30)
+
             await self.bot.change_presence(activity = discord.Game(name = "Banning T-Series subscribers"))
             await asyncio.sleep(30)
 
