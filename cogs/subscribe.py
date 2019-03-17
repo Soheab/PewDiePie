@@ -69,6 +69,7 @@ class Subscribe(commands.Cog):
                         self.bot.subgap["rmusr"]["delete"] = False
                     else:
                         self.bot.tasks["subgap"].cancel()
+
             await asyncio.sleep(15)
 
     async def subgcheck(self, channel: int, guild: int, message: int, submsg: str):
@@ -112,6 +113,7 @@ class Subscribe(commands.Cog):
                 except RuntimeError:
                     await asyncio.sleep(1)
                     continue
+
             await asyncio.sleep(30)
 
     @commands.group(invoke_without_command = True)
