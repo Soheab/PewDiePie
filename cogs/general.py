@@ -171,7 +171,7 @@ class General(commands.Cog):
 
     @commands.command(aliases = ["memes"])
     async def meme(self, ctx):
-        subreddit = ["memes", "meme", "dankmemes", "wholesomememes"]
+        subreddit = ["memes", "meme", "dankmemes", "wholesomememes", "pewdiepiesubmissions"]
         subreddit = random.choice(subreddit)
         base = "https://www.reddit.com/r/" + subreddit
 
