@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import asyncio
 import random
+from random import choice as randchoice
 import aiohttp
 import datetime
 import textwrap
@@ -172,8 +173,7 @@ class General(commands.Cog):
     @commands.command(aliases = ["memes"])
     async def meme(self, ctx):
         subreddit = ["memes", "meme", "dankmemes", "wholesomememes", "pewdiepiesubmissions"]
-        subreddit = random.choice(subreddit)
-        base = "https://www.reddit.com/r/" + subreddit
+        base = f"https://www.reddit.com/r/{randchoice(subreddit)}"
 
         async with aiohttp.ClientSession() as session:
             async with session.get(f"{base}/random.json") as response:
